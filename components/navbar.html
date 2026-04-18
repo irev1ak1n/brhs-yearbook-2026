@@ -1,5 +1,14 @@
 <header class="topbar hero-top">
     <div class="topbar-shell top-row">
+
+        <!-- left part of navbar -->
+        <nav class="nav nav-left" aria-label="Primary navigation left">
+            <a href="/pages/get-yearbooks.html">Yearbook</a>
+            <a href="/pages/seniors.html">Class of 2026</a>
+            <a href="/pages/our-team.html">Our Team</a>
+        </nav>
+
+        <!-- brand in the middle  -->
         <a href="/index.html" class="brand brand-uw" aria-label="Go to homepage">
             <div class="brand-text">
                 <strong class="title-desktop">BRHS Yearbook 2026</strong>
@@ -8,41 +17,42 @@
             </div>
         </a>
 
-        <nav class="nav" aria-label="Primary navigation">
-            <a href="/pages/get-yearbooks.html">Get Yearbook</a>
-            <a href="/pages/seniors.html">Class of 2026</a>
-            <a href="/pages/gallery.html">Gallery</a>
-            <a href="/pages/our-team.html">Our Team</a>
-            <a href="/pages/contact.html">Contact Us</a>
-            <a href="/pages/faq.html">FAQ</a>
-        </nav>
+        <!-- right of the menu: search bar + second half of menu -->
+        <div class="nav-right-wrap">
+            <nav class="nav nav-right" aria-label="Primary navigation right">
+                <a href="/pages/gallery.html">Gallery</a>
+                <a href="/pages/contact.html">Contact Us</a>
+                <a href="/pages/faq.html">FAQ</a>
+            </nav>
 
-        <div class="nav-search" role="search" aria-label="Search yearbook info">
-            <input
-                    id="navSearchInput"
-                    type="search"
-                    placeholder="Search yearbook info..."
-                    aria-label="Search yearbook info"
-            />
-            <button id="navSearchBtn" type="button" aria-label="Search">
-                <svg class="nav-search-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                            d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                    />
-                    <path
-                            d="M16.3 16.3 21 21"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                    />
-                </svg>
-            </button>
+            <div class="nav-search desktop-search" role="search" aria-label="Search yearbook info">
+                <input
+                        id="navSearchInput"
+                        type="search"
+                        placeholder="Search yearbook info..."
+                        aria-label="Search yearbook info"
+                />
+                <button id="navSearchBtn" type="button" aria-label="Search">
+                    <svg class="nav-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                                d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                        />
+                        <path
+                                d="M16.3 16.3 21 21"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                        />
+                    </svg>
+                </button>
+            </div>
         </div>
 
+        <!-- mobile buttoons -->
         <button
                 class="mobile-search-btn"
                 id="mobileSearchToggle"
@@ -80,8 +90,10 @@
             <span></span>
             <span></span>
         </button>
+
     </div>
 
+    <!-- mobile search panel -->
     <div class="mobile-search-panel" id="mobileSearchPanel" aria-hidden="true">
         <div class="mobile-search-inner">
             <input
@@ -126,7 +138,9 @@
     </div>
 
     <nav class="mobile-sidebar-links" aria-label="Mobile navigation">
-        <a href="/pages/get-yearbooks.html">Get Yearbook</a>
+        <a href="/pages/get-yearbooks.html">Yearbook</a>
+        <a href="/pages/seniors.html">Class of 2026</a>
+        <a href="/pages/our-team.html">Our Team</a>
         <a href="/pages/gallery.html">Gallery</a>
         <a href="/pages/contact.html">Contact Us</a>
         <a href="/pages/faq.html">FAQ</a>
