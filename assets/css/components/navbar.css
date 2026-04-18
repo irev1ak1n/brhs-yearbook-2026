@@ -181,11 +181,10 @@
     font-size: clamp(20px, 1.7vw, 26px) !important;
 }
 
-
 .nav{
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
 
     padding: 0;
     background: transparent;
@@ -196,7 +195,7 @@
 
     font-weight: 800;
     font-size: 14px;
-    letter-spacing: .08em;
+    letter-spacing: .07em;
     text-transform: uppercase;
 
     white-space: nowrap;
@@ -244,7 +243,7 @@
 .hero-top .nav-search{
     position: relative !important;
     flex: 0 0 auto !important;
-    width: clamp(240px, 22vw, 340px) !important;
+    width: clamp(220px, 20vw, 320px);
     margin-left: 10px !important;
     height: 44px !important;
     border-radius: 999px !important;
@@ -356,13 +355,35 @@
     box-shadow: none !important;
 }
 
+
+.hero-top .nav-search{
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: clamp(180px, 16vw, 250px);
+    height: 44px;
+    overflow: hidden;
+}
+
+.hero-top .nav-search input{
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 12px 0 16px;
+}
+
+.hero-top .nav-search button{
+    flex: 0 0 46px;
+    width: 46px;
+    height: 100%;
+}
+
 .nav a{
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 8px 8px;
+    padding: 6px 6px;
     text-decoration: none;
     color: #fff;
     opacity: .88;
