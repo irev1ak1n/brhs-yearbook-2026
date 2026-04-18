@@ -105,7 +105,7 @@
     letter-spacing: .02em;
 }
 
-/* ===== HERO-TOP / NAVBAR — CLEAN FINAL ===== */
+/* HERO-TOP / NAVBAR */
 
 .hero-top{
     transition: padding .2s ease, background .2s ease;
@@ -280,9 +280,7 @@
     box-shadow: none !important;
 }
 
-/* =========================
-   NAV PILL
-========================= */
+/*  NAV PILL */
 .nav{
     display: flex;
     align-items: center;
@@ -347,9 +345,7 @@
     background: rgba(232,178,79,.95);
 }
 
-/* =========================
-   ACCESSIBILITY / FOCUS
-========================= */
+/* ACCESSIBILITY / FOCUS */
 .hero-top .nav a:focus-visible,
 .hero-top .brand-uw:focus-visible{
     outline: 2px solid rgba(232,178,79,.9);
@@ -357,9 +353,7 @@
     border-radius: 10px;
 }
 
-/* =========================
-   NAV DROPDOWNS
-========================= */
+/*  NAV DROPDOWNS */
 .nav-item{
     position: relative;
     display: inline-flex;
@@ -436,9 +430,7 @@
 }
 
 
-/* =========================
-   NAV SEARCH - FINAL
-========================= */
+/*  NAV SEARCH */
 .hero-top .nav-search{
     position: relative;
     display: flex;
@@ -552,7 +544,6 @@
     height: 18px;
     display: block;
 }
-
 
 @media (max-width: 640px){
     .brand-text strong{
