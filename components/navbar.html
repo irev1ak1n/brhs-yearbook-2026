@@ -1,0 +1,132 @@
+<header class="topbar hero-top">
+    <div class="topbar-shell top-row">
+        <a href="/index.html" class="brand brand-uw" aria-label="Go to homepage">
+            <div class="brand-text">
+                <strong class="title-desktop">BRHS Yearbook 2026</strong>
+                <strong class="title-mobile">Yearbook 2026</strong>
+                <span>Ballantyne Ridge High School</span>
+            </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary navigation">
+            <a href="/pages/get-yearbooks.html">Get Yearbook</a>
+            <a href="/pages/gallery.html">Gallery</a>
+            <a href="/pages/contact.html">Contact Us</a>
+            <a href="/pages/faq.html">FAQ</a>
+        </nav>
+
+        <div class="nav-search" role="search" aria-label="Search yearbook info">
+            <input
+                    id="navSearchInput"
+                    type="search"
+                    placeholder="Search yearbook info..."
+                    aria-label="Search yearbook info"
+            />
+            <button id="navSearchBtn" type="button" aria-label="Search">
+                <svg class="nav-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                            d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                    />
+                    <path
+                            d="M16.3 16.3 21 21"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                    />
+                </svg>
+            </button>
+        </div>
+
+        <button
+                class="mobile-search-btn"
+                id="mobileSearchToggle"
+                type="button"
+                aria-label="Open search"
+                aria-expanded="false"
+                aria-controls="mobileSearchPanel"
+        >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                        d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                />
+                <path
+                        d="M16.3 16.3 21 21"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                />
+            </svg>
+        </button>
+
+        <button
+                class="mobile-menu-btn"
+                id="menuToggle"
+                type="button"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="mobileSidebar"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+
+    <div class="mobile-search-panel" id="mobileSearchPanel" aria-hidden="true">
+        <div class="mobile-search-inner">
+            <input
+                    id="mobileSearchInput"
+                    type="search"
+                    placeholder="Search yearbook info..."
+                    aria-label="Search yearbook info"
+            />
+            <button id="mobileSearchBtn" type="button" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                            d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                    />
+                    <path
+                            d="M16.3 16.3 21 21"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                    />
+                </svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+<aside class="mobile-sidebar" id="mobileSidebar" aria-hidden="true">
+    <div class="mobile-sidebar-top">
+        <div class="mobile-sidebar-brand">
+            <strong>BRHS Yearbook 2026</strong>
+            <span>Ballantyne Ridge High School</span>
+        </div>
+
+        <button class="mobile-close-btn" id="closeMenu" type="button" aria-label="Close menu">
+            ×
+        </button>
+    </div>
+
+    <nav class="mobile-sidebar-links" aria-label="Mobile navigation">
+        <a href="/pages/get-yearbooks.html">Get Yearbook</a>
+        <a href="/pages/gallery.html">Gallery</a>
+        <a href="/pages/contact.html">Contact Us</a>
+        <a href="/pages/faq.html">FAQ</a>
+    </nav>
+</aside>
