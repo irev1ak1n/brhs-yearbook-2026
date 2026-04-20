@@ -15,7 +15,6 @@
     position: absolute;
     inset: 0;
     background:
-    
             repeating-linear-gradient(
                     to right,
                     rgba(255,255,255,.025) 0,
@@ -201,6 +200,12 @@
 
 .yb-contact-btn:active {
     transform: translateY(0);
+}
+
+.yb-contact-success {
+    margin: 14px 0 0;
+    font-size: .96rem;
+    color: rgba(219, 181, 103, 0.95);
 }
 
 @media (max-width: 900px) {
