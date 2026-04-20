@@ -655,3 +655,116 @@
         font-size: 1.4rem;
     }
 }
+
+
+
+
+
+.yb-marquee {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background:
+            linear-gradient(90deg, #f6d365 0%, #fda085 50%, #f6d365 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.18),
+            inset 0 0 20px rgba(255, 255, 255, 0.08);
+    z-index: 5;
+}
+
+.yb-marquee::before,
+.yb-marquee::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.yb-marquee::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(246, 211, 101, 0.95), rgba(246, 211, 101, 0));
+}
+
+.yb-marquee::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(246, 211, 101, 0.95), rgba(246, 211, 101, 0));
+}
+
+.yb-marquee-track {
+    display: flex;
+    width: max-content;
+}
+
+.yb-marquee-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    white-space: nowrap;
+    padding: 1.1rem 0;
+    min-width: max-content;
+    animation: ybMarqueeMove 26s linear infinite;
+}
+
+.yb-marquee-content span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+    color: #111;
+    text-transform: uppercase;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.yb-marquee-sep {
+    font-size: 1.3rem;
+    opacity: 0.75;
+}
+
+@keyframes ybMarqueeMove {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-33.333%);
+    }
+}
+
+.yb-marquee:hover .yb-marquee-content {
+    animation-play-state: paused;
+}
+
+@media (max-width: 992px) {
+    .yb-marquee-content {
+        padding: 0.95rem 0;
+        gap: 1.5rem;
+    }
+
+    .yb-marquee-content span {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .yb-marquee::before,
+    .yb-marquee::after {
+        width: 45px;
+    }
+
+    .yb-marquee-content {
+        padding: 0.8rem 0;
+        gap: 1rem;
+    }
+
+    .yb-marquee-content span {
+        font-size: 1.15rem;
+        letter-spacing: 0.06em;
+    }
+
+    .yb-marquee-sep {
+        font-size: 1rem;
+    }
+}
