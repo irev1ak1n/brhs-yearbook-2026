@@ -1,0 +1,83 @@
+.yb-seniors-page {
+    padding: 11rem 0 6rem;
+    background:
+            radial-gradient(circle at top, rgba(212,177,95,0.1), transparent 30%),
+            linear-gradient(180deg, #030814, #050a18, #030712);
+    color: #f7f4ee;
+    text-align: center;
+}
+
+.yb-seniors-hero h1 {
+    font-family: "Bree Serif", serif;
+    font-size: 4rem;
+}
+
+.yb-seniors-kicker {
+    color: #d4b15f;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+}
+
+.yb-seniors-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.yb-seniors-btn {
+    padding: 0.8rem 1.6rem;
+    border-radius: 999px;
+    background: linear-gradient(#e1c37a, #cfa95a);
+    color: #08101f;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.yb-seniors-btn.outline {
+    background: transparent;
+    border: 1px solid #d4b15f;
+    color: #d4b15f;
+}
+
+.yb-seniors-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+    max-width: 1100px;
+    margin: 2rem auto;
+}
+
+.yb-senior-card {
+    background: rgba(9,16,36,0.9);
+    border-radius: 1.2rem;
+    padding: 1rem;
+}
+
+.yb-senior-photo {
+    height: 180px;
+    background: #0a1123;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.yb-seniors-cta {
+    margin-top: 3rem;
+}
+
+@media (max-width: 900px) {
+    .yb-seniors-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .yb-seniors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .yb-seniors-hero h1 {
+        font-size: 2.5rem;
+    }
+}
