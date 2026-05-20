@@ -1,16 +1,131 @@
 .yb-seniors-page {
+    position: relative;
+    overflow: hidden;
+
     padding: 11rem 0 6rem;
+    color: #f7f4ee;
 
     background:
-            radial-gradient(circle at top, rgba(212,177,95,0.08), transparent 30%),
-            linear-gradient(180deg, #020611, #040816, #02050d);
+            radial-gradient(circle at 15% 20%, rgba(45,92,200,.14), transparent 26%),
+            radial-gradient(circle at 82% 24%, rgba(74,58,170,.10), transparent 24%),
+            radial-gradient(circle at 50% 85%, rgba(255,255,255,.03), transparent 35%),
 
-    color: #f7f4ee;
+            linear-gradient(
+                    180deg,
+                    #01030a 0%,
+                    #020611 25%,
+                    #040b1f 55%,
+                    #07142d 78%,
+                    #020611 100%
+            );
 }
 
-/* =========================
-   HERO
-========================= */
+.yb-seniors-page::before {
+    content: "";
+
+    position: absolute;
+    top: -200px;
+    left: -120px;
+
+    width: 700px;
+    height: 700px;
+
+    border-radius: 50%;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(59,130,246,.22) 0%,
+                    rgba(59,130,246,.08) 35%,
+                    transparent 72%
+            );
+
+    filter: blur(40px);
+
+    animation: blueGlow 10s ease-in-out infinite alternate;
+
+    pointer-events: none;
+}
+
+.yb-seniors-page::after {
+    content: "";
+
+    position: absolute;
+    right: -200px;
+    top: 120px;
+
+    width: 650px;
+    height: 650px;
+
+    border-radius: 50%;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(124,58,237,.20) 0%,
+                    rgba(124,58,237,.08) 35%,
+                    transparent 72%
+            );
+
+    filter: blur(55px);
+
+    animation: purpleGlow 13s ease-in-out infinite alternate;
+
+    pointer-events: none;
+}
+
+.yb-seniors-hero {
+    position: relative;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.yb-seniors-hero::before {
+    content: "2026";
+
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-family: "Bree Serif", serif;
+    font-size: clamp(9rem, 22vw, 24rem);
+    line-height: 1;
+
+    color: rgba(120,160,255,.055);
+    letter-spacing: .04em;
+
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes blueGlow {
+    from {
+        transform: translate(0, 0) scale(1);
+    }
+
+    to {
+        transform: translate(40px, 30px) scale(1.12);
+    }
+}
+
+@keyframes purpleGlow {
+    from {
+        transform: translate(0, 0) scale(1);
+    }
+
+    to {
+        transform: translate(-50px, 20px) scale(1.08);
+    }
+}
+
+.yb-seniors-hero,
+.yb-seniors-actions,
+.yb-seniors-list {
+    position: relative;
+    z-index: 2;
+}
+
 
 .yb-seniors-hero {
     text-align: center;
@@ -34,56 +149,6 @@
     opacity: .85;
 }
 
-/* =========================
-   BUTTONS
-========================= */
-
-.yb-seniors-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-
-    flex-wrap: wrap;
-
-    margin-bottom: 5rem;
-}
-
-.yb-seniors-btn {
-    padding: .9rem 1.8rem;
-
-    border-radius: 999px;
-
-    background:
-            linear-gradient(
-                    180deg,
-                    #e1c37a,
-                    #cfa95a
-            );
-
-    color: #08101f;
-
-    text-decoration: none;
-    font-weight: 700;
-
-    transition:
-            transform .25s ease,
-            opacity .25s ease;
-}
-
-.yb-seniors-btn:hover {
-    transform: translateY(-3px);
-}
-
-.yb-seniors-btn.outline {
-    background: transparent;
-    border: 1px solid #d4b15f;
-    color: #d4b15f;
-}
-
-/* =========================
-   SENIOR GRID
-========================= */
-
 .yb-seniors-list {
     width: min(1500px, calc(100% - 60px));
     margin-left: 30px;
@@ -94,10 +159,6 @@
     gap: 2rem;
 }
 
-
-/* =========================
-   EACH CARD
-========================= */
 
 .yb-senior-row {
     position: relative;
@@ -132,10 +193,6 @@
             0 32px 70px rgba(0,0,0,.52);
 }
 
-/* =========================
-   IMAGE AREA
-========================= */
-
 .yb-senior-images {
     position: relative;
 
@@ -157,7 +214,6 @@
     padding: 0;
     background: transparent;
 }
-/* LEFT IMAGE */
 
 .kid-photo {
     position: absolute;
@@ -181,8 +237,6 @@
     z-index: 1;
 }
 
-/* RIGHT IMAGE */
-
 .senior-photo {
     position: absolute;
 
@@ -205,8 +259,6 @@
     z-index: 2;
 }
 
-/* SLASH */
-
 .diagonal-divider {
     position: absolute;
 
@@ -225,10 +277,6 @@
     box-shadow:
             0 0 18px rgba(255,255,255,.25);
 }
-
-/* =========================
-   TEXT SECTION
-========================= */
 
 .yb-senior-overlay {
     position: relative;
@@ -279,20 +327,12 @@
     line-height: 1.35;
 }
 
-/* =========================
-   TABLET
-========================= */
-
 @media (max-width: 1100px) {
 
     .yb-seniors-list {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 700px) {
 
@@ -332,4 +372,122 @@
     .diagonal-divider {
         width: 2px;
     }
+}
+
+.yb-upload-banner {
+    width: min(1220px, calc(100% - 64px));
+    margin: 0 auto 5rem;
+    padding: 3rem;
+
+    display: grid;
+    grid-template-columns: 1fr 390px;
+    gap: 2rem;
+
+    border-radius: 2.2rem;
+    background: linear-gradient(135deg, rgba(11,13,34,.96), rgba(8,10,28,.94));
+    border: 1px solid rgba(130,150,255,.12);
+
+    box-shadow: 0 24px 70px rgba(0,0,0,.35);
+}
+
+.yb-upload-kicker {
+    color: #b9a7ff;
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    font-size: .8rem;
+    margin-bottom: 1rem;
+}
+
+.yb-upload-content h2 {
+    font-family: "Bree Serif", serif;
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    line-height: 1.05;
+    margin-bottom: 1rem;
+}
+
+.yb-upload-text {
+    color: rgba(255,255,255,.72);
+    font-size: 1.25rem;
+    line-height: 1.7;
+    max-width: 720px;
+}
+
+.yb-upload-box {
+    min-height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 1.5rem;
+
+    background:
+            radial-gradient(circle at top, rgba(120,100,255,.12), transparent 45%),
+            rgba(2,5,18,.72);
+
+    border: 1px dashed rgba(185,167,255,.38);
+
+    text-align: center;
+}
+
+.yb-upload-icon {
+    width: 62px;
+    height: 62px;
+    margin-bottom: 1.2rem;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: rgba(185,167,255,.12);
+    color: #d8ccff;
+
+    font-size: 2rem;
+    font-weight: 700;
+
+    border: 1px solid rgba(185,167,255,.28);
+}
+
+.yb-upload-box h3 {
+    font-size: 1.45rem;
+    margin-bottom: .45rem;
+}
+
+.yb-upload-box p {
+    color: rgba(255,255,255,.58);
+}
+
+.yb-upload-action {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.yb-upload-btn {
+    padding: 1rem 2rem;
+    border-radius: 999px;
+
+    background:
+            linear-gradient(135deg, #7c5cff, #4f46e5);
+
+    color: white;
+    text-decoration: none;
+    font-weight: 800;
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    box-shadow:
+            0 16px 38px rgba(79,70,229,.28),
+            inset 0 1px 0 rgba(255,255,255,.18);
+
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.yb-upload-btn:hover {
+    transform: translateY(-4px);
+    box-shadow:
+            0 22px 50px rgba(79,70,229,.38),
+            inset 0 1px 0 rgba(255,255,255,.22);
 }
