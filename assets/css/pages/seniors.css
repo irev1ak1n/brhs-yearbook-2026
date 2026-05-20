@@ -85,15 +85,12 @@
 ========================= */
 
 .yb-seniors-list {
-    width: min(450px, 94%);
+    width: min(1500px, calc(100% - 60px));
     margin-left: 30px;
     margin-right: auto;
 
     display: grid;
-
-    /* balanced width */
     grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-
     gap: 2rem;
 }
 
