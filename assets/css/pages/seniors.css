@@ -1,38 +1,77 @@
 .yb-seniors-page {
     padding: 11rem 0 6rem;
+
     background:
-            radial-gradient(circle at top, rgba(212,177,95,0.1), transparent 30%),
-            linear-gradient(180deg, #030814, #050a18, #030712);
+            radial-gradient(circle at top, rgba(212,177,95,0.08), transparent 30%),
+            linear-gradient(180deg, #020611, #040816, #02050d);
+
     color: #f7f4ee;
-    text-align: center;
 }
 
-.yb-seniors-hero h1 {
-    font-family: "Bree Serif", serif;
-    font-size: 4rem;
+/* =========================
+   HERO
+========================= */
+
+.yb-seniors-hero {
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
 .yb-seniors-kicker {
     color: #d4b15f;
-    letter-spacing: 0.2em;
+    letter-spacing: .22em;
     margin-bottom: 1rem;
 }
+
+.yb-seniors-hero h1 {
+    font-family: "Bree Serif", serif;
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.yb-seniors-hero p {
+    font-size: 1.15rem;
+    opacity: .85;
+}
+
+/* =========================
+   BUTTONS
+========================= */
 
 .yb-seniors-actions {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin: 2rem 0;
+
     flex-wrap: wrap;
+
+    margin-bottom: 5rem;
 }
 
 .yb-seniors-btn {
-    padding: 0.8rem 1.6rem;
+    padding: .9rem 1.8rem;
+
     border-radius: 999px;
-    background: linear-gradient(#e1c37a, #cfa95a);
+
+    background:
+            linear-gradient(
+                    180deg,
+                    #e1c37a,
+                    #cfa95a
+            );
+
     color: #08101f;
+
     text-decoration: none;
     font-weight: 700;
+
+    transition:
+            transform .25s ease,
+            opacity .25s ease;
+}
+
+.yb-seniors-btn:hover {
+    transform: translateY(-3px);
 }
 
 .yb-seniors-btn.outline {
@@ -41,43 +80,236 @@
     color: #d4b15f;
 }
 
-.yb-seniors-grid {
+/* =========================
+   SENIOR GRID
+========================= */
+
+.yb-seniors-list {
+    width: min(420px, 94%);
+    margin: 0 auto;
+
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.2rem;
-    max-width: 1100px;
-    margin: 2rem auto;
+
+    /* balanced width */
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+
+    gap: 2rem;
 }
 
-.yb-senior-card {
-    background: rgba(9,16,36,0.9);
-    border-radius: 1.2rem;
-    padding: 1rem;
+/* =========================
+   EACH CARD
+========================= */
+
+.yb-senior-row {
+    position: relative;
+
+    height: 420px;
+
+    overflow: hidden;
+
+    border-radius: 1.8rem;
+
+    background:
+            linear-gradient(
+                    180deg,
+                    rgba(8,11,28,.98),
+                    rgba(3,5,15,.98)
+            );
+
+    border: 1px solid rgba(212,177,95,.14);
+
+    box-shadow:
+            0 24px 55px rgba(0,0,0,.42);
+
+    transition:
+            transform .3s ease,
+            box-shadow .3s ease;
 }
 
-.yb-senior-photo {
-    height: 180px;
-    background: #0a1123;
-    border-radius: 1rem;
-    margin-bottom: 1rem;
+.yb-senior-row:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+            0 32px 70px rgba(0,0,0,.52);
 }
 
-.yb-seniors-cta {
-    margin-top: 3rem;
+/* =========================
+   IMAGE AREA
+========================= */
+
+.yb-senior-images {
+    position: relative;
+
+    width: 100%;
+    height: 300px;
+
+    overflow: hidden;
+
+    background:
+            radial-gradient(circle at top, rgba(255,255,255,.03), transparent 60%),
+            #050816;
 }
 
-@media (max-width: 900px) {
-    .yb-seniors-grid {
-        grid-template-columns: 1fr 1fr;
+.yb-senior-images img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    object-fit: cover;
+    padding: 0;
+    background: transparent;
+}
+
+/* LEFT IMAGE */
+.kid-photo {
+    left: 0;
+    width: 52%;
+    object-position: center center;
+
+    clip-path: polygon(
+            0 0,
+            100% 0,
+            94% 100%,
+            0 100%
+    );
+}
+
+/* RIGHT IMAGE */
+.senior-photo {
+    right: 0;
+    width: 52%;
+    object-position: center center;
+
+    clip-path: polygon(
+            6% 0,
+            100% 0,
+            100% 100%,
+            0 100%
+    );
+}
+
+/* SLASH */
+.diagonal-divider {
+    position: absolute;
+    top: -6%;
+    left: 50%;
+
+    width: 4px;
+    height: 112%;
+
+    background: linear-gradient(
+            180deg,
+            rgba(255,255,255,.95),
+            rgba(255,255,255,.7)
+    );
+
+    transform: rotate(8deg);
+    z-index: 4;
+}
+
+/* =========================
+   TEXT SECTION
+========================= */
+
+.yb-senior-overlay {
+    position: relative;
+    z-index: 5;
+
+    height: 140px;
+
+    padding: 1.2rem 1.4rem;
+
+    background:
+            linear-gradient(
+                    180deg,
+                    rgba(0,0,0,.72),
+                    rgba(0,0,0,.94)
+            );
+
+    color: white;
+
+    text-align: left;
+}
+
+.yb-senior-label {
+    color: #d4b15f;
+
+    letter-spacing: .18em;
+    text-transform: uppercase;
+
+    font-size: .72rem;
+
+    margin-bottom: .45rem;
+}
+
+.yb-senior-overlay h2 {
+    font-family: "Bree Serif", serif;
+
+    font-size: 2rem;
+    line-height: 1.05;
+
+    margin: 0;
+}
+
+.yb-senior-details {
+    margin-top: .55rem;
+
+    color: #d4b15f;
+
+    font-size: .92rem;
+    line-height: 1.35;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1100px) {
+
+    .yb-seniors-list {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 500px) {
-    .yb-seniors-grid {
-        grid-template-columns: 1fr;
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .yb-seniors-page {
+        padding-top: 9rem;
     }
 
     .yb-seniors-hero h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
+    }
+
+    .yb-seniors-list {
+        grid-template-columns: 1fr;
+    }
+
+    .yb-senior-row {
+        height: 500px;
+        border-radius: 1.4rem;
+    }
+
+    .yb-senior-images {
+        height: 360px;
+    }
+
+    .yb-senior-overlay {
+        height: 140px;
+    }
+
+    .yb-senior-overlay h2 {
+        font-size: 1.8rem;
+    }
+
+    .yb-senior-details {
+        font-size: .85rem;
+    }
+
+    .diagonal-divider {
+        width: 2px;
     }
 }
