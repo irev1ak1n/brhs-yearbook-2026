@@ -157,52 +157,73 @@
     padding: 0;
     background: transparent;
 }
-
 /* LEFT IMAGE */
+
 .kid-photo {
+    position: absolute;
+
     left: 0;
+    top: 0;
+
     width: 52%;
-    object-position: center center;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
 
     clip-path: polygon(
             0 0,
             100% 0,
-            94% 100%,
+            92% 100%,
             0 100%
     );
+
+    z-index: 1;
 }
 
 /* RIGHT IMAGE */
+
 .senior-photo {
+    position: absolute;
+
     right: 0;
+    top: 0;
+
     width: 52%;
-    object-position: center center;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
 
     clip-path: polygon(
-            6% 0,
+            8% 0,
             100% 0,
             100% 100%,
             0 100%
     );
+
+    z-index: 2;
 }
 
 /* SLASH */
+
 .diagonal-divider {
     position: absolute;
-    top: -6%;
-    left: 50%;
 
-    width: 4px;
-    height: 112%;
+    top: -15%;
+    left: 49%;
 
-    background: linear-gradient(
-            180deg,
-            rgba(255,255,255,.95),
-            rgba(255,255,255,.7)
-    );
+    width: 5px;
+    height: 140%;
 
-    transform: rotate(8deg);
-    z-index: 4;
+    background: rgba(255,255,255,.92);
+
+    transform: rotate(3deg);
+
+    z-index: 5;
+
+    box-shadow:
+            0 0 18px rgba(255,255,255,.25);
 }
 
 /* =========================
