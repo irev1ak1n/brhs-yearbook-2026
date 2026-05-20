@@ -85,8 +85,9 @@
 ========================= */
 
 .yb-seniors-list {
-    width: min(420px, 94%);
-    margin: 0 auto;
+    width: min(450px, 94%);
+    margin-left: 30px;
+    margin-right: auto;
 
     display: grid;
 
@@ -95,6 +96,7 @@
 
     gap: 2rem;
 }
+
 
 /* =========================
    EACH CARD
