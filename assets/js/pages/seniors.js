@@ -36,6 +36,18 @@ seniorSort.addEventListener("change", () => {
         );
     }
 
+    if (seniorSort.value === "major-az") {
+        sortedCards = cards.sort((a, b) =>
+            getMajor(a).localeCompare(getMajor(b))
+        );
+    }
+
+    if (seniorSort.value === "major-za") {
+        sortedCards = cards.sort((a, b) =>
+            getMajor(b).localeCompare(getMajor(a))
+        );
+    }
+
     seniorsList.innerHTML = "";
     sortedCards.forEach(card => seniorsList.appendChild(card));
 });
@@ -45,5 +57,20 @@ function getName(card) {
 }
 
 function getCollege(card) {
-    return card.querySelector(".yb-senior-details").textContent.split("•")[0].trim();
+    return card
+        .querySelector(".yb-senior-details")
+        .textContent
+        .split("•")[0]
+        .trim();
+}
+
+function getMajor(card) {
+    const details = card
+        .querySelector(".yb-senior-details")
+        .textContent
+        .trim();
+
+    const parts = details.split("•");
+
+    return parts[1] ? parts[1].trim() : "Undeclared";
 }
