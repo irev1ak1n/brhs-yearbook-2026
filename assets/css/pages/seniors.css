@@ -599,3 +599,57 @@
     flex-direction: column;
     align-items: center;
 }
+
+
+.yb-seniors-hero {
+    margin-bottom: 4.5rem;
+}
+
+.yb-seniors-toolbar {
+    width: min(1500px, calc(100% - 60px));
+    margin: 0 auto 2.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    position: relative;
+    z-index: 2;
+}
+
+.yb-seniors-toolbar p {
+    color: rgba(255,255,255,.68);
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-size: .8rem;
+}
+
+.yb-seniors-toolbar select {
+    padding: .85rem 3.4rem .85rem 1.2rem;
+
+    border-radius: 999px;
+    border: 1px solid rgba(212,177,95,.25);
+
+    background: rgba(5,8,24,.82);
+    color: #f7f4ee;
+
+    font-weight: 700;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image:
+            linear-gradient(45deg, transparent 50%, #ffffff 50%),
+            linear-gradient(135deg, #ffffff 50%, transparent 50%);
+
+    background-position:
+            calc(100% - 26px) calc(50% + 1px),
+            calc(100% - 18px) calc(50% + 1px);
+
+    background-size: 8px 8px;
+    background-repeat: no-repeat;
+}
