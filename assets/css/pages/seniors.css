@@ -328,7 +328,6 @@
 }
 
 @media (max-width: 1100px) {
-
     .yb-seniors-list {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -374,8 +373,6 @@
     }
 }
 
-
-
 .yb-upload-banner {
     position: relative;
     overflow: hidden;
@@ -389,7 +386,6 @@
     gap: 2rem;
 
     border-radius: 2.4rem;
-
     background:
             radial-gradient(circle at 15% 20%, rgba(59,130,246,.16), transparent 28%),
             radial-gradient(circle at 85% 15%, rgba(124,58,237,.14), transparent 24%),
@@ -404,13 +400,13 @@
             );
 
     border: 1px solid rgba(120,140,255,.16);
-
     box-shadow:
             0 30px 80px rgba(0,0,0,.45),
             inset 0 1px 0 rgba(255,255,255,.04);
 
     isolation: isolate;
 }
+
 .yb-upload-banner::before {
     content: "";
 
@@ -465,7 +461,6 @@
     z-index: -2;
 }
 
-
 @keyframes floatingGlowBlue {
 
     0% {
@@ -495,6 +490,7 @@
         transform: translate(30px, -45px) scale(1.04);
     }
 }
+
 
 
 .yb-upload-kicker {
@@ -535,7 +531,6 @@
                     rgba(4,7,20,.68)
             );
     border: 1px dashed rgba(185,167,255,.38);
-
 }
 
 .yb-upload-icon {
@@ -597,56 +592,6 @@
     box-shadow:
             0 22px 50px rgba(79,70,229,.38),
             inset 0 1px 0 rgba(255,255,255,.22);
-}
-
-
-
-
-.yb-file-list {
-    margin-top: 1.2rem;
-
-    display: flex;
-    gap: .75rem;
-    flex-wrap: wrap;
-
-    justify-content: center;
-}
-
-.yb-file-preview {
-    position: relative;
-
-    width: 72px;
-    height: 72px;
-
-    border-radius: 1rem;
-    overflow: hidden;
-
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.12);
-}
-
-.yb-file-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.yb-remove-file {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-
-    width: 24px;
-    height: 24px;
-
-    border: none;
-    border-radius: 50%;
-
-    background: rgba(20,20,30,.95);
-    color: white;
-
-    font-size: 1rem;
-    cursor: pointer;
 }
 
 .yb-upload-inner {
