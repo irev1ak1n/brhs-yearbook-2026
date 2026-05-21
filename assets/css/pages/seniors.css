@@ -374,21 +374,128 @@
     }
 }
 
+
+
 .yb-upload-banner {
+    position: relative;
+    overflow: hidden;
+
     width: min(1220px, calc(100% - 64px));
-    margin: 0 auto 5rem;
+    margin: 6rem auto 5rem;
     padding: 3rem;
 
     display: grid;
     grid-template-columns: 1fr 390px;
     gap: 2rem;
 
-    border-radius: 2.2rem;
-    background: linear-gradient(135deg, rgba(11,13,34,.96), rgba(8,10,28,.94));
-    border: 1px solid rgba(130,150,255,.12);
+    border-radius: 2.4rem;
 
-    box-shadow: 0 24px 70px rgba(0,0,0,.35);
+    background:
+            radial-gradient(circle at 15% 20%, rgba(59,130,246,.16), transparent 28%),
+            radial-gradient(circle at 85% 15%, rgba(124,58,237,.14), transparent 24%),
+            radial-gradient(circle at 50% 120%, rgba(255,255,255,.05), transparent 42%),
+
+            linear-gradient(
+                    135deg,
+                    rgba(4,7,22,.98) 0%,
+                    rgba(5,10,35,.98) 35%,
+                    rgba(4,9,30,.98) 70%,
+                    rgba(2,5,18,.98) 100%
+            );
+
+    border: 1px solid rgba(120,140,255,.16);
+
+    box-shadow:
+            0 30px 80px rgba(0,0,0,.45),
+            inset 0 1px 0 rgba(255,255,255,.04);
+
+    isolation: isolate;
 }
+.yb-upload-banner::before {
+    content: "";
+
+    position: absolute;
+    top: -180px;
+    left: -120px;
+
+    width: 520px;
+    height: 520px;
+
+    border-radius: 50%;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(59,130,246,.18) 0%,
+                    rgba(59,130,246,.08) 35%,
+                    transparent 72%
+            );
+
+    filter: blur(45px);
+
+    animation: floatingGlowBlue 14s ease-in-out infinite alternate;
+
+    z-index: -2;
+}
+
+.yb-upload-banner::after {
+    content: "";
+
+    position: absolute;
+    right: -140px;
+    bottom: -220px;
+
+    width: 480px;
+    height: 480px;
+
+    border-radius: 50%;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(124,58,237,.16) 0%,
+                    rgba(124,58,237,.07) 38%,
+                    transparent 72%
+            );
+
+    filter: blur(55px);
+
+    animation: floatingGlowPurple 18s ease-in-out infinite alternate;
+
+    z-index: -2;
+}
+
+
+@keyframes floatingGlowBlue {
+
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+
+    50% {
+        transform: translate(40px, 25px) scale(1.08);
+    }
+
+    100% {
+        transform: translate(-20px, 50px) scale(1.03);
+    }
+}
+
+@keyframes floatingGlowPurple {
+
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+
+    50% {
+        transform: translate(-35px, -20px) scale(1.1);
+    }
+
+    100% {
+        transform: translate(30px, -45px) scale(1.04);
+    }
+}
+
 
 .yb-upload-kicker {
     color: #b9a7ff;
@@ -421,14 +528,14 @@
     justify-content: center;
 
     border-radius: 1.5rem;
-
     background:
-            radial-gradient(circle at top, rgba(120,100,255,.12), transparent 45%),
-            rgba(2,5,18,.72);
-
+            linear-gradient(
+                    135deg,
+                    rgba(5,8,24,.72),
+                    rgba(4,7,20,.68)
+            );
     border: 1px dashed rgba(185,167,255,.38);
 
-    text-align: center;
 }
 
 .yb-upload-icon {
@@ -490,4 +597,60 @@
     box-shadow:
             0 22px 50px rgba(79,70,229,.38),
             inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+
+
+
+.yb-file-list {
+    margin-top: 1.2rem;
+
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+
+    justify-content: center;
+}
+
+.yb-file-preview {
+    position: relative;
+
+    width: 72px;
+    height: 72px;
+
+    border-radius: 1rem;
+    overflow: hidden;
+
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+.yb-file-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.yb-remove-file {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+
+    width: 24px;
+    height: 24px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(20,20,30,.95);
+    color: white;
+
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.yb-upload-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
