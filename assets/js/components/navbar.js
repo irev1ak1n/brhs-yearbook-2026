@@ -5,18 +5,18 @@
 
         if (!searchInput) return;
 
-        const basePlaceholder = "Search prom info...";
+        const basePlaceholder = "Search yearbook info...";
         const examples = [
-            "When is prom night?",
-            "Where is the venue?",
-            "Ticket deadline May 1",
-            "What should I wear?",
-            "Dress code for prom",
-            "Buy prom tickets",
-            "Prom night schedule",
-            "Parking at The Hamilton",
-            "Guest rules for prom",
-            "Everything about prom"
+            "How much is a yearbook?",
+            "When is the order deadline?",
+            "Where do I pick up my book?",
+            "Yearbook room 2206",
+            "Buy my yearbook",
+            "Why order early?",
+            "Senior portrait info",
+            "Sports team photos",
+            "Contact yearbook staff",
+            "Everything about the yearbook"
         ];
 
         let exIndex = 0;
@@ -41,7 +41,7 @@
 
                 if (charIndex >= full.length) {
                     deleting = true;
-                    setTimeout(tick, 1000);
+                    setTimeout(tick, 1100);
                     return;
                 }
             } else {
@@ -86,7 +86,7 @@
             return true;
         }
 
-        function goToPromSearch() {
+        function goToYearbookSearch() {
             const raw = searchInput.value.trim();
             if (!raw || !isValidQuery(raw)) return;
 
@@ -94,33 +94,70 @@
 
             const routes = [
                 {
-                    target: "/tickets",
+                    target: "/pages/get-yearbooks.html",
                     keys: [
-                        "ticket", "tickets",
-                        "buy", "buy ticket", "buy tickets",
-                        "get ticket", "get tickets",
-                        "purchase", "purchase ticket",
+                        "yearbook", "buy yearbook", "buy my yearbook",
+                        "order yearbook", "order my yearbook", "order",
+                        "buy", "purchase", "purchase yearbook",
                         "price", "prices", "cost", "how much",
-                        "payment", "pay", "pay for tickets",
-                        "ticket price", "ticket cost"
+                        "payment", "pay", "pay for yearbook",
+                        "yearbook price", "yearbook cost",
+                        "deadline", "order deadline", "when is the deadline",
+                        "last day to order", "ticket"
                     ],
                 },
 
                 {
-                    target: "/faq",
+                    target: "/pages/get-yearbooks.html#reasons",
                     keys: [
-                        "faq", "faqs",
-                        "questions", "common questions",
-                        "rules", "rules for prom",
-                        "policy", "policies",
-                        "allowed", "not allowed",
-                        "what can i bring", "what is allowed",
-                        "restrictions"
+                        "why order early", "order early", "reasons",
+                        "why buy early", "limited copies",
+                        "why act now", "before the deadline"
                     ],
                 },
 
                 {
-                    target: "/contact",
+                    target: "/pages/get-yearbooks.html#pickup",
+                    keys: [
+                        "pickup", "pick up", "distribution",
+                        "room 2206", "2206",
+                        "missed pickup", "missed distribution",
+                        "where do i pick up", "get my yearbook",
+                        "collect yearbook", "collect my yearbook",
+                        "when do i get my yearbook", "distribution day"
+                    ],
+                },
+
+                {
+                    target: "/pages/seniors.html",
+                    keys: [
+                        "senior", "seniors",
+                        "senior portrait", "senior portraits",
+                        "senior page", "senior photos",
+                        "class of 2026","class of 2027", "graduating class"
+                    ],
+                },
+
+                {
+                    target: "/pages/sports.html",
+                    keys: [
+                        "sports", "athletics", "team photos",
+                        "sports photos", "games", "teams",
+                        "sports page"
+                    ],
+                },
+
+                {
+                    target: "/pages/our-team.html",
+                    keys: [
+                        "our team", "staff", "yearbook staff",
+                        "advisor", "editors", "editorial team",
+                        "who makes the yearbook", "team page"
+                    ],
+                },
+
+                {
+                    target: "/pages/contact.html",
                     keys: [
                         "contact", "contact us",
                         "email", "email school",
@@ -132,129 +169,25 @@
                 },
 
                 {
-                    target: "/gallery",
+                    target: "/pages/faq.html",
                     keys: [
-                        "gallery", "photos", "pictures",
-                        "images", "pics",
-                        "prom pictures", "prom photos",
-                        "prom gallery", "see photos",
-                        "view gallery", "photo gallery",
-                        "event photos", "prom images"
+                        "faq", "faqs",
+                        "questions", "common questions",
+                        "rules", "policy", "policies",
+                        "allowed", "not allowed",
+                        "what is allowed", "restrictions"
                     ],
                 },
 
                 {
-                    target: "/night-guide#theme",
-                    keys: [
-                        "theme", "prom theme",
-                        "las vegas", "vegas",
-                        "what is the theme",
-                        "theme idea", "prom style"
-                    ],
-                },
-
-                {
-                    target: "/night-guide#date-time",
-                    keys: [
-                        "date", "time", "when",
-                        "when is prom", "when is prom night",
-                        "what time is prom",
-                        "start time", "end time",
-                        "schedule", "prom schedule",
-                        "may 2", "7 pm", "11 pm"
-                    ],
-                },
-
-                {
-                    target: "/night-guide#venue",
-                    keys: [
-                        "venue",
-                        "the hamilton",
-                        "parking", "parking info",
-                    ],
-                },
-
-                {
-                    target: "/night-guide#dress-code",
-                    keys: [
-                        "dress code", "what to wear",
-                        "wear", "outfit",
-                        "formal", "formal wear",
-                        "suit", "dress",
-                        "attire", "clothes",
-                        "what should i wear",
-                        "prom outfit"
-                    ],
-                },
-
-                {
-                    target: "/night-guide#tickets",
-                    keys: [
-                        "deadline", "ticket deadline",
-                        "buy early", "sales close",
-                        "last day", "last day to buy",
-                        "april 15",
-                        "when do tickets close",
-                        "ticket cutoff"
-                    ],
-                },
-
-                {
-                    target: "/night-guide",
-                    keys: [
-                        "night guide", "guide",
-                        "prom info", "prom information",
-                        "details", "information",
-                        "everything about prom",
-                        "all info", "full info"
-                    ],
-                },
-
-                {
-                    target: "/",
+                    target: "/index.html",
                     keys: [
                         "home", "homepage", "main page",
                         "start", "go home",
-                        "prom home", "prom homepage",
                         "back to home", "landing",
                         "main", "overview"
                     ],
                 },
-
-                {
-                    target: "/#map",
-                    keys: [
-                        "map", "location map",
-                        "venue map", "prom map",
-                        "where is it on map",
-                        "find location", "see location",
-                        "directions", "how to get there",
-                        "open map", "view map",
-                        "join us", "join us section",
-                        "where is prom located",
-                        "show location", "location", "address",
-                        "where", "where is prom",
-                        "where is the venue", "how to get there"
-                    ],
-                },
-
-                {
-                    target: "/#newsletter",
-                    keys: [
-                        "newsletter", "subscribe",
-                        "sign up", "signup",
-                        "join mailing list",
-                        "email updates",
-                        "get updates", "stay updated",
-                        "notifications", "alerts",
-                        "prom updates",
-                        "news", "latest news",
-                        "updates about prom",
-                        "subscribe for updates"
-                    ],
-                },
-
-
             ];
 
             const matches = (keys) =>
@@ -270,20 +203,44 @@
                 }
             }
 
-            // fallback: send unknown but valid prom-related searches to FAQ
-            window.location.href = `/faq?q=${encodeURIComponent(raw)}`;
+            // fallback: send unknown but valid yearbook-related searches to FAQ
+            window.location.href = `/pages/faq.html?q=${encodeURIComponent(raw)}`;
         }
 
         searchInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
-                goToPromSearch();
+                goToYearbookSearch();
+            }
+            if (e.key === "Escape") {
+                searchInput.value = "";
+                searchInput.blur();
+                searchInput.closest(".nav-search")?.classList.remove("active");
             }
         });
 
-        if (searchBtn) {
-            searchBtn.addEventListener("click", goToPromSearch);
-        }
+        searchBtn?.addEventListener("click", (e) => {
+            const form = searchInput.closest(".nav-search");
+            const isOpen = form?.classList.contains("active") || document.activeElement === searchInput;
+
+            if (!isOpen) {
+                e.preventDefault();
+                form?.classList.add("active");
+                setTimeout(() => searchInput.focus(), 250);
+                return;
+            }
+
+            goToYearbookSearch();
+        });
+
+        // collapse desktop search if clicking elsewhere while empty
+        document.addEventListener("click", (e) => {
+            const form = searchInput.closest(".nav-search");
+            if (!form) return;
+            if (!form.contains(e.target) && !searchInput.value) {
+                form.classList.remove("active");
+            }
+        });
     }
 
     function initNavScroll() {
@@ -299,11 +256,10 @@
     }
 
     function setActiveLink() {
-        const links = document.querySelectorAll(".nav a");
+        const links = document.querySelectorAll(".nav a, .mobile-sidebar-links a");
         if (!links.length) return;
 
         const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
-        const currentHash = window.location.hash || "";
 
         links.forEach((link) => {
             link.classList.remove("is-active");
@@ -344,7 +300,10 @@
             sidebar?.setAttribute("aria-hidden", "true");
         }
 
-        menuToggle.addEventListener("click", openMenu);
+        menuToggle.addEventListener("click", () => {
+            const isOpen = body.classList.contains("mobile-menu-open");
+            isOpen ? closeSidebar() : openMenu();
+        });
         closeMenu?.addEventListener("click", closeSidebar);
         overlay?.addEventListener("click", closeSidebar);
 
@@ -352,8 +311,7 @@
             if (e.key === "Escape") closeSidebar();
         });
 
-        // close menu when clicking links
-        document.querySelectorAll(".mobile-sidebar a").forEach(link => {
+        document.querySelectorAll(".mobile-sidebar-links a").forEach((link) => {
             link.addEventListener("click", closeSidebar);
         });
     }
@@ -371,7 +329,7 @@
             body.classList.add("mobile-search-open");
             searchToggle.setAttribute("aria-expanded", "true");
             searchPanel.setAttribute("aria-hidden", "false");
-            setTimeout(() => mobileSearchInput?.focus(), 50);
+            setTimeout(() => mobileSearchInput?.focus(), 100);
         }
 
         function closeSearch() {
@@ -382,11 +340,7 @@
 
         searchToggle.addEventListener("click", () => {
             const isOpen = body.classList.contains("mobile-search-open");
-            if (isOpen) {
-                closeSearch();
-            } else {
-                openSearch();
-            }
+            isOpen ? closeSearch() : openSearch();
         });
 
         mobileSearchBtn?.addEventListener("click", () => {
@@ -406,6 +360,9 @@
                 e.preventDefault();
                 mobileSearchBtn?.click();
             }
+            if (e.key === "Escape") {
+                closeSearch();
+            }
         });
 
         document.addEventListener("keydown", (e) => {
@@ -415,11 +372,63 @@
         });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    const NAVBAR_PATHS = [
+        "navbar.html",
+        "./navbar.html",
+        "../navbar.html",
+        "../components/navbar.html",
+        "../assets/components/navbar.html",
+        "../assets/html/components/navbar.html",
+        "/assets/components/navbar.html",
+        "/assets/html/components/navbar.html",
+        "/components/navbar.html",
+    ];
+
+    async function fetchFirstAvailable(paths) {
+        for (const path of paths) {
+            try {
+                const res = await fetch(path, { cache: "no-cache" });
+                if (res.ok) {
+                    const html = await res.text();
+                    // sanity check: make sure we actually got the navbar markup
+                    if (html.includes("siteNav"))
+                        return html;
+                }
+            } catch (_) {
+                /* try next path */
+            }
+        }
+        return null;
+    }
+
+    async function loadNavbar() {
+        const placeholder = document.getElementById("navbar-placeholder");
+        if (!placeholder) {
+            initAll();
+            return;
+        }
+
+        const html = await fetchFirstAvailable(NAVBAR_PATHS);
+
+        if (html) {
+            placeholder.outerHTML = html;
+        } else {
+            console.error(
+                "navbar.js: could not load navbar.html from any known path. " +
+                "Tried: " + NAVBAR_PATHS.join(", ")
+            );
+        }
+
+        initAll();
+    }
+
+    function initAll() {
         initNavSearch();
         initNavScroll();
         setActiveLink();
         initMobileMenu();
         initMobileSearch();
-    });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadNavbar);
 })();

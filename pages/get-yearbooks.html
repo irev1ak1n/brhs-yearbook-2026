@@ -1,67 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <title>Buy Yearbook | BRHS Yearbook</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="../assets/css/core/global.css">
-    <link rel="stylesheet" href="../assets/css/index.css">
-
-    <link rel="stylesheet" href="../assets/css/pages/get-yearbooks.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/pages/buy.css">
     <link rel="stylesheet" href="../assets/css/components/navbar.css">
-    <link rel="stylesheet" href="../assets/css/components/mobile-navbar.css">
-    <link rel="stylesheet" href="../assets/css/components/footer.css">
-
-    <link rel="shortcut icon" href="../assets/images/logo/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/logo/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/logo/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/logo/apple-touch-icon.png">
-    <link rel="manifest" href="../assets/images/logo/site.webmanifest">
 </head>
 <body>
 
+<canvas id="c-room"></canvas>
+<canvas id="c-fire"></canvas>
+<canvas id="c-dust"></canvas>
+
 <div id="navbar-placeholder"></div>
 
-<main>
-    <section class="yb-buy-page">
-
-        <!-- HERO -->
-        <div class="yb-buy-hero">
-            <p class="yb-buy-kicker">BRHS YEARBOOK 2026</p>
-            <h1>Secure Your Yearbook</h1>
-            <p>
-                Capture the moments, friendships, and memories that define your year at BRHS.
-            </p>
-
-            <a href="https://YOUR-SCHOOL-LINK.com" target="_blank" class="yb-buy-btn">
-                BUY YEARBOOK
-            </a>
+<section class="hero">
+    <div class="hero-inner">
+        <p class="hero-kicker" id="kicker"></p>
+        <h1 class="hero-title">
+            <span class="row"><span>Secure</span></span>
+            <span class="row"><span>your</span></span>
+            <span class="row"><span class="faded">copy.</span></span>
+        </h1>
+        <p class="hero-sub">Years from now, we'll forget a lot of things. These pages help us remember the ones that mattered most.</p>
+        <div class="hero-ctas">
+            <a href="https://www.jostens.com/apps/store/customer/3313696/Ballantyne-Ridge-High-School/" target="_blank" class="btn-primary">Buy My Yearbook &rarr;</a>
+            <a href="#reasons" class="btn-ghost">Why order early?</a>
         </div>
-
-        <!-- WHY ORDER -->
-        <div class="yb-buy-info">
-            <h2>Why Order Early?</h2>
-            <p>
-                Yearbooks are printed in limited quantities. Ordering early guarantees
-                your copy and helps you avoid missing out at the end of the year.
-            </p>
+    </div>
+    <div class="scroll-hint">
+        <div class="candle-wrap">
+            <div class="candle-glow"></div>
+            <div class="candle-flame"></div>
+            <div class="candle-body"></div>
         </div>
+        <span>Scroll</span>
+    </div>
+</section>
 
-    </section>
+<div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
+<section class="section" id="reasons">
+    <span class="eyebrow" id="ew1">Why act now</span>
+    <h2 class="section-h" id="sh1">Before the<br><em>chapter ends</em></h2>
+    <div class="zig" id="zig">
+        <div class="zig-spine"></div><div class="zig-spine-fill"></div>
+        <div class="zig-row" id="zr1">
+            <div class="zig-left"><div class="zig-card">
+                <div class="zig-num">01</div>
+                <div class="zig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M21 8V19a2 2 0 01-2 2H5a2 2 0 01-2-2V8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+                <h3>Limited copies printed</h3>
+                <p>We only print what's ordered, plus a small reserve. Once they're gone, they're gone. No reprints. Every year, students miss out by waiting.</p>
+                <span class="mem-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Don&apos;t be the one without a copy</span>
+            </div></div>
+            <div class="zig-dot-col"><div class="zig-dot"></div></div>
+            <div class="zig-empty"></div>
+        </div>
+        <div class="zig-row" id="zr2">
+            <div class="zig-empty"></div>
+            <div class="zig-dot-col"><div class="zig-dot"></div></div>
+            <div class="zig-right"><div class="zig-card">
+                <div class="zig-num">02</div>
+                <div class="zig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 010 3h-3a1.5 1.5 0 000 3H15"/></svg></div>
+                <h3>Early price is the best price</h3>
+                <p>The price increases as the deadline approaches. Ordering now locks in the lowest rate all year.</p>
+                <span class="mem-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> Save money, act early</span>
+            </div></div>
+        </div>
+        <div class="zig-row" id="zr3">
+            <div class="zig-left"><div class="zig-card">
+                <div class="zig-num">03</div>
+                <div class="zig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+                <h3>First in line for signatures</h3>
+                <p>Having your book on distribution day means you&apos;re first to collect signatures from your friends and teachers.</p>
+                <span class="mem-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg> Your story, signed</span>
+            </div></div>
+            <div class="zig-dot-col"><div class="zig-dot"></div></div>
+            <div class="zig-empty"></div>
+        </div>
+        <div class="zig-row" id="zr4">
+            <div class="zig-empty"></div>
+            <div class="zig-dot-col"><div class="zig-dot"></div></div>
+            <div class="zig-right"><div class="zig-card">
+                <div class="zig-num">04</div>
+                <div class="zig-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+                <h3>These moments don&apos;t repeat</h3>
+                <p>This is the one book that holds all of it. Ten years from now, you&apos;ll pull it off the shelf and remember everything.</p>
+                <span class="mem-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> A lifetime on the shelf</span>
+            </div></div>
+        </div>
+    </div>
+</section>
 
-</main>
+<div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
-<!--<div id="footer-host"></div>-->
+<div class="deadline-wrap" style="padding-top:4rem">
+    <div class="deadline-box">
+        <div class="dl-text">
+            <h2>Order before the year ends</h2>
+            <p>Pre-orders close at the end of the school year. After that, your only chance is if copies remain. Write your name in one now.</p>
+        </div>
+        <div class="dl-right">
+            <div class="dl-label">Starting at</div>
+            <div class="dl-price">$100</div>
+            <div class="dl-note">Price increases closer to deadline</div>
+            <a href="https://www.jostens.com/apps/store/customer/3313696/Ballantyne-Ridge-High-School/" target="_blank" class="btn-primary" style="margin-top:1.4rem;font-size:.8rem;padding:.9rem 2rem">Order Now &rarr;</a>
+        </div>
+    </div>
+</div>
+
+<div class="pg-divider" style="padding:3rem 0"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+<div class="section" id="pickup" style="padding-top:2rem">
+    <span class="eyebrow" id="ew2">Distribution &amp; pickup</span>
+    <h2 class="section-h" id="sh2">How you get<br>your book</h2>
+
+    <div class="pickup-book-wrap" id="pickup-book-wrap">
+        <div class="pickup-book" id="pickup-book">
+            <div class="pb-spine"><span class="pb-spine-text">BRHS 2027</span></div>
+            <div class="pb-page pb-left">
+                <div class="pb-page-inner">
+                    <div class="pb-tag">End of year</div>
+                    <h3 class="pb-h">Distributed<br>in class</h3>
+                    <p class="pb-p">Yearbooks are distributed at the end of the school year. If you've ordered one, it'll be waiting for you when the time comes.</p>
+                    <p class="pb-p" style="margin-top:.9rem;opacity:.65;font-size:.78rem">Watch for announcements closer to distribution day for exact dates.</p>
+                    <div class="pb-pg-num">01</div>
+                </div>
+            </div>
+            <div class="pb-flip" id="pb-flip">
+                <div class="pb-flip-front">
+                    <div class="pb-page-inner">
+                        <div class="pb-tag" style="background:rgba(140,55,15,.1);border-color:rgba(160,70,20,.28);color:rgba(195,110,50,.9)">Missed pickup?</div>
+                        <h3 class="pb-h">Come find<br>us directly</h3>
+                        <p class="pb-p">If you missed distribution day or have questions about your order, swing by the yearbook room. Your copy will be waiting.</p>
+                        <div class="pb-room">
+                            <span class="pb-room-num">2206</span>
+                            <span class="pb-room-label">Yearbook Room<br><small style="opacity:.7">Available after distribution day</small></span>
+                        </div>
+                        <div class="pb-pg-num" style="left:auto;right:14px">02</div>
+                    </div>
+                </div>
+                <div class="pb-flip-back">
+                    <div class="pb-page-inner" style="display:flex;align-items:center;justify-content:center;height:100%">
+                        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:.85rem;color:rgba(70,38,12,.3);text-align:center;line-height:2">
+                            Your year.<br>Your story.<br>Your book.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pb-page pb-right">
+                <div class="pb-page-inner" style="display:flex;align-items:center;justify-content:center;height:100%">
+                    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:rgba(70,38,12,.18);letter-spacing:.1em;line-height:1.1;text-align:center">BRHS<br>YEARBOOK<br>2027</div>
+                </div>
+            </div>
+            <div class="pb-bookmark" id="pb-bm"><span class="pb-bm-text">2027</span></div>
+        </div>
+        <div class="pb-shadow" id="pb-shadow"></div>
+        <div class="pb-controls">
+            <button class="pb-btn" id="pb-prev" aria-label="Previous page">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <span class="pb-hint" id="pb-hint">click a page or use arrows to flip</span>
+            <button class="pb-btn" id="pb-next" aria-label="Next page">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<button class="lamp-btn" id="lamp-btn" title="Toggle lamp">
+    <svg viewBox="0 0 24 24"><path d="M9 21h6M12 3C8.7 3 6 5.7 6 9c0 2.4 1.3 4.5 3.3 5.6L9 18h6l-.3-3.4C16.7 13.5 18 11.4 18 9c0-3.3-2.7-6-6-6z"/></svg>
+</button>
+<div class="read-bar" id="read-bar"></div>
 
 <script src="../assets/js/components/navbar.js"></script>
-<script src="../assets/js/components/footer.js"></script>
-<script src="../assets/js/layout.js"></script>
-
+<script src="../assets/js/pages/buy.js"></script>
 </body>
 </html>

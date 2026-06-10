@@ -1,23 +1,22 @@
-<header class="topbar hero-top">
+<header class="topbar hero-top" id="siteNav">
     <div class="topbar-shell top-row">
 
-        <!-- left part of navbar -->
+        <!-- left half of the menu -->
         <nav class="nav nav-left" aria-label="Primary navigation left">
             <a href="/pages/get-yearbooks.html">Get Yearbook</a>
             <a href="/pages/seniors.html">Our Seniors</a>
             <a href="/pages/sports.html">Sports</a>
         </nav>
 
-        <!-- brand in the middle  -->
-        <a href="/index.html" class="brand brand-uw" aria-label="Go to homepage">
-            <div class="brand-text">
-                <strong class="title-desktop">Beyond the Yearbook</strong>
-                <strong class="title-mobile">Beyond the Yearbook</strong>
+        <!-- brand, centered -->
+        <a href="/index.html" class="brand-uw" aria-label="Go to homepage">
+            <span class="brand-text">
+                <strong>Beyond the Yearbook</strong>
                 <span>Ballantyne Ridge High School</span>
-            </div>
+            </span>
         </a>
 
-        <!-- right of the menu: search bar + second half of menu -->
+        <!-- right half: nav links + search -->
         <div class="nav-right-wrap">
             <nav class="nav nav-right" aria-label="Primary navigation right">
                 <a href="/pages/contact.html">Contact Us</a>
@@ -25,7 +24,7 @@
                 <a href="/pages/faq.html">FAQ</a>
             </nav>
 
-            <div class="nav-search desktop-search" role="search" aria-label="Search yearbook info">
+            <form class="nav-search desktop-search" id="navSearchForm" role="search" aria-label="Search yearbook info" autocomplete="off">
                 <input
                         id="navSearchInput"
                         type="search"
@@ -34,25 +33,14 @@
                 />
                 <button id="navSearchBtn" type="button" aria-label="Search">
                     <svg class="nav-search-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path
-                                d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                        />
-                        <path
-                                d="M16.3 16.3 21 21"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                        />
+                        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="16.3" y1="16.3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </button>
-            </div>
+            </form>
         </div>
 
-        <!-- mobile buttoons -->
+        <!-- mobile-only buttons -->
         <button
                 class="mobile-search-btn"
                 id="mobileSearchToggle"
@@ -62,19 +50,8 @@
                 aria-controls="mobileSearchPanel"
         >
             <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                        d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                />
-                <path
-                        d="M16.3 16.3 21 21"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                />
+                <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="16.3" y1="16.3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
         </button>
 
@@ -93,7 +70,7 @@
 
     </div>
 
-    <!-- mobile search panel -->
+    <!-- mobile search panel, slides down under the bar -->
     <div class="mobile-search-panel" id="mobileSearchPanel" aria-hidden="true">
         <div class="mobile-search-inner">
             <input
@@ -104,19 +81,8 @@
             />
             <button id="mobileSearchBtn" type="button" aria-label="Search">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                            d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18Z"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                    />
-                    <path
-                            d="M16.3 16.3 21 21"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                    />
+                    <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <line x1="16.3" y1="16.3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
         </div>
@@ -128,20 +94,19 @@
 <aside class="mobile-sidebar" id="mobileSidebar" aria-hidden="true">
     <div class="mobile-sidebar-top">
         <div class="mobile-sidebar-brand">
-            <strong>BRHS Yearbook 2026</strong>
+            <strong>Beyond the Yearbook</strong>
             <span>Ballantyne Ridge High School</span>
         </div>
-
         <button class="mobile-close-btn" id="closeMenu" type="button" aria-label="Close menu">
-            ×
+            <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
     </div>
 
     <nav class="mobile-sidebar-links" aria-label="Mobile navigation">
-        <a href="/pages/get-yearbooks.html">Yearbook</a>
+        <a href="/pages/get-yearbooks.html">Get Yearbook</a>
         <a href="/pages/seniors.html">Our Seniors</a>
         <a href="/pages/sports.html">Sports</a>
-        <a href="/pages/gallery.html">Our Team</a>
+        <a href="/pages/our-team.html">Our Team</a>
         <a href="/pages/contact.html">Contact Us</a>
         <a href="/pages/faq.html">FAQ</a>
     </nav>
