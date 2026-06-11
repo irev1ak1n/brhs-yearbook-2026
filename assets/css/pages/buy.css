@@ -109,6 +109,7 @@ body{
 
 .hero-title .faded{
     color:rgba(240,230,208,.48);
+
     animation:revealRow 1s .8s cubic-bezier(.16,1,.3,1) forwards, candleFlicker 4s 1.8s ease-in-out infinite;
 }
 
@@ -188,6 +189,7 @@ body{
 .section-h.in{opacity:1;transform:none}
 .section-h em{font-family:'Playfair Display',serif;font-style:italic;color:var(--ember-bright)}
 
+
 .zig{position:relative;padding:1rem 0 3rem}
 
 .zig-spine{
@@ -239,6 +241,7 @@ body{
     opacity:0;
     backdrop-filter:blur(2px);
     transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s;
+
     background-image:
             repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(240,220,180,.015) 28px,rgba(240,220,180,.015) 29px),
             linear-gradient(135deg,rgba(30,18,8,.8),rgba(22,12,4,.9));
@@ -336,11 +339,13 @@ body{
     0%,100%{opacity:.48}10%{opacity:.52}20%{opacity:.44}30%{opacity:.5}
     40%{opacity:.46}50%{opacity:.53}60%{opacity:.45}70%{opacity:.51}80%{opacity:.47}90%{opacity:.5}
 }
+
 @keyframes flameWiggle{
     0%,100%{transform:scaleX(1) scaleY(1) translateX(0)}
     25%{transform:scaleX(.75) scaleY(1.1) translateX(-1px)}
     75%{transform:scaleX(.85) scaleY(1.08) translateX(1px)}
 }
+
 @keyframes glowPulse{
     0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}
     50%{opacity:1;transform:translateX(-50%) scale(1.2)}
@@ -414,7 +419,7 @@ body{
 .pb-room-num{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:rgba(180,90,20,.85);line-height:1}
 .pb-room-label{font-family:sans-serif;font-size:.75rem;color:rgba(60,35,12,.65);line-height:1.5}
 .pb-pg-num{position:absolute;bottom:14px;left:14px;font-family:'Playfair Display',serif;font-style:italic;font-size:.65rem;color:rgba(80,45,15,.3)}
-/* THE FLIP PAGE */
+
 .pb-flip{
     position:absolute;top:0;right:0;
     width:calc(50% - 11px);height:100%;
@@ -427,6 +432,7 @@ body{
 .pb-flip.open{transform:rotateY(-180deg)}
 .pb-flip-front,.pb-flip-back{
     position:absolute;inset:0;backface-visibility:hidden;border-radius:0 3px 3px 0;
+    overflow:hidden;
 }
 .pb-flip-front{
     background:linear-gradient(160deg,#ede2c4,#f5ead4,#ebe0c2);
@@ -449,6 +455,7 @@ body{
 .pb-flip.turning .pb-flip-front{
     box-shadow:inset -4px 0 18px rgba(0,0,0,.08),-14px 0 32px rgba(0,0,0,.35);
 }
+
 .pb-bookmark{
     position:absolute;top:0;right:36px;z-index:20;
     width:20px;height:58px;cursor:pointer;
@@ -501,9 +508,24 @@ body.lamp-off .lamp-btn svg{stroke:rgba(212,115,42,.4)}
 }
 
 @media(max-width:740px){
-    .pickup-book{width:340px;height:240px}
-    .pb-shadow{width:300px}
-    .pb-h{font-size:1.4rem}
-    .pb-p{font-size:.72rem}
+    .pickup-book-wrap{padding:1rem 0 3rem}
+    .pickup-book{width:min(92vw,400px);height:560px}
+    .pb-shadow{width:min(80vw,340px)}
+    .pb-page-inner{padding:1.5rem 1.2rem 1.2rem}
+    .pb-tag{font-size:.56rem;padding:.18rem .6rem;margin-bottom:.7rem}
+    .pb-h{font-size:1.5rem;margin-bottom:.6rem}
+    .pb-p{font-size:.74rem;line-height:1.6}
+    .pb-room{margin-top:1rem;padding:.6rem .9rem;gap:.6rem}
     .pb-room-num{font-size:1.8rem}
+    .pb-room-label{font-size:.66rem}
+    .pb-pg-num{display:none}
+    .pb-spine{width:18px}
+    .pb-spine-text{font-size:.5rem}
+    .pb-bookmark{right:24px}
+}
+
+@media(max-width:380px){
+    .pickup-book{height:610px}
+    .pb-h{font-size:1.3rem}
+    .pb-p{font-size:.7rem}
 }

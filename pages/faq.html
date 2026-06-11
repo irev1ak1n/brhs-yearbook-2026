@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/core/global.css">
     <link rel="stylesheet" href="../assets/css/index.css">
@@ -30,144 +30,194 @@
 <div id="navbar-placeholder"></div>
 
 <main>
-    <section class="yb-faq-page">
-        <div class="yb-faq-hero">
-            <p class="yb-faq-kicker">BRHS YEARBOOK</p>
-            <h1>Frequently Asked Questions</h1>
-            <p class="yb-faq-subtitle">
+    <section class="faq-page">
+        <canvas id="faq-embers"></canvas>
+
+        <div class="faq-hero">
+            <p class="hero-kicker" id="kicker"></p>
+            <h1 class="faq-title">
+                <span class="row"><span>Frequently</span></span>
+                <span class="row"><span>Asked</span></span>
+                <span class="row"><span class="faded">Questions</span></span>
+            </h1>
+            <p class="faq-subtitle">
                 Find quick answers to the most common questions about the BRHS Yearbook.
             </p>
         </div>
 
-        <section class="yb-faq-section">
-            <div class="yb-faq-list">
-                <details class="yb-faq-item" open>
-                    <summary>How do I buy a yearbook?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            You can buy a yearbook through the Yearbook website’s ordering page.
-                        </p>
-                    </div>
-                </details>
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
-                <details class="yb-faq-item">
-                    <summary>When is the deadline to order?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            The last day of the deadline to order is ...
-                        </p>
-                    </div>
-                </details>
+        <div class="faq-section">
+            <div class="faq-list">
 
-                <details class="yb-faq-item">
-                    <summary>Can I submit photos to the yearbook?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            Yes. Students may have opportunities to submit photos from school events, sports, clubs, spirit weeks, and other activities for consideration by the yearbook staff.
-                        </p>
+                <div class="faq-item open">
+                    <button class="faq-q" aria-expanded="true">
+                        <span>How do I buy a yearbook?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>You can buy a yearbook through the Yearbook website&rsquo;s ordering page.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>When will yearbooks be distributed?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            Yearbooks will be distributed ...
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>When is the deadline to order?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>The last day of the deadline to order is &hellip;</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>Who should I contact if I have a question?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            For any questions about orders, submissions, or yearbook information, please use the Contact page
-                            and send a message to the yearbook team.
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>Can I submit photos to the yearbook?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>Yes. Students may have opportunities to submit photos from school events, sports, clubs, spirit weeks, and other activities for consideration by the yearbook staff.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item" open>
-                    <summary>Can yearbooks sell out?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            Yes. Once all copies are sold, additional yearbooks may not be available. Ordering early guarantees your copy.
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>When will yearbooks be distributed?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>Yearbooks will be distributed &hellip;</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>What happens if I lose my yearbook?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            Replacement copies are not guaranteed. If extra copies are available after distribution, students may be able to purchase another while supplies last.
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>Who should I contact if I have a question?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>For any questions about orders, submissions, or yearbook information, please use the Contact page and send a message to the yearbook team.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>Can seniors submit quotes or photos?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            Yes. Senior quote and photo submission information will be available on Senior page.
-                        </p>
+                <div class="faq-item open">
+                    <button class="faq-q" aria-expanded="true">
+                        <span>Can yearbooks sell out?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>Yes. Once all copies are sold, additional yearbooks may not be available. Ordering early guarantees your copy.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>What kinds of events are included in the yearbook?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            The yearbook highlights academics, athletics, clubs, performances, student life,
-                            dances, spirit events, and major moments from the school year.
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>What happens if I lose my yearbook?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>Replacement copies are not guaranteed. If extra copies are available after distribution, students may be able to purchase another while supplies last.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>What if my name or photo is incorrect?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            Please contact the yearbook staff as soon as possible through the Contact page.
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>Can seniors submit quotes or photos?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>Yes. Senior quote and photo submission information will be available on the Senior page.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>Are yearbooks refundable?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>What kinds of events are included in the yearbook?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>The yearbook highlights academics, athletics, clubs, performances, student life, dances, spirit events, and major moments from the school year.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
 
-                <details class="yb-faq-item">
-                    <summary>How can I contact the yearbook staff?</summary>
-                    <div class="yb-faq-answer">
-                        <p>
-                            You can use the Contact page on this website to reach the BRHS Yearbook team.
-                        </p>
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>What if my name or photo is incorrect?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>Please contact the yearbook staff as soon as possible through the Contact page.</p>
+                        </div>
                     </div>
-                </details>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>Are yearbooks refundable?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>&nbsp;</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" aria-expanded="false">
+                        <span>How can I contact the yearbook staff?</span>
+                        <span class="faq-icon"><i></i><i></i></span>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner">
+                            <p>You can use the Contact page on this website to reach the BRHS Yearbook team.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="yb-faq-help">
-                <p class="yb-faq-help-kicker">Still Need Help?</p>
-                <h2>We’re here for you.</h2>
+            <aside class="faq-help">
+                <div class="faq-help-glow"></div>
+                <p class="faq-help-kicker">Still need help?</p>
+                <h2>We&rsquo;re here for you.</h2>
                 <p>
-                    If your question is not answered here, visit the Contact page and send us a message.
+                    If your question isn’t answered here, visit our Contact page and send us a message. We’ll be happy to help and will get back to you as soon as possible.
                 </p>
-                <a href="contact.html" class="yb-faq-help-btn">CONTACT US</a>
-            </div>
-        </section>
+                <a href="contact.html" class="btn-primary faq-help-btn">
+                    Contact Us
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </a>
+            </aside>
+        </div>
+
     </section>
 </main>
 
-<!--<div id="footer-host"></div>-->
+<div id="footer-placeholder"></div>
 
 <script src="../assets/js/components/navbar.js"></script>
 <script src="../assets/js/components/footer.js"></script>
+<script src="../assets/js/pages/faq.js"></script>
 <script src="../assets/js/layout.js"></script>
 
 </body>
