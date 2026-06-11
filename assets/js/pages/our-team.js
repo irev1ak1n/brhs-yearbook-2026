@@ -1,4 +1,3 @@
-/* ══ KICKER CHAR STAGGER ══ */
 (function(){
     const kEl = document.getElementById('kicker');
     if(!kEl) return;
@@ -11,18 +10,6 @@
     });
 })();
 
-/* ══ FLIP CARDS (tap support for touch devices) ══ */
-(function(){
-    document.querySelectorAll('.team-card').forEach(card=>{
-        card.addEventListener('click', e=>{
-            // only toggle on touch-primary devices; desktop relies on :hover
-            if(window.matchMedia('(hover: hover)').matches) return;
-            card.classList.toggle('flipped');
-        });
-    });
-})();
-
-/* ══ SCROLL REVEAL ══ */
 (function(){
     const cards = document.querySelectorAll('.team-card');
     const cta = document.querySelector('.team-cta');
@@ -53,7 +40,6 @@
     }
 })();
 
-/* ══ EMBER PARTICLE CANVAS ══ */
 (function(){
     const canvas = document.getElementById('team-embers');
     const page = document.querySelector('.team-page');

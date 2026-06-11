@@ -1,6 +1,3 @@
-/* ══════════════════════════════════════
-   OUR TEAM PAGE — ember / library theme
-══════════════════════════════════════ */
 :root{
     --cream:#f0e6d0;
     --cream-dim:rgba(240,230,208,0.78);
@@ -41,7 +38,6 @@
     pointer-events:none;z-index:0;
 }
 
-/* ── HERO ── */
 .team-hero,
 .team-grid-wrap,
 .team-cta,
@@ -93,7 +89,6 @@
     opacity:0;animation:tmFadeUp .9s .55s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-/* ── PAGE DIVIDER ── */
 .pg-divider{
     display:flex;align-items:center;gap:1.2rem;
     max-width:900px;padding:3rem 2rem;
@@ -110,7 +105,6 @@
     50%{transform:scale(1.25) rotate(180deg);opacity:.9}
 }
 
-/* ── GRID ── */
 .team-grid-wrap{margin-top:1rem}
 
 .team-grid{
@@ -119,68 +113,37 @@
     gap:1.4rem;
 }
 
-/* ── FLIP CARD ── */
 .team-card{
-    perspective:1200px;
-    opacity:0;transform:translateY(28px);
-    transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .45s cubic-bezier(.16,1,.3,1);
-}
-.team-card.in{opacity:1;transform:none}
-
-.team-card-inner{
     position:relative;
-    width:100%;height:100%;
     min-height:340px;
-    transform-style:preserve-3d;
-    transition:transform .7s cubic-bezier(.16,1,.3,1);
-    border-radius:6px;
-}
-.team-card:hover .team-card-inner,
-.team-card.flipped .team-card-inner{
-    transform:rotateY(180deg);
-}
-
-.team-card-front,
-.team-card-back{
-    position:absolute;inset:0;
-    backface-visibility:hidden;
     border-radius:6px;
     border:1px solid var(--border);
     overflow:hidden;
+    display:flex;flex-direction:column;
     background:
             repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(240,220,180,.012) 28px,rgba(240,220,180,.012) 29px),
             linear-gradient(135deg,rgba(30,18,8,.7),rgba(18,10,4,.92));
-    transition:border-color .3s ease,box-shadow .3s ease;
+    opacity:0;transform:translateY(28px);
+    transition:
+            opacity .65s cubic-bezier(.16,1,.3,1),
+            transform .45s cubic-bezier(.16,1,.3,1),
+            border-color .3s ease,
+            box-shadow .3s ease;
 }
-.team-card:hover .team-card-front,
-.team-card:hover .team-card-back{
+.team-card.in{opacity:1;transform:none}
+.team-card:hover{
     border-color:rgba(212,115,42,.36);
     box-shadow:0 16px 44px rgba(0,0,0,.4),0 0 28px rgba(212,115,42,.06);
 }
 
-/* ember line on top, draws in on hover */
-.team-card-front::after,
-.team-card-back::after{
+.team-card::after{
     content:'';position:absolute;top:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,var(--ember-bright),var(--ember-glow),var(--ember-bright),transparent);
     transform:scaleX(0);transform-origin:center;
     transition:transform .55s cubic-bezier(.16,1,.3,1);pointer-events:none;
 }
-.team-card:hover .team-card-front::after,
-.team-card:hover .team-card-back::after{transform:scaleX(1)}
+.team-card:hover::after{transform:scaleX(1)}
 
-.team-card-front{
-    display:flex;flex-direction:column;
-}
-
-.team-card-back{
-    transform:rotateY(180deg);
-    display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
-    padding:1.8rem;
-    text-align:left;
-}
-
-/* ── PHOTO PLACEHOLDER ── */
 .team-photo-wrap{
     position:relative;
     aspect-ratio:1/1.05;
@@ -193,6 +156,7 @@
     position:absolute;inset:0;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;
     color:rgba(212,115,42,.5);
+    overflow:hidden;
 }
 .team-photo-placeholder svg{
     width:42%;max-width:64px;
@@ -203,19 +167,17 @@
     text-transform:uppercase;color:var(--cream-muted);
 }
 
-/* subtle ember scanline shimmer on placeholder */
 .team-photo-placeholder::before{
-    content:'';position:absolute;inset:0;
-    background:linear-gradient(115deg,transparent 40%,rgba(245,176,96,.06) 50%,transparent 60%);
-    background-size:220% 220%;
-    animation:tmShimmer 6s ease-in-out infinite;
+    content:'';position:absolute;top:0;bottom:0;left:-60%;width:40%;
+    background:linear-gradient(115deg,transparent,rgba(245,176,96,.08),transparent);
+    transform:skewX(-15deg) translateX(0);
+    transition:transform 1s cubic-bezier(.16,1,.3,1);
+    pointer-events:none;
 }
-@keyframes tmShimmer{
-    0%,100%{background-position:0% 0%}
-    50%{background-position:100% 100%}
+.team-card:hover .team-photo-placeholder::before{
+    transform:skewX(-15deg) translateX(420%);
 }
 
-/* ── CARD BODY ── */
 .team-card-body{
     padding:1.15rem 1rem 1.2rem;
     text-align:center;
@@ -234,42 +196,6 @@
     text-transform:uppercase;color:var(--ember-glow);
 }
 
-/* ── FLIP HINT ── */
-.team-flip-hint{
-    position:absolute;top:.8rem;right:.8rem;z-index:2;
-    display:flex;align-items:center;gap:.35rem;
-    padding:.3rem .6rem;border-radius:999px;
-    font-family:sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--cream-muted);
-    background:rgba(10,6,2,.55);border:1px solid rgba(240,230,208,.14);
-    backdrop-filter:blur(2px);
-    opacity:.8;
-    transition:opacity .3s ease,color .3s ease,border-color .3s ease;
-}
-.team-flip-hint svg{width:11px;height:11px}
-.team-card:hover .team-flip-hint{
-    opacity:1;color:var(--ember-bright);border-color:rgba(212,115,42,.3);
-}
-
-/* ── BACK FACE TEXT ── */
-.team-back-kicker{
-    margin:0 0 .7rem;
-    font-family:sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.32em;
-    text-transform:uppercase;color:var(--ember-glow);
-}
-.team-back-text{
-    margin:0;
-    font-family:sans-serif;font-size:.86rem;line-height:1.85;
-    color:var(--cream-dim);
-}
-.team-card-back::before{
-    /* small ember icon decoration */
-    content:'';position:absolute;top:1.6rem;right:1.6rem;
-    width:30px;height:30px;border-radius:50%;
-    background:rgba(212,115,42,.08);border:1px solid rgba(212,115,42,.22);
-}
-
-/* ── TEACHER ROW ── */
 .team-teacher-row{
     display:flex;justify-content:center;
     margin-top:1.6rem;
@@ -277,7 +203,7 @@
 .team-card-teacher{
     width:min(320px,100%);
 }
-.team-card-teacher .team-card-inner{min-height:380px}
+.team-card-teacher{min-height:380px}
 
 .team-badge{
     display:inline-flex;align-self:center;align-items:center;justify-content:center;
@@ -289,7 +215,6 @@
     background:rgba(212,115,42,.08);
 }
 
-/* ── CTA ── */
 .team-cta{
     position:relative;overflow:hidden;
     margin-top:1rem;
@@ -339,7 +264,6 @@
     color:var(--cream-dim);
 }
 
-/* ── BUTTON (mirrors buy.css btn-primary) ── */
 .btn-primary{
     position:relative;overflow:hidden;
     display:inline-flex;align-items:center;gap:.5rem;
@@ -365,7 +289,6 @@
 .team-cta-btn svg{width:15px;height:15px;transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .team-cta-btn:hover svg{transform:translateX(4px)}
 
-/* ── KEYFRAMES ── */
 @keyframes tmCharUp{to{opacity:1;transform:translateY(0)}}
 @keyframes tmRevealRow{to{opacity:1;transform:translateY(0) skewY(0)}}
 @keyframes tmFadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
@@ -374,9 +297,6 @@
     40%{opacity:.46}50%{opacity:.53}60%{opacity:.45}70%{opacity:.51}80%{opacity:.47}90%{opacity:.5}
 }
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
 @media (max-width:1100px){
     .team-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
@@ -392,7 +312,7 @@
     .team-hero{margin-bottom:.5rem}
     .pg-divider{padding:2.2rem 1.2rem}
     .team-grid{grid-template-columns:1fr;gap:1rem}
-    .team-card-inner{min-height:300px}
+    .team-card{min-height:300px}
     .team-card-body{padding:1rem .95rem 1.1rem}
     .team-card-body h3{font-size:1.35rem}
     .team-cta{padding:1.8rem 1.2rem;border-radius:6px}
