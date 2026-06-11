@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/core/global.css">
     <link rel="stylesheet" href="../assets/css/index.css">
@@ -28,90 +28,115 @@
 <div id="navbar-placeholder"></div>
 
 <main>
-    <section class="yb-contact-page">
-        <div class="yb-contact-hero">
-            <p class="yb-contact-kicker">BRHS YEARBOOK</p>
-            <h1>Contact Us</h1>
-            <p class="yb-contact-subtitle">
-                Have questions about yearbook content, photos, updates, or submissions? We’re here to help.
+    <section class="contact-page">
+        <canvas id="contact-embers"></canvas>
+
+        <div class="contact-hero">
+            <p class="hero-kicker" id="kicker"></p>
+            <h1 class="contact-title">
+                <span class="row"><span>Get in</span></span>
+                <span class="row"><span>touch</span></span>
+                <span class="row"><span class="faded">with us.</span></span>
+            </h1>
+            <p class="contact-subtitle">
+                Have questions about yearbook content, photos, updates, or submissions?
+                We&rsquo;re here to help.
             </p>
         </div>
 
-        <div class="yb-contact-wrap">
-            <div class="yb-contact-info">
-                <h2>Get in Touch</h2>
-                <p>
-                    If you have questions about the yearbook, gallery submissions, student content, or general updates,
-                    feel free to reach out. We’ll do our best to respond as soon as possible.
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+        <div class="contact-wrap">
+
+            <!-- INFO COLUMN -->
+            <div class="contact-info">
+                <h2 class="contact-info-h">Get in Touch</h2>
+                <p class="contact-info-lead">
+                    If you have questions about the yearbook, gallery submissions, student
+                    content, or general updates, feel free to reach out. We&rsquo;ll do our
+                    best to respond as soon as possible.
                 </p>
 
-                <div class="yb-contact-info-block">
-                    <h3>Email</h3>
-                    <p>amye.mcnelis@cms.k12.nc.us</p>
-                    <span>Use this for general questions, photo submissions, or yearbook-related concerns.</span>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3V5Zm0 0 9 7 9-7"/></svg>
+                    </div>
+                    <div class="info-body">
+                        <h3>Email</h3>
+                        <p class="info-value">amye.mcnelis@cms.k12.nc.us</p>
+                        <span>Use this for general questions, photo submissions, or yearbook-related concerns.</span>
+                    </div>
                 </div>
 
-                <div class="yb-contact-info-block">
-                    <h3>Response Time</h3>
-                    <p>Usually within 24–48 hours</p>
-                    <span>Please allow extra time during busy school weeks or deadlines.</span>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    </div>
+                    <div class="info-body">
+                        <h3>Response Time</h3>
+                        <p class="info-value">Usually within 24&ndash;48 hours</p>
+                        <span>Please allow extra time during busy school weeks or deadlines.</span>
+                    </div>
                 </div>
 
-                <div class="yb-contact-info-block">
-                    <h3>Need Help?</h3>
-                    <p>Check the FAQ first for common questions.</p>
-                    <span>If you still need help, send us a message directly.</span>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 2-2.5 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <div class="info-body">
+                        <h3>Need Help?</h3>
+                        <p class="info-value">Check the <a href="faq.html">FAQ</a> first for common questions.</p>
+                        <span>If you still need help, send us a message directly.</span>
+                    </div>
                 </div>
             </div>
 
-            <form class="yb-contact-form" id="contactForm">
-                <div class="yb-form-group">
+            <!-- FORM CARD -->
+            <form class="contact-form" id="contactForm" action="https://formspree.io/f/mgoblyrn" method="POST" novalidate>
+                <div class="contact-form-glow"></div>
+
+                <div class="field" data-field>
+                    <input id="name" name="name" type="text" placeholder=" " required autocomplete="name">
                     <label for="name">Name</label>
-                    <input id="name" name="name" type="text" placeholder="Your name" required>
+                    <span class="field-line"></span>
                 </div>
 
-                <div class="yb-form-group">
+                <div class="field" data-field>
+                    <input id="email" name="email" type="email" placeholder=" " required autocomplete="email">
                     <label for="email">Email</label>
-                    <input id="email" name="email" type="email" placeholder="Your email" required>
+                    <span class="field-line"></span>
                 </div>
 
-                <div class="yb-form-group">
+                <div class="field" data-field>
+                    <textarea id="message" name="message" placeholder=" " required></textarea>
                     <label for="message">Message</label>
-                    <textarea id="message" name="message" placeholder="Write your message..." required></textarea>
+                    <span class="field-line"></span>
                 </div>
 
-                <button type="submit" class="yb-contact-btn">Send Message</button>
+                <button type="submit" class="contact-btn" id="contactBtn">
+                    <span class="btn-label">Send Message</span>
+                    <span class="btn-icon">
+                        <svg class="icon-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    </span>
+                </button>
 
-                <p class="yb-contact-success" id="contactSuccess" hidden>
-                    Thanks — your message has been sent.
+                <p class="contact-success" id="contactSuccess">
+                    <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    <span id="contactSuccessText">Thanks &mdash; your message has been sent.</span>
                 </p>
             </form>
+
         </div>
     </section>
 </main>
 
-<!--<div id="footer-host"></div>-->
+<div id="footer-placeholder"></div>
 
 <script src="../assets/js/components/navbar.js"></script>
 <script src="../assets/js/components/footer.js"></script>
-
+<script src="../assets/js/pages/contact.js"></script>
 <script src="../assets/js/layout.js"></script>
-
-<script>
-    const contactForm = document.getElementById("contactForm");
-    const contactSuccess = document.getElementById("contactSuccess");
-
-    contactForm?.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        contactSuccess.hidden = false;
-        contactForm.reset();
-
-        setTimeout(() => {
-            contactSuccess.hidden = true;
-        }, 4000);
-    });
-</script>
 
 </body>
 </html>

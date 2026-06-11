@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Class of 2026 | BRHS Yearbook</title>
+    <title>Our Seniors | BRHS Yearbook</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/core/global.css">
     <link rel="stylesheet" href="../assets/css/index.css">
@@ -29,12 +28,51 @@
 
 <main>
     <section class="yb-seniors-page">
+        <canvas id="seniors-embers"></canvas>
+        <div class="yb-seniors-watermark">2026</div>
 
         <div class="yb-seniors-hero">
-            <p class="yb-seniors-kicker">BRHS YEARBOOK</p>
-            <h1>Class of 2026</h1>
-            <p>Every senior once stood on the other side of the camera. This is the journey between.</p>
+            <p class="hero-kicker" id="kicker"></p>
+            <h1 class="seniors-title">
+                <span class="row"><span>Senior</span></span>
+                <span class="row"><span class="faded">Legacy</span></span>
+            </h1>
+            <p class="seniors-subtitle">Every senior once stood on the other side of the camera. <br> This is the journey between.</p>
         </div>
+
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+        <div class="yb-next-grid">
+
+            <div class="yb-next-card yb-next-card--soon">
+                <span class="yb-next-badge">Coming Soon</span>
+                <div class="yb-next-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                </div>
+                <h2>Class of 2027</h2>
+                <p>The Class of 2027 archive is still being put together. Check back later in the year as more seniors are added.</p>
+            </div>
+
+            <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSem7FpNfSZPnSJCd-f55DRrvmL2119G3tzFt611PEwJFqR3_g/viewform?usp=sharing&ouid=117728662292977779084"
+                    target="_blank"
+                    class="yb-next-card yb-next-card--upload"
+            >
+                <p class="yb-upload-kicker">Share Your Memories</p>
+                <h2>Be part of the BRHS Yearbook archive.</h2>
+                <p class="yb-upload-text">
+                    Upload your childhood and senior photos to be featured in the yearbook.
+                    Share some of your favorite memories and moments from your journey at BRHS.
+                </p>
+                <span class="yb-next-cta">
+                    Submit your photos
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+        </div>
+
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
         <div class="yb-seniors-toolbar">
 
@@ -937,7 +975,10 @@
 
         </div>
 
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
         <section class="yb-upload-banner">
+            <div class="yb-upload-glow"></div>
 
             <div class="yb-upload-content">
                 <p class="yb-upload-kicker">Share Your Memories</p>
@@ -957,7 +998,9 @@
             >
                 <div class="yb-upload-inner">
 
-                    <div class="yb-upload-icon">＋</div>
+                    <div class="yb-upload-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                    </div>
 
                     <h3>Submit your photos</h3>
 
@@ -971,6 +1014,8 @@
     </section>
 
 </main>
+
+<div id="footer-placeholder"></div>
 
 <script src="../assets/js/components/navbar.js"></script>
 <script src="../assets/js/components/footer.js"></script>

@@ -61,7 +61,7 @@
         const kEl = ftr.querySelector("#ftrKicker");
         if (!kEl) return;
 
-        const text = "BRHS Yearbook — 2026";
+        const text = "BRHS Yearbook — 2027";
         text.split("").forEach((c, i) => {
             const s = document.createElement("span");
             s.className = "ch";

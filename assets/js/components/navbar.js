@@ -134,7 +134,7 @@
                         "senior", "seniors",
                         "senior portrait", "senior portraits",
                         "senior page", "senior photos",
-                        "class of 2026","class of 2027", "graduating class"
+                        "class of 2026", "graduating class"
                     ],
                 },
 
@@ -253,6 +253,21 @@
 
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
+    }
+
+    function initReadBar() {
+        const bar = document.getElementById("read-bar");
+        if (!bar) return;
+
+        const onScroll = () => {
+            const docH = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+            bar.style.width = pct.toFixed(1) + "%";
+        };
+
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll, { passive: true });
     }
 
     function setActiveLink() {
@@ -391,11 +406,9 @@
                 if (res.ok) {
                     const html = await res.text();
                     // sanity check: make sure we actually got the navbar markup
-                    if (html.includes("siteNav"))
-                        return html;
+                    if (html.includes("siteNav")) return html;
                 }
             } catch (_) {
-                /* try next path */
             }
         }
         return null;
@@ -404,6 +417,7 @@
     async function loadNavbar() {
         const placeholder = document.getElementById("navbar-placeholder");
         if (!placeholder) {
+            // navbar markup already inline on the page
             initAll();
             return;
         }
@@ -428,6 +442,7 @@
         setActiveLink();
         initMobileMenu();
         initMobileSearch();
+        initReadBar();
     }
 
     document.addEventListener("DOMContentLoaded", loadNavbar);
