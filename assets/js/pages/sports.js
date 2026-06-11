@@ -1,115 +1,273 @@
-const sportsHome = document.getElementById("sportsHome");
+(function(){
+    const kEl = document.getElementById('kicker');
+    if(!kEl) return;
+    'BRHS Yearbook — Sports'.split('').forEach((c,i)=>{
+        const s = document.createElement('span');
+        s.className = 'ch';
+        s.textContent = c === ' ' ? '\u00A0' : c;
+        s.style.animationDelay = `${.05 + i * .03}s`;
+        kEl.appendChild(s);
+    });
+})();
 
-const sportView = document.getElementById("sportView");
+const SPORTS = [
+    { key: 'football',          label: 'Football',             folder: 'football',           prefix: 'football' },
+    { key: 'basketball',        label: 'Basketball',           folder: 'basketball',         prefix: 'basketball' },
+    { key: 'baseball',          label: 'Baseball',             folder: 'baseball',           prefix: 'baseball' },
+    { key: 'men_soccer',        label: "Men's Soccer",         folder: 'men_soccer',         prefix: 'ms' },
+    { key: 'lacrosse',          label: 'Lacrosse',             folder: 'lacrosse',           prefix: 'mlax' },
+    { key: 'txf',               label: 'Track & Field',        folder: 'txf',                prefix: 'txf' },
+    { key: 'mens_volleyball',   label: "Men's Volleyball",     folder: 'men_volleyball',     prefix: 'mvb' },
+    { key: 'womens_basketball', label: "Women's Basketball",   folder: 'women_basketball',   prefix: 'wbb' },
+    { key: 'womens_field_hockey', label: "Women's Field Hockey", folder: 'women_fieldhockey', prefix: 'wfh' },
+    { key: 'womens_volleyball', label: "Women's Volleyball",   folder: 'women_volleyball',   prefix: 'wvb' },
+];
 
-const sportTitle = document.getElementById("sportTitle");
+const BASE_PATH = '../assets/images/gallery/';
 
-const sportsGallery = document.getElementById("sportsGallery");
+const MAX_CONSECUTIVE_MISSES = 15;
+const BATCH_SIZE = 10;
+const ABSOLUTE_MAX = 800;
 
-const backToSports = document.getElementById("backToSports");
+function probeImage(sport, n){
+    return new Promise(resolve=>{
+        const src = `${BASE_PATH}${sport.folder}/${sport.prefix} (${n}).jpg`;
+        const img = new Image();
+        img.onload = () => resolve({ src, sport: sport.key, label: sport.label });
+        img.onerror = () => resolve(null);
+        img.src = encodeURI(src);
+    });
+}
 
-const sportCards = document.querySelectorAll(".yb-sport-card");
+async function gatherSportPhotos(sport){
+    const photos = [];
+    let n = 1;
+    let consecutiveMisses = 0;
 
-const sportImages = {
+    while(consecutiveMisses < MAX_CONSECUTIVE_MISSES && n <= ABSOLUTE_MAX){
+        const batchEnd = Math.min(n + BATCH_SIZE - 1, ABSOLUTE_MAX);
+        const batch = [];
+        for(let i = n; i <= batchEnd; i++){
+            batch.push(probeImage(sport, i));
+        }
 
-    football: [
+        const results = await Promise.all(batch);
 
-        "../assets/images/sports/football/football-1.jpg",
-        "../assets/images/sports/football/football-2.jpg",
-        "../assets/images/sports/football/football-3.jpg",
-        "../assets/images/sports/football/football-4.jpg",
-        "../assets/images/sports/football/football-5.jpg"
+        for(const result of results){
+            if(result){
+                photos.push(result);
+                consecutiveMisses = 0;
+            } else {
+                consecutiveMisses++;
+                if(consecutiveMisses >= MAX_CONSECUTIVE_MISSES) break;
+            }
+        }
 
-    ],
+        n = batchEnd + 1;
+    }
 
-    baseball: [
+    return photos;
+}
 
-        "../assets/images/sports/baseball/baseball-1.jpg",
-        "../assets/images/sports/baseball/baseball-2.jpg",
-        "../assets/images/sports/baseball/baseball-3.jpg",
-        "../assets/images/sports/baseball/baseball-4.jpg"
+async function gatherPhotos(){
+    const perSport = await Promise.all(SPORTS.map(gatherSportPhotos));
+    const photos = perSport.flat();
 
-    ],
+    for(let i = photos.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [photos[i], photos[j]] = [photos[j], photos[i]];
+    }
+    return photos;
+}
 
-    basketball: [
+(function(){
+    const collage = document.getElementById('sportsCollage');
+    const loading = document.getElementById('sportsLoading');
+    const empty = document.getElementById('sportsEmpty');
+    const filtersWrap = document.getElementById('sportsFilters');
+    if(!collage) return;
 
-        "../assets/images/sports/basketball/basketball-1.jpg",
-        "../assets/images/sports/basketball/basketball-2.jpg",
-        "../assets/images/sports/basketball/basketball-3.jpg",
-        "../assets/images/sports/basketball/basketball-4.jpg"
+    let allItems = [];
 
-    ]
+    gatherPhotos().then(photos=>{
+        if(loading) loading.remove();
 
-};
+        if(!photos.length){
+            if(empty) empty.hidden = false;
+            return;
+        }
 
-const sportNames = {
+        const frag = document.createDocumentFragment();
 
-    football: "Football",
+        photos.forEach((photo, i)=>{
+            const fig = document.createElement('figure');
+            fig.className = 'collage-item';
+            fig.dataset.sport = photo.sport;
+            fig.dataset.year = '2026';
+            fig.dataset.index = i;
+            fig.dataset.revealIndex = i % 8;
 
-    baseball: "Baseball",
+            const img = document.createElement('img');
+            img.src = photo.src;
+            img.loading = 'lazy';
+            img.alt = `${photo.label} photo`;
 
-    basketball: "Basketball"
+            const tag = document.createElement('span');
+            tag.className = 'collage-tag';
+            tag.textContent = photo.label;
 
-};
+            fig.appendChild(img);
+            fig.appendChild(tag);
+            frag.appendChild(fig);
+        });
 
-sportCards.forEach((card) => {
+        collage.appendChild(frag);
+        allItems = [...collage.querySelectorAll('.collage-item')];
 
-    card.addEventListener("click", () => {
+        const yearFiltersWrap = document.getElementById('sportsYearFilters');
+        const nextSeason = document.getElementById('sportsNextSeason');
 
-        const sport = card.dataset.sport;
+        initReveal(allItems);
+        initFilters(filtersWrap, yearFiltersWrap, allItems, empty);
+        initLightbox(allItems);
+        initFadeIn(yearFiltersWrap);
+        initFadeIn(nextSeason);
+    });
+})();
 
-        openSport(sport);
+function initReveal(items){
+    const io = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+            if(!entry.isIntersecting) return;
+            const el = entry.target;
+            const delay = Number(el.dataset.revealIndex || 0) * 60;
+            setTimeout(()=>el.classList.add('in'), delay);
+            io.unobserve(el);
+        });
+    }, { threshold:.05 });
 
+    items.forEach(item=> io.observe(item));
+}
+
+function initFadeIn(el){
+    if(!el) return;
+    new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+            if(entry.isIntersecting) el.classList.add('in');
+        });
+    }, { threshold:.2 }).observe(el);
+}
+
+function initFilters(sportWrap, yearWrap, items, emptyEl){
+    let activeSport = 'all';
+    let activeYear = 'all';
+
+    function applyFilters(){
+        let visibleCount = 0;
+
+        items.forEach(item=>{
+            const sportMatch = activeSport === 'all' || item.dataset.sport === activeSport;
+            const yearMatch = activeYear === 'all' || item.dataset.year === activeYear;
+            const match = sportMatch && yearMatch;
+            item.classList.toggle('is-hidden', !match);
+            if(match) visibleCount++;
+        });
+
+        if(emptyEl) emptyEl.hidden = visibleCount > 0;
+    }
+
+    if(sportWrap){
+        // fade in the filter bar on scroll
+        new IntersectionObserver(entries=>{
+            entries.forEach(entry=>{
+                if(entry.isIntersecting) sportWrap.classList.add('in');
+            });
+        }, { threshold:.2 }).observe(sportWrap);
+
+        const buttons = [...sportWrap.querySelectorAll('.filter-pill')];
+        buttons.forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                buttons.forEach(b=>b.classList.remove('is-active'));
+                btn.classList.add('is-active');
+                activeSport = btn.dataset.filter;
+                applyFilters();
+            });
+        });
+    }
+
+    if(yearWrap){
+        const yearButtons = [...yearWrap.querySelectorAll('.year-pill')];
+        yearButtons.forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                yearButtons.forEach(b=>b.classList.remove('is-active'));
+                btn.classList.add('is-active');
+                activeYear = btn.dataset.year;
+                applyFilters();
+            });
+        });
+    }
+}
+
+function initLightbox(items){
+    const lightbox = document.getElementById('sportsLightbox');
+    const backdrop = document.getElementById('lightboxBackdrop');
+    const closeBtn = document.getElementById('lightboxClose');
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+    const imgEl = document.getElementById('lightboxImg');
+    const captionEl = document.getElementById('lightboxCaption');
+    if(!lightbox || !imgEl) return;
+
+    let currentIndex = 0;
+
+    function visibleItems(){
+        return items.filter(item => !item.classList.contains('is-hidden'));
+    }
+
+    function open(item){
+        const visible = visibleItems();
+        currentIndex = visible.indexOf(item);
+        render(visible);
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function close(){
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+    }
+
+    function render(visible){
+        const item = visible[currentIndex];
+        if(!item) return;
+        const img = item.querySelector('img');
+        imgEl.src = img.src;
+        imgEl.alt = img.alt;
+        captionEl.textContent = item.querySelector('.collage-tag')?.textContent || '';
+    }
+
+    function step(dir){
+        const visible = visibleItems();
+        if(!visible.length) return;
+        currentIndex = (currentIndex + dir + visible.length) % visible.length;
+        render(visible);
+    }
+
+    items.forEach(item=>{
+        item.addEventListener('click', ()=> open(item));
     });
 
-});
+    closeBtn?.addEventListener('click', close);
+    backdrop?.addEventListener('click', close);
+    prevBtn?.addEventListener('click', ()=> step(-1));
+    nextBtn?.addEventListener('click', ()=> step(1));
 
-backToSports.addEventListener("click", () => {
-
-    sportView.hidden = true;
-
-    sportsHome.hidden = false;
-
-    sportsGallery.innerHTML = "";
-
-    window.scrollTo({
-
-        top: 0,
-        behavior: "smooth"
-
+    document.addEventListener('keydown', e=>{
+        if(!lightbox.classList.contains('is-open')) return;
+        if(e.key === 'Escape') close();
+        if(e.key === 'ArrowLeft') step(-1);
+        if(e.key === 'ArrowRight') step(1);
     });
-
-});
-
-function openSport(sport) {
-
-    sportsHome.hidden = true;
-
-    sportView.hidden = false;
-
-    sportTitle.textContent = sportNames[sport];
-
-    sportsGallery.innerHTML = "";
-
-    sportImages[sport].forEach((image) => {
-
-        const item = document.createElement("div");
-
-        item.className = "yb-sports-photo";
-
-        item.innerHTML = `
-            <img src="${image}" alt="${sportNames[sport]} photo">
-        `;
-
-        sportsGallery.appendChild(item);
-
-    });
-
-    window.scrollTo({
-
-        top: 0,
-        behavior: "smooth"
-
-    });
-
 }

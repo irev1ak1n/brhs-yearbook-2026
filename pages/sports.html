@@ -7,8 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/core/global.css">
     <link rel="stylesheet" href="../assets/css/index.css">
@@ -30,96 +29,94 @@
 <div id="navbar-placeholder"></div>
 
 <main>
+    <section class="sports-page">
+        <div class="sports-watermark">2026</div>
 
-    <section class="yb-sports-page">
-
-        <!-- HOME VIEW -->
-
-        <div class="yb-sports-home" id="sportsHome">
-
-            <div class="yb-sports-hero">
-
-                <p class="yb-sports-kicker">BRHS ATHLETICS</p>
-
-                <h1>Sports Moments</h1>
-
-                <p class="yb-sports-subtitle">
-                    Explore game days, team highlights, and the moments
-                    that made this year unforgettable.
-                </p>
-
-            </div>
-
-            <div class="yb-sports-grid">
-
-                <button class="yb-sport-card" data-sport="football">
-
-                    <img
-                            src="../assets/images/gallery/football/football.jpg"
-                            alt="Football"
-                    >
-
-                    <span>Football</span>
-
-                </button>
-
-                <button class="yb-sport-card" data-sport="baseball">
-
-                    <img
-                            src="../assets/images/sports/baseball/baseball-1.jpg"
-                            alt="Baseball"
-                    >
-
-                    <span>Baseball</span>
-
-                </button>
-
-                <button class="yb-sport-card" data-sport="basketball">
-
-                    <img
-                            src="../assets/images/sports/basketball/basketball-1.jpg"
-                            alt="Basketball"
-                    >
-
-                    <span>Basketball</span>
-
-                </button>
-
-            </div>
-
+        <div class="sports-hero">
+            <p class="hero-kicker" id="kicker"></p>
+            <h1 class="sports-title">
+                <span class="row"><span>Sports</span></span>
+                <span class="row"><span class="faded">Moments</span></span>
+            </h1>
+            <p class="sports-subtitle">
+                Game days, team highlights, and unforgettable moments from Ballantyne Ridge athletics, all in one place.
+            </p>
         </div>
 
-        <!-- SPORT VIEW -->
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
-        <div class="yb-sport-view" id="sportView" hidden>
-
-            <button class="yb-back-btn" id="backToSports">
-                ← Back to Sports
-            </button>
-
-            <div class="yb-sport-view-header">
-
-                <p class="yb-sports-kicker">BRHS ATHLETICS</p>
-
-                <h1 id="sportTitle">Football</h1>
-
-            </div>
-
-            <div class="yb-sports-gallery" id="sportsGallery"></div>
-
+        <div class="sports-year-filters" id="sportsYearFilters">
+            <button class="filter-pill year-pill is-active" data-year="all">All Years</button>
+            <button class="filter-pill year-pill" data-year="2026">2026</button>
+            <button class="filter-pill year-pill" data-year="2027">2027</button>
         </div>
+
+        <div class="sports-next-season" id="sportsNextSeason">
+            <span class="sports-next-badge">Coming Soon</span>
+            <div class="sports-next-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            </div>
+            <h2>2026&ndash;2027 Season</h2>
+            <p>
+                Photos from the 2026&ndash;2027 season are on their way. Have photos from games,
+                practices, or events to share? Submit them and check back as the season unfolds.
+            </p>
+            <a
+                    href="https://photos.jostens.com/LLYDBZ"
+                    target="_blank"
+                    class="sports-next-link"
+            >
+                Submit your photos
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <div class="sports-filters" id="sportsFilters">
+            <button class="filter-pill is-active" data-filter="all">All Sports</button>
+            <button class="filter-pill" data-filter="football">Football</button>
+            <button class="filter-pill" data-filter="basketball">Basketball</button>
+            <button class="filter-pill" data-filter="baseball">Baseball</button>
+            <button class="filter-pill" data-filter="men_soccer">Men&rsquo;s Soccer</button>
+            <button class="filter-pill" data-filter="lacrosse">Lacrosse</button>
+            <button class="filter-pill" data-filter="txf">Track &amp; Field</button>
+            <button class="filter-pill" data-filter="mens_volleyball">Men&rsquo;s Volleyball</button>
+            <button class="filter-pill" data-filter="womens_basketball">Women&rsquo;s Basketball</button>
+            <button class="filter-pill" data-filter="womens_field_hockey">Women&rsquo;s Field Hockey</button>
+            <button class="filter-pill" data-filter="womens_volleyball">Women&rsquo;s Volleyball</button>
+        </div>
+
+        <div class="sports-collage" id="sportsCollage">
+            <p class="sports-loading" id="sportsLoading">Gathering photos&hellip;</p>
+        </div>
+
+        <p class="sports-empty" id="sportsEmpty" hidden>No photos found for this filter yet &mdash; check back soon!</p>
 
     </section>
-
 </main>
 
-<!--<div id="footer-host"></div>-->
+<!-- LIGHTBOX -->
+<div class="sports-lightbox" id="sportsLightbox" aria-hidden="true">
+    <div class="sports-lightbox-backdrop" id="lightboxBackdrop"></div>
+    <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Previous photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Next photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <figure class="sports-lightbox-figure">
+        <img id="lightboxImg" src="" alt="">
+        <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+</div>
+
+<div id="footer-placeholder"></div>
 
 <script src="../assets/js/components/navbar.js"></script>
 <script src="../assets/js/components/footer.js"></script>
-
 <script src="../assets/js/pages/sports.js"></script>
-
 <script src="../assets/js/layout.js"></script>
 
 </body>
