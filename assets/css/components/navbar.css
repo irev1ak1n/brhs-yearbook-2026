@@ -414,9 +414,9 @@ body.mobile-menu-open .mobile-sidebar-footer{opacity:1}
 ══════════════════════════════════════ */
 @media (max-width:980px){
     .topbar{padding:0 .85rem}
-    .topbar.hero-top .topbar-shell.top-row{justify-content:space-between;padding:.85rem 0}
+    .topbar.hero-top .topbar-shell.top-row{justify-content:space-between;padding:.85rem 0;gap:.5rem}
     .nav-left,.nav-right,.nav-right-wrap .nav-search{display:none}
-    .topbar.hero-top .nav-right-wrap{gap:.4rem}
+    .topbar.hero-top .nav-right-wrap{gap:.3rem}
     .mobile-search-btn,.mobile-menu-btn{display:flex}
     .brand-text span::before,
     .brand-text span::after{display:none}
@@ -425,15 +425,25 @@ body.mobile-menu-open .mobile-sidebar-footer{opacity:1}
 }
 
 @media (max-width:480px){
-    .brand-text strong{font-size:1.1rem}
-    .brand-text span{letter-spacing:.18em;font-size:.46rem;gap:.3rem}
+    .brand-text strong{font-size:1.05rem}
+    .brand-text span{letter-spacing:.14em;font-size:.42rem;gap:.25rem}
     .mobile-sidebar{width:88vw}
-    .topbar{padding:0 .65rem}
-    .topbar.hero-top .nav-right-wrap{gap:.3rem}
+    .topbar{padding:0 .5rem}
+    .topbar.hero-top .topbar-shell.top-row{gap:.35rem}
+    .topbar.hero-top .nav-right-wrap{gap:0}
     .mobile-search-btn,
-    .mobile-menu-btn{width:2.2rem;height:2.2rem}
-    .mobile-search-btn svg{width:13px;height:13px}
-    .mobile-menu-btn span{width:14px}
+    .mobile-menu-btn{width:2.15rem;height:2.15rem}
+    .mobile-search-btn svg{width:12px;height:12px}
+    .mobile-menu-btn span{width:13px}
+}
+
+/* very narrow phones: drop the subtitle line entirely so the
+   brand never competes for space with the search/menu buttons */
+@media (max-width:400px){
+    .brand-text span{display:none}
+    .brand-uw{padding:0}
+    .topbar.hero-top .topbar-shell.top-row{gap:.25rem}
+    .topbar{padding:0 .4rem}
 }
 
 /* ══════════════════════════════════════
