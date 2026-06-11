@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Friday | BRHS Yearbook</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/core/global.css">
+    <link rel="stylesheet" href="../assets/css/index.css">
+
+    <link rel="stylesheet" href="../assets/css/pages/happy-friday.css">
+
+    <link rel="stylesheet" href="../assets/css/components/footer.css">
+    <link rel="stylesheet" href="../assets/css/components/navbar.css">
+    <link rel="stylesheet" href="../assets/css/components/mobile-navbar.css">
+
+    <link rel="shortcut icon" href="../assets/images/logo/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/logo/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/logo/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/logo/apple-touch-icon.png">
+    <link rel="manifest" href="../assets/images/logo/site.webmanifest">
+</head>
+
+<body>
+
+<div id="navbar-placeholder"></div>
+
+<main>
+    <section class="friday-page">
+
+        <div class="friday-hero">
+            <p class="hero-kicker" id="kicker"></p>
+            <h1 class="friday-title">
+                <span class="row"><span>Happy</span></span>
+                <span class="row"><span class="faded">Friday</span></span>
+            </h1>
+            <p class="friday-subtitle">
+                From Almost Friday to Finally Friday
+            </p>
+        </div>
+
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+        <div class="friday-year-filters" id="fridayYearFilters">
+            <button class="filter-pill year-pill is-active" data-year="all">All Years</button>
+            <button class="filter-pill year-pill" data-year="2025-2026">2025&ndash;2026</button>
+            <button class="filter-pill year-pill" data-year="2026-2027">2026&ndash;2027</button>
+        </div>
+
+        <div class="friday-next-season" id="fridayNextSeason">
+            <span class="friday-next-badge">Coming Soon</span>
+            <div class="friday-next-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            </div>
+            <h2>2026&ndash;2027 Season</h2>
+            <p>
+                Photos from the 2026&ndash;2027 school year are on their way. Have a great
+                Friday photo to share? Submit it and check back as the year unfolds.
+            </p>
+            <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSem7FpNfSZPnSJCd-f55DRrvmL2119G3tzFt611PEwJFqR3_g/viewform?usp=sharing&ouid=117728662292977779084"
+                    target="_blank"
+                    class="friday-next-link"
+            >
+                Submit your photos
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <div class="friday-filters" id="fridayFilters">
+            <button class="filter-pill is-active" data-filter="all">All Photos</button>
+            <button class="filter-pill" data-filter="almost_friday">Almost Friday</button>
+            <button class="filter-pill" data-filter="finally_friday">Finally Friday</button>
+        </div>
+
+        <div class="friday-collage" id="fridayCollage">
+            <p class="friday-loading" id="fridayLoading">Gathering photos&hellip;</p>
+        </div>
+
+        <p class="friday-empty" id="fridayEmpty" hidden>No photos found for this filter yet &mdash; check back soon!</p>
+
+    </section>
+</main>
+
+<div class="friday-lightbox" id="fridayLightbox" aria-hidden="true">
+    <div class="friday-lightbox-backdrop" id="lightboxBackdrop"></div>
+    <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Previous photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Next photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <figure class="friday-lightbox-figure">
+        <img id="lightboxImg" src="" alt="">
+        <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<script src="../assets/js/components/navbar.js"></script>
+<script src="../assets/js/components/footer.js"></script>
+<script src="../assets/js/pages/happy-friday.js"></script>
+<script src="../assets/js/layout.js"></script>
+
+</body>
+</html>

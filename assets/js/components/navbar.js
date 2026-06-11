@@ -203,7 +203,6 @@
                 }
             }
 
-            // fallback: send unknown but valid yearbook-related searches to FAQ
             window.location.href = `/pages/faq.html?q=${encodeURIComponent(raw)}`;
         }
 
@@ -233,7 +232,6 @@
             goToYearbookSearch();
         });
 
-        // collapse desktop search if clicking elsewhere while empty
         document.addEventListener("click", (e) => {
             const form = searchInput.closest(".nav-search");
             if (!form) return;
@@ -255,6 +253,40 @@
         window.addEventListener("scroll", onScroll, { passive: true });
     }
 
+    function initMoreDropdown() {
+        const item = document.querySelector(".nav-item.has-dd");
+        const btn = document.getElementById("moreDropdownBtn");
+        const dd = document.getElementById("moreDropdown");
+        if (!item || !btn || !dd) return;
+
+        const close = () => {
+            item.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+        };
+        const toggle = () => {
+            const willOpen = !item.classList.contains("open");
+            item.classList.toggle("open", willOpen);
+            btn.setAttribute("aria-expanded", String(willOpen));
+        };
+
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggle();
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!item.contains(e.target)) close();
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") close();
+        });
+
+        dd.querySelectorAll("a").forEach((a) => {
+            a.addEventListener("click", close);
+        });
+    }
+
     function initReadBar() {
         const bar = document.getElementById("read-bar");
         if (!bar) return;
@@ -271,7 +303,7 @@
     }
 
     function setActiveLink() {
-        const links = document.querySelectorAll(".nav a, .mobile-sidebar-links a");
+        const links = document.querySelectorAll(".nav a, .nav-dd a, .mobile-sidebar-links a");
         if (!links.length) return;
 
         const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
@@ -292,6 +324,12 @@
                 link.classList.add("is-active");
             }
         });
+
+        const ddActive = document.querySelector(".nav-dd a.is-active");
+        const moreBtn = document.getElementById("moreDropdownBtn");
+        if (moreBtn) {
+            moreBtn.classList.toggle("is-active", !!ddActive);
+        }
     }
 
     function initMobileMenu() {
@@ -405,7 +443,6 @@
                 const res = await fetch(path, { cache: "no-cache" });
                 if (res.ok) {
                     const html = await res.text();
-                    // sanity check: make sure we actually got the navbar markup
                     if (html.includes("siteNav")) return html;
                 }
             } catch (_) {
@@ -417,7 +454,6 @@
     async function loadNavbar() {
         const placeholder = document.getElementById("navbar-placeholder");
         if (!placeholder) {
-            // navbar markup already inline on the page
             initAll();
             return;
         }
@@ -443,6 +479,7 @@
         initMobileMenu();
         initMobileSearch();
         initReadBar();
+        initMoreDropdown();
     }
 
     document.addEventListener("DOMContentLoaded", loadNavbar);

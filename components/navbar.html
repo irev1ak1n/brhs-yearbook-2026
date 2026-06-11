@@ -16,9 +16,18 @@
 
         <div class="nav-right-wrap">
             <nav class="nav nav-right" aria-label="Primary navigation right">
+                <a href="/pages/happy-friday.html">Happy Friday</a>
                 <a href="/pages/contact.html">Contact Us</a>
-                <a href="/pages/our-team.html">Our Team</a>
-                <a href="/pages/faq.html">FAQ</a>
+                <div class="nav-item has-dd">
+                    <button class="nav-link" id="moreDropdownBtn" aria-haspopup="true" aria-expanded="false">
+                        More
+                        <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="nav-dd" id="moreDropdown">
+                        <a href="/pages/faq.html">FAQ</a>
+                        <a href="/pages/our-team.html">Our Team</a>
+                    </div>
+                </div>
             </nav>
 
             <form class="nav-search desktop-search" id="navSearchForm" role="search" aria-label="Search yearbook info" autocomplete="off">
@@ -117,6 +126,10 @@
         <a href="/pages/sports.html">
             <span class="msl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v3.5a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5v1A3.5 3.5 0 0 0 8 9.5M17 5h2.5v1A3.5 3.5 0 0 1 16 9.5"/></svg></span>
             <span>Sports</span>
+        </a>
+        <a href="/pages/happy-friday.html">
+            <span class="msl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M22 12h-2.5M4.5 12H2M19.07 4.93l-1.77 1.77M6.7 17.3l-1.77 1.77M19.07 19.07l-1.77-1.77M6.7 6.7 4.93 4.93"/></svg></span>
+            <span>Happy Friday</span>
         </a>
         <a href="/pages/our-team.html">
             <span class="msl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-3.6 3.36-6 7.5-6s7.5 2.4 7.5 6"/></svg></span>
