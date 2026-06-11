@@ -1,9 +1,4 @@
 (() => {
-    /* ══════════════════════════════════════
-       LOAD footer.html INTO #footer-placeholder
-       Tries a few common locations so this works
-       no matter where footer.html actually lives.
-    ══════════════════════════════════════ */
     const FOOTER_PATHS = [
         "footer.html",
         "./footer.html",
@@ -50,9 +45,6 @@
         initFooter();
     }
 
-    /* ══════════════════════════════════════
-       INIT EVERYTHING ONCE FOOTER IS IN THE DOM
-    ══════════════════════════════════════ */
     function initFooter() {
         const ftr = document.getElementById("siteFooter");
         if (!ftr) return;
@@ -65,7 +57,6 @@
         initYear(ftr);
     }
 
-    /* ── kicker char stagger ── */
     function initKicker(ftr) {
         const kEl = ftr.querySelector("#ftrKicker");
         if (!kEl) return;
@@ -80,13 +71,11 @@
         });
     }
 
-    /* ── current year ── */
     function initYear(ftr) {
         const yEl = ftr.querySelector("#ftrYear");
         if (yEl) yEl.textContent = new Date().getFullYear();
     }
 
-    /* ── scroll reveal ── */
     function initReveal(ftr) {
         const io = new IntersectionObserver(
             (entries) => {
@@ -102,7 +91,6 @@
         io.observe(ftr);
     }
 
-    /* ── newsletter form ── */
     function initNewsletter(ftr) {
         const form = ftr.querySelector("#ftrForm");
         const input = ftr.querySelector("#ftrEmail");
@@ -142,7 +130,6 @@
         });
     }
 
-    /* ── back to top ── */
     function initToTop(ftr) {
         const btn = ftr.querySelector("#ftrToTop");
         if (!btn) return;
@@ -158,11 +145,6 @@
         });
     }
 
-    /* ══════════════════════════════════════
-       EMBER PARTICLE CANVAS
-       Lightweight drifting embers + dust,
-       only animates while footer is visible.
-    ══════════════════════════════════════ */
     function initEmbers(ftr) {
         const canvas = ftr.querySelector("#ftr-embers");
         if (!canvas) return;
