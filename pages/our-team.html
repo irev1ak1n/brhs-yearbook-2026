@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/core/global.css">
     <link rel="stylesheet" href="../assets/css/index.css">
@@ -29,134 +29,281 @@
 <div id="navbar-placeholder"></div>
 
 <main>
-    <section class="yb-team-page">
-        <div class="yb-team-hero">
-            <p class="yb-team-kicker">BRHS YEARBOOK</p>
-            <h1>Meet Our Team</h1>
-            <p class="yb-team-subtitle">
+    <section class="team-page">
+        <canvas id="team-embers"></canvas>
+
+        <div class="team-hero">
+            <p class="hero-kicker" id="kicker"></p>
+            <h1 class="team-title">
+                <span class="row"><span>Meet</span></span>
+                <span class="row"><span class="faded">our team</span></span>
+            </h1>
+            <p class="team-subtitle">
                 The students and staff behind the memories and design of the BRHS Yearbook.
             </p>
         </div>
 
-        <section class="yb-team-grid-wrap">
-            <div class="yb-team-grid">
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+        <section class="team-grid-wrap">
+            <div class="team-grid">
 
                 <!-- ROW 1 -->
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-1.jpg" alt="Team member" class="yb-team-photo">
-                    </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
-                    </div>
-                </article>
-
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-2.jpg" alt="Team member" class="yb-team-photo">
-                    </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
-                    </div>
-                </article>
-
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-3.jpg" alt="Team member" class="yb-team-photo">
-                    </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
                     </div>
                 </article>
 
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-4.jpg" alt="Team member" class="yb-team-photo">
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
                     </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
+                </article>
+
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
                     </div>
                 </article>
 
                 <!-- ROW 2 -->
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-5.jpg" alt="Team member" class="yb-team-photo">
-                    </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
-                    </div>
-                </article>
-
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-6.jpg" alt="Team member" class="yb-team-photo">
-                    </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
-                    </div>
-                </article>
-
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-7.jpg" alt="Team member" class="yb-team-photo">
-                    </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
                     </div>
                 </article>
 
-                <article class="yb-team-card">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/placeholder-8.jpg" alt="Team member" class="yb-team-photo">
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
                     </div>
-                    <div class="yb-team-card-body">
-                        <h3>Student Name</h3>
-                        <p>Student Role</p>
+                </article>
+
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="team-card">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <h3>Student Name</h3>
+                                <p>Student Role</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
                     </div>
                 </article>
             </div>
 
-            <!-- ROW 3 teacher -->
-            <div class="yb-team-teacher-row">
-                <article class="yb-team-card yb-team-card-teacher">
-                    <div class="yb-team-photo-wrap">
-                        <img src="../assets/images/team/teacher-placeholder.jpg" alt="Teacher advisor" class="yb-team-photo">
-                    </div>
-                    <div class="yb-team-card-body">
-                        <span class="yb-team-badge">Club Advisor</span>
-                        <h3>Ms. McNelis</h3>
-                        <p>Yearbook Advisor</p>
+            <!-- TEACHER ROW -->
+            <div class="team-teacher-row">
+                <article class="team-card team-card-teacher">
+                    <div class="team-card-inner">
+                        <div class="team-card-front">
+                            <div class="team-photo-wrap">
+                                <div class="team-photo-placeholder">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+                                    <span>Photo coming soon</span>
+                                </div>
+                            </div>
+                            <div class="team-card-body">
+                                <span class="team-badge">Club Advisor</span>
+                                <h3>Ms. McNelis</h3>
+                                <p>Yearbook Advisor</p>
+                            </div>
+                            <span class="team-flip-hint">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                                Flip
+                            </span>
+                        </div>
+                        <div class="team-card-back">
+                            <p class="team-back-kicker">Bio</p>
+                            <p class="team-back-text">Profile coming soon &mdash; check back as the team page is filled in.</p>
+                        </div>
                     </div>
                 </article>
             </div>
         </section>
 
-        <section class="yb-team-cta">
-            <div class="yb-team-cta-inner">
-                <p class="yb-team-cta-kicker">JOIN THE STORY</p>
-                <h2>Want to get involved?</h2>
-                <p>
-                    Interested in helping with photography, design, writing, or content for the BRHS Yearbook?
-                    Reach out and be part of creating something students will remember for years.
-                </p>
-                <a href="contact.html" class="yb-team-cta-btn">CONTACT US</a>
-            </div>
+        <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+        <section class="team-cta">
+            <div class="team-cta-glow"></div>
+            <p class="team-cta-kicker">Join the Story</p>
+            <h2>Want to get involved?</h2>
+            <p>
+                Interested in helping with photography, design, writing, or content for the BRHS Yearbook?
+                Reach out and be part of creating something students will remember for years.
+            </p>
+            <a href="contact.html" class="btn-primary team-cta-btn">
+                Contact Us
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
         </section>
     </section>
 </main>
 
-<!--<div id="footer-host"></div>-->
+<div id="footer-placeholder"></div>
 
 <script src="../assets/js/components/navbar.js"></script>
 <script src="../assets/js/components/footer.js"></script>
+<script src="../assets/js/pages/our-team.js"></script>
 <script src="../assets/js/layout.js"></script>
 
 </body>
