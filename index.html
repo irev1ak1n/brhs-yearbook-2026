@@ -54,6 +54,7 @@
         <div class="hero-overlay"></div>
         <div class="hero-glow hero-glow-1"></div>
         <div class="hero-glow hero-glow-2"></div>
+        <canvas id="hero-embers" aria-hidden="true"></canvas>
 
         <div class="hero-content">
             <p class="hero-kicker" id="heroKicker"></p>
@@ -125,6 +126,7 @@
     <section class="home-section">
         <div class="section-inner">
             <div class="cta-banner reveal">
+                <canvas class="cta-embers" aria-hidden="true"></canvas>
                 <span class="cta-banner-badge">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
                     Coming Soon
@@ -145,14 +147,13 @@
     <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
     <section class="home-section" id="explore">
+        <canvas class="section-embers" aria-hidden="true"></canvas>
         <div class="section-inner section-split">
             <div class="section-copy reveal">
                 <p class="section-kicker">On the Field</p>
                 <h2>Every game, every cheer, every win.</h2>
                 <p class="section-text">
-                    From football Fridays under the lights to track meets and championship runs,
-                    relive the season through photos from every BRHS team &mdash; football, basketball,
-                    baseball, soccer, lacrosse, volleyball, field hockey, and track &amp; field.
+                    From football Fridays to track meets and championship runs, take a look back at the moments that made BRHS athletics special through photos from every BRHS team — football, basketball, baseball, soccer, lacrosse, volleyball, field hockey, and track & field.
                 </p>
                 <a href="pages/sports.html" class="btn-outline">
                     View Sports Gallery
@@ -171,19 +172,22 @@
     <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
     <section class="home-section">
+        <canvas class="section-embers" aria-hidden="true"></canvas>
         <div class="section-inner section-split reverse">
-            <div class="section-visual bento reveal">
-                <div class="bento-cell big"><img src="assets/images/gallery/finally_friday/ff (2).jpg" alt="Finally Friday"></div>
-                <div class="bento-cell"><img src="assets/images/gallery/almost_friday/afr (2).jpg" alt="Almost Friday"></div>
-                <div class="bento-cell"><img src="assets/images/gallery/almost_friday/afr (5).jpg" alt="Almost Friday"></div>
-                <div class="bento-cell"><img src="assets/images/gallery/finally_friday/ff (4).jpg" alt="Finally Friday"></div>
+            <div class="section-visual bento-5 reveal">
+                <div class="bento-cell bento-5-big"><img src="assets/images/gallery/finally_friday/ff (111).jpg" alt="Finally Friday"></div>
+                <div class="bento-5-grid">
+                    <div class="bento-cell"><img src="assets/images/gallery/finally_friday/ff (132).jpg" alt="Finally Friday"></div>
+                    <div class="bento-cell"><img src="assets/images/gallery/finally_friday/ff (200).jpg" alt="Finally Friday"></div>
+                    <div class="bento-cell"><img src="assets/images/gallery/almost_friday/afr (191).jpg" alt="Almost Friday"></div>
+                    <div class="bento-cell"><img src="assets/images/gallery/almost_friday/afr (100).jpg" alt="Almost Friday"></div>
+                </div>
             </div>
             <div class="section-copy reveal">
                 <p class="section-kicker">Weekly Tradition</p>
-                <h2>Hallway selfies. Game nights. Happy Fridays.</h2>
+                <h2>It's Finally Friday.</h2>
                 <p class="section-text">
-                    A running photo dump of the small moments that made every Friday feel like
-                    a celebration &mdash; before the bell, after the game, and everywhere in between.
+                    Just a running pile of the small stuff: the dumb jokes, the last minute plans, the photos nobody posed for. This is what Fridays actually looked like this year.
                 </p>
                 <a href="pages/happy-friday.html" class="btn-outline">
                     See the Photos
@@ -196,17 +200,49 @@
     <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
     <section class="home-section">
+        <canvas class="section-embers" aria-hidden="true"></canvas>
         <div class="section-inner section-split reverse">
-            <div class="section-visual duo reveal">
-                <div class="bento-cell big"><img src="assets/images/gallery/prom/pic (21).jpg" alt="Prom 2026"></div>
-                <div class="bento-cell"><img src="assets/images/gallery/prom/pic (4).jpg" alt="Prom 2026"></div>
+            <div class="section-visual photo-marquee reveal">
+                <div class="marquee-col marquee-col-up">
+                    <div class="marquee-col-track">
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (2).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (11).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (24).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (38).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (55).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (68).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (2).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (11).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (24).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (38).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (55).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (68).jpg" alt="Prom 2026"></div>
+                    </div>
+                </div>
+                <div class="marquee-col marquee-col-down">
+                    <div class="marquee-col-track">
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (7).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (19).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (33).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (47).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (60).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (70).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (7).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (19).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (33).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (47).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (60).jpg" alt="Prom 2026"></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (70).jpg" alt="Prom 2026"></div>
+                    </div>
+                </div>
+                <div class="photo-marquee-fade top"></div>
+                <div class="photo-marquee-fade bottom"></div>
             </div>
             <div class="section-copy reveal">
                 <p class="section-kicker">Throwback</p>
                 <h2>Prom 2026: A night to remember.</h2>
                 <p class="section-text">
-                    Dresses, suits, and dancing the night away &mdash; Prom 2026 was a night this
-                    class won&rsquo;t forget. Take a look back at the moments that made it special.
+                    Dresses, suits, friends, and a packed dance floor. Take a look back at the memories that made Prom 2026 one of the most memorable nights of the year.
                 </p>
                 <a href="https://www.example.com" target="_blank" rel="noopener" class="btn-outline">
                     More Prom Photos
@@ -219,6 +255,7 @@
     <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
     <section class="home-section">
+        <canvas class="section-embers" aria-hidden="true"></canvas>
         <div class="section-inner section-split">
             <div class="section-copy reveal">
                 <p class="section-kicker">Class of 2026</p>
@@ -232,51 +269,51 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                 </a>
             </div>
-            <div class="section-visual senior-marquee reveal">
-                <div class="senior-col senior-col-up">
-                    <div class="senior-col-track">
-                        <div class="senior-photo"><img src="assets/images/gallery/football/football (3).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (5).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (1).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (10).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (8).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/football/football (3).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (5).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (1).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (10).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (8).jpg" alt=""></div>
+            <div class="section-visual photo-marquee reveal">
+                <div class="marquee-col marquee-col-up">
+                    <div class="marquee-col-track">
+                        <div class="marquee-photo"><img src="assets/images/gallery/almost_friday/afr (50).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/football/football (3).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (15).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/basketball/basketball (5).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/finally_friday/ff (20).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/almost_friday/afr (50).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/football/football (3).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (15).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/basketball/basketball (5).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/finally_friday/ff (20).jpg" alt=""></div>
                     </div>
                 </div>
-                <div class="senior-col senior-col-down">
-                    <div class="senior-col-track">
-                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (10).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/men_soccer/ms (5).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/women_volleyball/wvb (20).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (2).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/football/football (7).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (10).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/men_soccer/ms (5).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/women_volleyball/wvb (20).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (2).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/football/football (7).jpg" alt=""></div>
+                <div class="marquee-col marquee-col-down">
+                    <div class="marquee-col-track">
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (30).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/lacrosse/mlax (10).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/almost_friday/afr (80).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/men_soccer/ms (5).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/txf/txf (10).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (30).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/lacrosse/mlax (10).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/almost_friday/afr (80).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/men_soccer/ms (5).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/txf/txf (10).jpg" alt=""></div>
                     </div>
                 </div>
-                <div class="senior-col senior-col-up">
-                    <div class="senior-col-track">
-                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (15).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (12).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (20).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (25).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (10).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (15).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (12).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (20).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (25).jpg" alt=""></div>
-                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (10).jpg" alt=""></div>
+                <div class="marquee-col marquee-col-up">
+                    <div class="marquee-col-track">
+                        <div class="marquee-photo"><img src="assets/images/gallery/finally_friday/ff (60).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/women_volleyball/wvb (20).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (45).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/baseball/baseball (8).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/lacrosse/mlax (25).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/finally_friday/ff (60).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/women_volleyball/wvb (20).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/prom/pic (45).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/baseball/baseball (8).jpg" alt=""></div>
+                        <div class="marquee-photo"><img src="assets/images/gallery/lacrosse/mlax (25).jpg" alt=""></div>
                     </div>
                 </div>
-                <div class="senior-marquee-fade top"></div>
-                <div class="senior-marquee-fade bottom"></div>
+                <div class="photo-marquee-fade top"></div>
+                <div class="photo-marquee-fade bottom"></div>
             </div>
         </div>
     </section>
@@ -284,6 +321,7 @@
     <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
     <section class="home-section">
+        <canvas class="section-embers" aria-hidden="true"></canvas>
         <div class="section-inner">
             <div class="section-head reveal">
                 <p class="section-kicker">Get Involved</p>
