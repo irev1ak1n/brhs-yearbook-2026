@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BRHS Yearbook 2026</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/core/global.css">
     <link rel="stylesheet" href="assets/css/index.css">
@@ -30,13 +31,11 @@
         }
     </script>
 
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXWZG8NEH"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-YXWZG8NEH');
     </script>
 </head>
@@ -47,113 +46,278 @@
 
 <main class="home-page">
 
-    <section class="hero-page" id="home">
-        <div class="hero-bg"></div>
+    <section class="home-hero" id="home">
+        <div class="hero-collage-wrap" aria-hidden="true">
+            <div class="hero-collage" id="heroCollage"></div>
+        </div>
+
+        <div class="hero-overlay"></div>
         <div class="hero-glow hero-glow-1"></div>
         <div class="hero-glow hero-glow-2"></div>
 
-        <section class="hero container hero-minimal">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span>BRHS YEARBOOK 2026</span>
-                    <span>YOUR MOMENTS. YOUR MEMORIES.</span>
-                    <span>ALL IN ONE PLACE.</span>
-                </h1>
+        <div class="hero-content">
+            <p class="hero-kicker" id="heroKicker"></p>
+            <h1 class="hero-title">
+                <span class="row"><span>BRHS Yearbook 2026</span></span>
+                <span class="row"><span>Your Moments. Your Memories.</span></span>
+                <span class="row"><span class="faded">All In One Place.</span></span>
+            </h1>
 
-                <p style="opacity:0; height:0; overflow:hidden;">
-                    Ballantyne Ridge High School Yearbook 2026. Submit photos, check deadlines,
-                    and order your yearbook in one place.
-                </p>
+            <p style="opacity:0; height:0; overflow:hidden;">
+                Ballantyne Ridge High School Yearbook 2026. Submit photos, check deadlines,
+                and order your yearbook in one place.
+            </p>
 
-                <div class="hero-actions">
-                    <a href="pages/get-yearbooks.html" class="hero-btn outline">BUY YEARBOOK</a>
-                    <a href="pages/seniors.html" class="hero-btn outline">CLASS OF 2026</a>
-                    <a href="pages/faq.html" class="hero-btn outline">HAVE QUESTIONS?</a>
-                </div>
+            <div class="hero-actions">
+                <a href="pages/get-yearbooks.html" class="btn-outline">Buy Yearbook</a>
+                <a href="pages/seniors.html" class="btn-outline">Class of 2026</a>
+                <a href="pages/faq.html" class="btn-outline">Have Questions?</a>
             </div>
-        </section>
+        </div>
+
+        <a href="#explore" class="hero-scroll-cue" aria-label="Scroll to explore">
+            <span>Explore</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M5 12l7 7 7-7"/></svg>
+        </a>
     </section>
 
-    <section class="yb-home-overview">
-        <div class="container">
-            <div class="yb-section-head">
-                <p class="yb-section-kicker">INSIDE THE BOOK</p>
-                <h2>More than pages. It’s the story of this year.</h2>
-                <p>
-                    From senior moments to school traditions, the BRHS Yearbook brings together
-                    the people, events, and memories that shaped 2026.
-                </p>
+    <section class="home-marquee" aria-hidden="true">
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <span>Football</span><span class="marquee-sep">&#10022;</span>
+                <span>Basketball</span><span class="marquee-sep">&#10022;</span>
+                <span>Baseball</span><span class="marquee-sep">&#10022;</span>
+                <span>Lacrosse</span><span class="marquee-sep">&#10022;</span>
+                <span>Track &amp; Field</span><span class="marquee-sep">&#10022;</span>
+                <span>Happy Friday</span><span class="marquee-sep">&#10022;</span>
+                <span>Class of 2026</span><span class="marquee-sep">&#10022;</span>
+                <span>Prom 2026</span><span class="marquee-sep">&#10022;</span>
+                <span>Football</span><span class="marquee-sep">&#10022;</span>
+                <span>Basketball</span><span class="marquee-sep">&#10022;</span>
+                <span>Baseball</span><span class="marquee-sep">&#10022;</span>
+                <span>Lacrosse</span><span class="marquee-sep">&#10022;</span>
+                <span>Track &amp; Field</span><span class="marquee-sep">&#10022;</span>
+                <span>Happy Friday</span><span class="marquee-sep">&#10022;</span>
+                <span>Class of 2026</span><span class="marquee-sep">&#10022;</span>
+                <span>Prom 2026</span><span class="marquee-sep">&#10022;</span>
             </div>
-
-            <div class="yb-overview-grid">
-                <article class="yb-overview-card">
-                    <div class="yb-overview-icon">01</div>
-                    <h3>Student Life</h3>
-                    <p>text</p>
-                </article>
-
-                <article class="yb-overview-card">
-                    <div class="yb-overview-icon">02</div>
-                    <h3>Events & Traditions</h3>
-                    <p>text</p>
-                </article>
-
-                <article class="yb-overview-card">
-                    <div class="yb-overview-icon">03</div>
-                    <h3>Senior Recognition</h3>
-                    <p>Text</p>
-                </article>
+            <div class="marquee-content">
+                <span>Football</span><span class="marquee-sep">&#10022;</span>
+                <span>Basketball</span><span class="marquee-sep">&#10022;</span>
+                <span>Baseball</span><span class="marquee-sep">&#10022;</span>
+                <span>Lacrosse</span><span class="marquee-sep">&#10022;</span>
+                <span>Track &amp; Field</span><span class="marquee-sep">&#10022;</span>
+                <span>Happy Friday</span><span class="marquee-sep">&#10022;</span>
+                <span>Class of 2026</span><span class="marquee-sep">&#10022;</span>
+                <span>Prom 2026</span><span class="marquee-sep">&#10022;</span>
+                <span>Football</span><span class="marquee-sep">&#10022;</span>
+                <span>Basketball</span><span class="marquee-sep">&#10022;</span>
+                <span>Baseball</span><span class="marquee-sep">&#10022;</span>
+                <span>Lacrosse</span><span class="marquee-sep">&#10022;</span>
+                <span>Track &amp; Field</span><span class="marquee-sep">&#10022;</span>
+                <span>Happy Friday</span><span class="marquee-sep">&#10022;</span>
+                <span>Class of 2026</span><span class="marquee-sep">&#10022;</span>
+                <span>Prom 2026</span><span class="marquee-sep">&#10022;</span>
             </div>
         </div>
     </section>
 
-    <section class="yb-home-spotlight">
-        <div class="container yb-spotlight-wrap">
-            <div class="yb-spotlight-copy">
-                <p class="yb-section-kicker">CLASS OF 2026</p>
+    <section class="home-section">
+        <div class="section-inner">
+            <div class="cta-banner reveal">
+                <span class="cta-banner-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    Coming Soon
+                </span>
+                <h2>2026&ndash;2027 Yearbook</h2>
+                <p>
+                    Sales for the 2026 yearbook have closed, but next year&rsquo;s book is already
+                    in the works. Be the first to know when 2026&ndash;2027 ordering opens.
+                </p>
+                <a href="pages/get-yearbooks.html" class="btn-cta">
+                    <span>Get Notified</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+    <section class="home-section" id="explore">
+        <div class="section-inner section-split">
+            <div class="section-copy reveal">
+                <p class="section-kicker">On the Field</p>
+                <h2>Every game, every cheer, every win.</h2>
+                <p class="section-text">
+                    From football Fridays under the lights to track meets and championship runs,
+                    relive the season through photos from every BRHS team &mdash; football, basketball,
+                    baseball, soccer, lacrosse, volleyball, field hockey, and track &amp; field.
+                </p>
+                <a href="pages/sports.html" class="btn-outline">
+                    View Sports Gallery
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+            <div class="section-visual bento reveal">
+                <div class="bento-cell big"><img src="assets/images/gallery/football/football (1).jpg" alt="Football"></div>
+                <div class="bento-cell"><img src="assets/images/gallery/basketball/basketball (8).jpg" alt="Basketball"></div>
+                <div class="bento-cell"><img src="assets/images/gallery/baseball/baseball (15).jpg" alt="Baseball"></div>
+                <div class="bento-cell"><img src="assets/images/gallery/lacrosse/mlax (4).jpg" alt="Lacrosse"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+    <section class="home-section">
+        <div class="section-inner section-split reverse">
+            <div class="section-visual bento reveal">
+                <div class="bento-cell big"><img src="assets/images/gallery/finally_friday/ff (2).jpg" alt="Finally Friday"></div>
+                <div class="bento-cell"><img src="assets/images/gallery/almost_friday/afr (2).jpg" alt="Almost Friday"></div>
+                <div class="bento-cell"><img src="assets/images/gallery/almost_friday/afr (5).jpg" alt="Almost Friday"></div>
+                <div class="bento-cell"><img src="assets/images/gallery/finally_friday/ff (4).jpg" alt="Finally Friday"></div>
+            </div>
+            <div class="section-copy reveal">
+                <p class="section-kicker">Weekly Tradition</p>
+                <h2>Hallway selfies. Game nights. Happy Fridays.</h2>
+                <p class="section-text">
+                    A running photo dump of the small moments that made every Friday feel like
+                    a celebration &mdash; before the bell, after the game, and everywhere in between.
+                </p>
+                <a href="pages/happy-friday.html" class="btn-outline">
+                    See the Photos
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+    <section class="home-section">
+        <div class="section-inner section-split reverse">
+            <div class="section-visual duo reveal">
+                <div class="bento-cell big"><img src="assets/images/gallery/prom/pic (21).jpg" alt="Prom 2026"></div>
+                <div class="bento-cell"><img src="assets/images/gallery/prom/pic (4).jpg" alt="Prom 2026"></div>
+            </div>
+            <div class="section-copy reveal">
+                <p class="section-kicker">Throwback</p>
+                <h2>Prom 2026: A night to remember.</h2>
+                <p class="section-text">
+                    Dresses, suits, and dancing the night away &mdash; Prom 2026 was a night this
+                    class won&rsquo;t forget. Take a look back at the moments that made it special.
+                </p>
+                <a href="https://www.example.com" target="_blank" rel="noopener" class="btn-outline">
+                    More Prom Photos
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
+
+    <section class="home-section">
+        <div class="section-inner section-split">
+            <div class="section-copy reveal">
+                <p class="section-kicker">Class of 2026</p>
                 <h2>The final chapter deserves its own spotlight.</h2>
-                <p>
-                    Text
+                <p class="section-text">
+                    Senior portraits, superlatives, and the moments that close out four years
+                    at Ballantyne Ridge. This is where their story gets the page it deserves.
                 </p>
-
-                <div class="yb-spotlight-actions">
-                    <a href="pages/seniors.html" class="hero-btn outline">EXPLORE SENIORS</a>
-                    <a href="pages/gallery.html" class="hero-btn outline">VIEW GALLERY</a>
-                </div>
+                <a href="pages/seniors.html" class="btn-outline">
+                    Explore Seniors
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </a>
             </div>
-
-            <div class="yb-spotlight-visual">
-                <div class="yb-spotlight-card yb-spotlight-card-main">
-                    <span class="yb-spotlight-label">Senior Page</span>
-                    <h3>Text</h3>
+            <div class="section-visual senior-marquee reveal">
+                <div class="senior-col senior-col-up">
+                    <div class="senior-col-track">
+                        <div class="senior-photo"><img src="assets/images/gallery/football/football (3).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (5).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (1).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (10).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (8).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/football/football (3).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (5).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (1).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (10).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (8).jpg" alt=""></div>
+                    </div>
                 </div>
-
-                <div class="yb-spotlight-card yb-spotlight-card-small top">
-                    <span>2026</span>
+                <div class="senior-col senior-col-down">
+                    <div class="senior-col-track">
+                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (10).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/men_soccer/ms (5).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/women_volleyball/wvb (20).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (2).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/football/football (7).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (10).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/men_soccer/ms (5).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/women_volleyball/wvb (20).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (2).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/football/football (7).jpg" alt=""></div>
+                    </div>
                 </div>
-
-                <div class="yb-spotlight-card yb-spotlight-card-small bottom">
-                    <span>BRHS</span>
+                <div class="senior-col senior-col-up">
+                    <div class="senior-col-track">
+                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (15).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (12).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (20).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (25).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (10).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/basketball/basketball (15).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/baseball/baseball (12).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/txf/txf (20).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/lacrosse/mlax (25).jpg" alt=""></div>
+                        <div class="senior-photo"><img src="assets/images/gallery/prom/pic (10).jpg" alt=""></div>
+                    </div>
                 </div>
+                <div class="senior-marquee-fade top"></div>
+                <div class="senior-marquee-fade bottom"></div>
             </div>
         </div>
     </section>
 
-    <section class="yb-home-participate">
-        <div class="container">
-            <div class="yb-participate-box">
-                <p class="yb-section-kicker">GET INVOLVED</p>
-                <h2>Be part of the yearbook.</h2>
-                <p>
-                    Submit content, explore team pages, and make sure your memories are part of
-                    the story students will look back on for years.
-                </p>
+    <div class="pg-divider"><div class="pg-divider-line"></div><div class="pg-divider-ornament">&#10022;</div><div class="pg-divider-line"></div></div>
 
-                <div class="yb-participate-actions">
-                    <a href="pages/our-team.html" class="hero-btn outline">MEET THE TEAM</a>
-                    <a href="pages/contact.html" class="hero-btn outline">CONTACT US</a>
-                    <a href="pages/get-yearbooks.html" class="hero-btn outline">ORDER NOW</a>
-                </div>
+    <section class="home-section">
+        <div class="section-inner">
+            <div class="section-head reveal">
+                <p class="section-kicker">Get Involved</p>
+                <h2>Be part of the yearbook.</h2>
+                <p class="section-text">
+                    Meet the team behind the book, ask a question, or get more details before
+                    the deadline.
+                </p>
+            </div>
+
+            <div class="link-grid">
+                <a href="pages/our-team.html" class="link-card reveal">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-3.6 3.36-6 7.5-6s7.5 2.4 7.5 6"/></svg>
+                    </span>
+                    <h3>Our Team</h3>
+                    <p>Meet the students behind the book.</p>
+                </a>
+
+                <a href="pages/contact.html" class="link-card reveal">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3V5Zm0 0 9 7 9-7"/></svg>
+                    </span>
+                    <h3>Contact Us</h3>
+                    <p>Questions, photo submissions, and more.</p>
+                </a>
+
+                <a href="pages/faq.html" class="link-card reveal">
+                    <span class="link-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 2-2.5 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </span>
+                    <h3>FAQ</h3>
+                    <p>Deadlines, pricing, and common questions.</p>
+                </a>
             </div>
         </div>
     </section>
@@ -164,6 +328,7 @@
 
 <script src="assets/js/components/navbar.js"></script>
 <script src="assets/js/components/footer.js"></script>
+<script src="assets/js/pages/index.js"></script>
 <script src="assets/js/layout.js"></script>
 
 </body>

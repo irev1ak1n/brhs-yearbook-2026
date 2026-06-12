@@ -1,3 +1,4 @@
+/* ══ KICKER CHAR STAGGER ══ */
 (function(){
     const kEl = document.getElementById('kicker');
     if(!kEl) return;
@@ -10,6 +11,10 @@
     });
 })();
 
+/* ══════════════════════════════════════
+   SPORTS DATA
+   Folder layout: ../assets/images/gallery/<folder>/<prefix> (N).jpg
+══════════════════════════════════════ */
 const SPORTS = [
     { key: 'football',          label: 'Football',             folder: 'football',           prefix: 'football' },
     { key: 'basketball',        label: 'Basketball',           folder: 'basketball',         prefix: 'basketball' },
@@ -25,10 +30,14 @@ const SPORTS = [
 
 const BASE_PATH = '../assets/images/gallery/';
 
+// how many consecutive missing numbers before we assume a sport's
+// folder has no more photos (handles small numbering gaps gracefully)
 const MAX_CONSECUTIVE_MISSES = 15;
 const BATCH_SIZE = 10;
+// hard safety ceiling so a misconfigured folder can't loop forever
 const ABSOLUTE_MAX = 800;
 
+/* probe a single image; resolves with the item if it exists, else null */
 function probeImage(sport, n){
     return new Promise(resolve=>{
         const src = `${BASE_PATH}${sport.folder}/${sport.prefix} (${n}).jpg`;
@@ -39,6 +48,8 @@ function probeImage(sport, n){
     });
 }
 
+/* keep probing a single sport's folder in batches until we hit a
+   run of consecutive misses — finds ALL photos regardless of count */
 async function gatherSportPhotos(sport){
     const photos = [];
     let n = 1;
@@ -69,10 +80,12 @@ async function gatherSportPhotos(sport){
     return photos;
 }
 
+/* probe all sports in parallel, return shuffled combined list */
 async function gatherPhotos(){
     const perSport = await Promise.all(SPORTS.map(gatherSportPhotos));
     const photos = perSport.flat();
 
+    // Fisher-Yates shuffle
     for(let i = photos.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
         [photos[i], photos[j]] = [photos[j], photos[i]];
@@ -80,6 +93,7 @@ async function gatherPhotos(){
     return photos;
 }
 
+/* ══ BUILD COLLAGE ══ */
 (function(){
     const collage = document.getElementById('sportsCollage');
     const loading = document.getElementById('sportsLoading');
@@ -103,7 +117,7 @@ async function gatherPhotos(){
             const fig = document.createElement('figure');
             fig.className = 'collage-item';
             fig.dataset.sport = photo.sport;
-            fig.dataset.year = '2026';
+            fig.dataset.year = '2025-2026';
             fig.dataset.index = i;
             fig.dataset.revealIndex = i % 8;
 
@@ -135,6 +149,7 @@ async function gatherPhotos(){
     });
 })();
 
+/* ══ SCROLL REVEAL ══ */
 function initReveal(items){
     const io = new IntersectionObserver(entries=>{
         entries.forEach(entry=>{
@@ -149,6 +164,7 @@ function initReveal(items){
     items.forEach(item=> io.observe(item));
 }
 
+/* ══ FADE-IN HELPER (for year filters / next-season card) ══ */
 function initFadeIn(el){
     if(!el) return;
     new IntersectionObserver(entries=>{
@@ -158,6 +174,7 @@ function initFadeIn(el){
     }, { threshold:.2 }).observe(el);
 }
 
+/* ══ FILTERS (sport + year, combined) ══ */
 function initFilters(sportWrap, yearWrap, items, emptyEl){
     let activeSport = 'all';
     let activeYear = 'all';
@@ -208,6 +225,7 @@ function initFilters(sportWrap, yearWrap, items, emptyEl){
     }
 }
 
+/* ══ LIGHTBOX ══ */
 function initLightbox(items){
     const lightbox = document.getElementById('sportsLightbox');
     const backdrop = document.getElementById('lightboxBackdrop');
