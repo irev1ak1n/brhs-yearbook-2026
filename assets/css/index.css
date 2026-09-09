@@ -434,6 +434,11 @@
     grid-template-rows:repeat(2,1fr);
     gap:.85rem;
 }
+.bento-solo{
+    display:grid;
+    grid-template-columns:1fr;
+    aspect-ratio:1.15/1;
+}
 .bento-cell{
     position:relative;overflow:hidden;border-radius:6px;
     border:1px solid var(--border);
@@ -585,7 +590,7 @@
     .hero-actions{flex-direction:column;width:100%}
     .btn-cta,.btn-outline{width:100%;justify-content:center}
     .home-section{padding:3rem 0}
-    .bento,.duo{aspect-ratio:1/1}
+    .bento,.duo,.bento-solo{aspect-ratio:1/1}
     .photo-marquee{aspect-ratio:1/1.1}
 }
 

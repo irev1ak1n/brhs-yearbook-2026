@@ -20,6 +20,11 @@ const MAX_CONSECUTIVE_MISSES = 25;
 const BATCH_SIZE = 10;
 const ABSOLUTE_MAX = 800;
 
+// keeps the randomized order stable across scrolling, filtering, and
+// rerenders within a session; a fresh shuffle is generated once this expires
+const GALLERY_ORDER_KEY = 'brhs_friday_gallery_order_2025-2026';
+const GALLERY_ORDER_TTL_MS = 30 * 60 * 1000;
+
 function probeImage(set, n){
     return new Promise(resolve=>{
         const src = `${BASE_PATH}${set.folder}/${set.prefix} (${n}).jpg`;
@@ -64,11 +69,10 @@ async function gatherPhotos(){
     const perSet = await Promise.all(FRIDAY_SETS.map(gatherSetPhotos));
     const photos = perSet.flat();
 
-    for(let i = photos.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [photos[i], photos[j]] = [photos[j], photos[i]];
-    }
-    return photos;
+    const photoBySrc = new Map(photos.map(photo => [photo.src, photo]));
+    const orderedSrcs = getStableOrderedIds(GALLERY_ORDER_KEY, photos.map(photo => photo.src), GALLERY_ORDER_TTL_MS);
+
+    return orderedSrcs.map(src => photoBySrc.get(src)).filter(Boolean);
 }
 
 (function(){

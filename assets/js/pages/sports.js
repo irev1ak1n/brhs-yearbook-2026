@@ -37,6 +37,11 @@ const BATCH_SIZE = 10;
 // hard safety ceiling so a misconfigured folder can't loop forever
 const ABSOLUTE_MAX = 800;
 
+// keeps the randomized order stable across scrolling, filtering, and
+// rerenders within a session; a fresh shuffle is generated once this expires
+const GALLERY_ORDER_KEY = 'brhs_sports_gallery_order_2025-2026';
+const GALLERY_ORDER_TTL_MS = 30 * 60 * 1000;
+
 /* probe a single image; resolves with the item if it exists, else null */
 function probeImage(sport, n){
     return new Promise(resolve=>{
@@ -80,17 +85,15 @@ async function gatherSportPhotos(sport){
     return photos;
 }
 
-/* probe all sports in parallel, return shuffled combined list */
+/* probe all sports in parallel, return combined list in a session-stable order */
 async function gatherPhotos(){
     const perSport = await Promise.all(SPORTS.map(gatherSportPhotos));
     const photos = perSport.flat();
 
-    // Fisher-Yates shuffle
-    for(let i = photos.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [photos[i], photos[j]] = [photos[j], photos[i]];
-    }
-    return photos;
+    const photoBySrc = new Map(photos.map(photo => [photo.src, photo]));
+    const orderedSrcs = getStableOrderedIds(GALLERY_ORDER_KEY, photos.map(photo => photo.src), GALLERY_ORDER_TTL_MS);
+
+    return orderedSrcs.map(src => photoBySrc.get(src)).filter(Boolean);
 }
 
 /* ══ BUILD COLLAGE ══ */
