@@ -13,22 +13,71 @@
 
 /* ══════════════════════════════════════
    SPORTS DATA
-   Folder layout: ../assets/images/gallery/<folder>/<prefix> (N).jpg
+   The sport list (and its filter pills) is driven by the "sports" table
+   in Supabase so a sport the teacher adds in the dashboard shows up here
+   automatically. Sports with a folder/prefix also have their existing
+   on-disk photos probed for (legacy layout: ../assets/images/gallery/<folder>/<prefix> (N).jpg);
+   sports created purely through the dashboard have no folder and rely
+   entirely on uploaded photos.
 ══════════════════════════════════════ */
-const SPORTS = [
-    { key: 'football',          label: 'Football',             folder: 'football',           prefix: 'football' },
-    { key: 'basketball',        label: 'Basketball',           folder: 'basketball',         prefix: 'basketball' },
-    { key: 'baseball',          label: 'Baseball',             folder: 'baseball',           prefix: 'baseball' },
-    { key: 'men_soccer',        label: "Men's Soccer",         folder: 'men_soccer',         prefix: 'ms' },
-    { key: 'lacrosse',          label: 'Lacrosse',             folder: 'lacrosse',           prefix: 'mlax' },
-    { key: 'txf',               label: 'Track & Field',        folder: 'txf',                prefix: 'txf' },
-    { key: 'mens_volleyball',   label: "Men's Volleyball",     folder: 'men_volleyball',     prefix: 'mvb' },
-    { key: 'womens_basketball', label: "Women's Basketball",   folder: 'women_basketball',   prefix: 'wbb' },
-    { key: 'womens_field_hockey', label: "Women's Field Hockey", folder: 'women_fieldhockey', prefix: 'wfh' },
-    { key: 'womens_volleyball', label: "Women's Volleyball",   folder: 'women_volleyball',   prefix: 'wvb' },
-];
-
 const BASE_PATH = '../assets/images/gallery/';
+
+async function fetchSports(){
+    try {
+        const { data, error } = await getSupabaseClient()
+            .from('sports')
+            .select('id, name, slug, folder, prefix, display_order')
+            .order('display_order', { ascending: true });
+        if(error) throw error;
+        return (data || []).map(row => ({
+            id: row.id,
+            key: row.slug,
+            label: row.name,
+            folder: row.folder,
+            prefix: row.prefix,
+        }));
+    } catch(e){
+        console.error('Could not load sports list from Supabase', e);
+        return [];
+    }
+}
+
+async function fetchSportPhotosFromDB(sports){
+    const bySlugId = new Map(sports.map(s => [s.id, s]));
+    try {
+        const { data, error } = await getSupabaseClient()
+            .from('sport_photos')
+            .select('id, sport_id, image_url, caption, season')
+            .order('created_at', { ascending: false });
+        if(error) throw error;
+        return (data || []).map(row => {
+            const sport = bySlugId.get(row.sport_id);
+            if(!sport) return null;
+            return {
+                src: row.image_url,
+                sport: sport.key,
+                label: sport.label,
+                year: row.season || '2025-2026',
+                fromDB: true,
+            };
+        }).filter(Boolean);
+    } catch(e){
+        console.error('Could not load sport photos from Supabase', e);
+        return [];
+    }
+}
+
+function buildSportFilterPills(sports){
+    const wrap = document.getElementById('sportsFilters');
+    if(!wrap) return;
+    sports.forEach(sport=>{
+        const btn = document.createElement('button');
+        btn.className = 'filter-pill';
+        btn.dataset.filter = sport.key;
+        btn.textContent = sport.label;
+        wrap.appendChild(btn);
+    });
+}
 
 // how many consecutive missing numbers before we assume a sport's
 // folder has no more photos (handles small numbering gaps gracefully)
@@ -47,7 +96,7 @@ function probeImage(sport, n){
     return new Promise(resolve=>{
         const src = `${BASE_PATH}${sport.folder}/${sport.prefix} (${n}).jpg`;
         const img = new Image();
-        img.onload = () => resolve({ src, sport: sport.key, label: sport.label });
+        img.onload = () => resolve({ src, sport: sport.key, label: sport.label, year: '2025-2026' });
         img.onerror = () => resolve(null);
         img.src = encodeURI(src);
     });
@@ -56,6 +105,8 @@ function probeImage(sport, n){
 /* keep probing a single sport's folder in batches until we hit a
    run of consecutive misses — finds ALL photos regardless of count */
 async function gatherSportPhotos(sport){
+    if(!sport.folder || !sport.prefix) return [];
+
     const photos = [];
     let n = 1;
     let consecutiveMisses = 0;
@@ -85,10 +136,12 @@ async function gatherSportPhotos(sport){
     return photos;
 }
 
-/* probe all sports in parallel, return combined list in a session-stable order */
-async function gatherPhotos(){
-    const perSport = await Promise.all(SPORTS.map(gatherSportPhotos));
-    const photos = perSport.flat();
+/* probe legacy on-disk photos + fetch dashboard-uploaded photos, return
+   combined list in a session-stable order */
+async function gatherPhotos(sports){
+    const perSport = await Promise.all(sports.map(gatherSportPhotos));
+    const dbPhotos = await fetchSportPhotosFromDB(sports);
+    const photos = perSport.flat().concat(dbPhotos);
 
     const photoBySrc = new Map(photos.map(photo => [photo.src, photo]));
     const orderedSrcs = getStableOrderedIds(GALLERY_ORDER_KEY, photos.map(photo => photo.src), GALLERY_ORDER_TTL_MS);
@@ -97,7 +150,7 @@ async function gatherPhotos(){
 }
 
 /* ══ BUILD COLLAGE ══ */
-(function(){
+(async function(){
     const collage = document.getElementById('sportsCollage');
     const loading = document.getElementById('sportsLoading');
     const empty = document.getElementById('sportsEmpty');
@@ -106,7 +159,10 @@ async function gatherPhotos(){
 
     let allItems = [];
 
-    gatherPhotos().then(photos=>{
+    const sports = await fetchSports();
+    buildSportFilterPills(sports);
+
+    gatherPhotos(sports).then(photos=>{
         if(loading) loading.remove();
 
         if(!photos.length){
@@ -120,7 +176,7 @@ async function gatherPhotos(){
             const fig = document.createElement('figure');
             fig.className = 'collage-item';
             fig.dataset.sport = photo.sport;
-            fig.dataset.year = '2025-2026';
+            fig.dataset.year = photo.year || '2025-2026';
             fig.dataset.index = i;
             fig.dataset.revealIndex = i % 8;
 

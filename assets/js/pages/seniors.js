@@ -13,7 +13,112 @@
 const seniorSort = document.getElementById("seniorSort");
 const seniorsList = document.querySelector(".yb-seniors-list");
 
-const originalCards = [...seniorsList.children];
+let originalCards = [];
+
+/* ══════════════════════════════════════
+   SENIOR DATA
+   Senior profiles are fetched from the "seniors" table in Supabase so
+   new entries added through the dashboard appear here automatically,
+   without touching this file or redeploying the site.
+══════════════════════════════════════ */
+function detailsText(senior){
+    const parts = [];
+    if(senior.major) parts.push(`${senior.major} Major`);
+    if(senior.minor) parts.push(`${senior.minor} Minor`);
+    return parts.join(' • ');
+}
+
+function buildSeniorCard(senior){
+    const article = document.createElement('article');
+    article.className = 'yb-senior-row';
+
+    const images = document.createElement('div');
+    images.className = 'yb-senior-images';
+
+    const kidImg = document.createElement('img');
+    kidImg.className = 'kid-photo';
+    kidImg.loading = 'lazy';
+    kidImg.src = senior.child_photo_url;
+    kidImg.alt = `${senior.full_name} childhood photo`;
+
+    const seniorImg = document.createElement('img');
+    seniorImg.className = 'senior-photo';
+    seniorImg.loading = 'lazy';
+    seniorImg.src = senior.senior_photo_url;
+    seniorImg.alt = `${senior.full_name} senior photo`;
+
+    const divider = document.createElement('div');
+    divider.className = 'diagonal-divider';
+
+    images.appendChild(kidImg);
+    images.appendChild(seniorImg);
+    images.appendChild(divider);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'yb-senior-overlay';
+
+    const label = document.createElement('p');
+    label.className = 'yb-senior-label';
+    label.textContent = `Class of ${senior.grad_year}`;
+
+    const h2 = document.createElement('h2');
+    h2.textContent = senior.full_name;
+
+    overlay.appendChild(label);
+    overlay.appendChild(h2);
+
+    const majorMinor = detailsText(senior);
+    const detailsLine = senior.college && majorMinor
+        ? `${senior.college} • ${majorMinor}`
+        : (senior.college || majorMinor);
+    if(detailsLine){
+        const detailsEl = document.createElement('p');
+        detailsEl.className = 'yb-senior-details';
+        detailsEl.textContent = detailsLine;
+        overlay.appendChild(detailsEl);
+    }
+
+    article.appendChild(images);
+    article.appendChild(overlay);
+    return article;
+}
+
+async function loadSeniors(){
+    if(!seniorsList) return;
+    try {
+        const { data, error } = await getSupabaseClient()
+            .from('seniors')
+            .select('id, full_name, college, major, minor, note, child_photo_url, senior_photo_url, grad_year, display_order')
+            .order('display_order', { ascending: true });
+        if(error) throw error;
+
+        seniorsList.innerHTML = '';
+
+        if(!data || !data.length){
+            const empty = document.createElement('p');
+            empty.className = 'yb-seniors-empty';
+            empty.textContent = 'Senior profiles are on their way — check back soon!';
+            seniorsList.appendChild(empty);
+            return;
+        }
+
+        const frag = document.createDocumentFragment();
+        data.forEach(senior => frag.appendChild(buildSeniorCard(senior)));
+        seniorsList.appendChild(frag);
+
+        originalCards = [...seniorsList.children];
+        revealSeniorCards();
+    } catch(e){
+        console.error('Could not load seniors from Supabase', e);
+        seniorsList.innerHTML = '';
+        const errorEl = document.createElement('p');
+        errorEl.className = 'yb-seniors-empty';
+        errorEl.textContent = 'Senior profiles could not be loaded right now — please refresh.';
+        seniorsList.appendChild(errorEl);
+    }
+}
+
+loadSeniors();
 
 seniorSort.addEventListener("change", () => {
     const cards = [...seniorsList.children];

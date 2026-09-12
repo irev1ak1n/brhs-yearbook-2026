@@ -29,10 +29,35 @@ function probeImage(set, n){
     return new Promise(resolve=>{
         const src = `${BASE_PATH}${set.folder}/${set.prefix} (${n}).jpg`;
         const img = new Image();
-        img.onload = () => resolve({ src, set: set.key, label: set.label });
+        img.onload = () => resolve({ src, set: set.key, label: set.label, year: '2025-2026' });
         img.onerror = () => resolve(null);
         img.src = encodeURI(src);
     });
+}
+
+async function fetchFridayPhotosFromDB(){
+    const byCategory = new Map(FRIDAY_SETS.map(s => [s.key, s]));
+    try {
+        const { data, error } = await getSupabaseClient()
+            .from('happy_friday_photos')
+            .select('id, category, image_url, caption, season')
+            .order('created_at', { ascending: false });
+        if(error) throw error;
+        return (data || []).map(row => {
+            const set = byCategory.get(row.category);
+            if(!set) return null;
+            return {
+                src: row.image_url,
+                set: set.key,
+                label: set.label,
+                year: row.season || '2025-2026',
+                fromDB: true,
+            };
+        }).filter(Boolean);
+    } catch(e){
+        console.error('Could not load Happy Friday photos from Supabase', e);
+        return [];
+    }
 }
 
 async function gatherSetPhotos(set){
@@ -67,7 +92,8 @@ async function gatherSetPhotos(set){
 
 async function gatherPhotos(){
     const perSet = await Promise.all(FRIDAY_SETS.map(gatherSetPhotos));
-    const photos = perSet.flat();
+    const dbPhotos = await fetchFridayPhotosFromDB();
+    const photos = perSet.flat().concat(dbPhotos);
 
     const photoBySrc = new Map(photos.map(photo => [photo.src, photo]));
     const orderedSrcs = getStableOrderedIds(GALLERY_ORDER_KEY, photos.map(photo => photo.src), GALLERY_ORDER_TTL_MS);
@@ -98,7 +124,7 @@ async function gatherPhotos(){
             const fig = document.createElement('figure');
             fig.className = 'collage-item';
             fig.dataset.set = photo.set;
-            fig.dataset.year = '2025-2026';
+            fig.dataset.year = photo.year || '2025-2026';
             fig.dataset.index = i;
             fig.dataset.revealIndex = i % 8;
 

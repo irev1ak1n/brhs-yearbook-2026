@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Dashboard | BRHS Yearbook</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/core/global.css">
+    <link rel="stylesheet" href="../assets/css/pages/dashboard.css">
+
+    <link rel="shortcut icon" href="../assets/images/logo/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/logo/favicon-32x32.png">
+</head>
+<body>
+
+<div class="dash-shell">
+
+    <!-- ══ LOGIN VIEW ══ -->
+    <section class="dash-login" id="loginView">
+        <div class="dash-login-card">
+            <p class="dash-login-mark">Beyond the Yearbook</p>
+            <p class="dash-login-sub">Staff Dashboard</p>
+            <h1>Welcome back</h1>
+            <p class="dash-hint">Enter the dashboard password to manage Sports, Happy Friday, and Seniors content.</p>
+            <form id="loginForm">
+                <div class="dash-field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="Enter password" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="dash-btn dash-btn-primary" id="loginBtn">
+                    <span id="loginBtnText">Unlock Dashboard</span>
+                </button>
+                <div class="dash-error" id="loginError" hidden></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ══ APP VIEW ══ -->
+    <div id="appView" hidden>
+        <header class="dash-header">
+            <div class="dash-brand">
+                Beyond the Yearbook
+                <span class="dash-brand-badge">Dashboard</span>
+            </div>
+            <div class="dash-header-actions">
+                <button class="dash-btn dash-btn-outline dash-btn-sm" id="changePasswordBtn">Change Password</button>
+                <button class="dash-btn dash-btn-outline dash-btn-sm" id="logoutBtn">Log Out</button>
+            </div>
+        </header>
+
+        <main class="dash-main">
+
+            <!-- HOME -->
+            <section id="homeView">
+                <p class="dash-home-kicker">BRHS Yearbook</p>
+                <h1 class="dash-home-title">What would you like to manage?</h1>
+                <div class="dash-home-grid">
+                    <button class="dash-home-card" data-goto="sports">
+                        <span class="dash-home-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v3.5a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5v1A3.5 3.5 0 0 0 8 9.5M17 5h2.5v1A3.5 3.5 0 0 1 16 9.5"/></svg>
+                        </span>
+                        <h2>Sports</h2>
+                        <p>Upload team photos, manage sports categories, and edit captions.</p>
+                        <span class="dash-home-count" id="sportsCount">Loading&hellip;</span>
+                    </button>
+                    <button class="dash-home-card" data-goto="friday">
+                        <span class="dash-home-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M22 12h-2.5M4.5 12H2M19.07 4.93l-1.77 1.77M6.7 17.3l-1.77 1.77M19.07 19.07l-1.77-1.77M6.7 6.7 4.93 4.93"/></svg>
+                        </span>
+                        <h2>Happy Friday</h2>
+                        <p>Upload Almost Friday and Finally Friday photos.</p>
+                        <span class="dash-home-count" id="fridayCount">Loading&hellip;</span>
+                    </button>
+                    <button class="dash-home-card" data-goto="seniors">
+                        <span class="dash-home-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m22 9-10-5L2 9l10 5 10-5Z"/><path d="M6 11v4.2c0 1.27 2.7 3.3 6 3.3s6-2.03 6-3.3V11"/></svg>
+                        </span>
+                        <h2>Seniors</h2>
+                        <p>Add, edit, and remove senior profiles.</p>
+                        <span class="dash-home-count" id="seniorsCount">Loading&hellip;</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SPORTS VIEW -->
+            <section id="sportsView" hidden>
+                <div class="dash-back" data-goto="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Dashboard
+                </div>
+                <h1 class="dash-view-title">Sports Photos</h1>
+                <p class="dash-view-sub">Choose a sport, drop in photos, and they'll appear on the public Sports page automatically.</p>
+
+                <div class="dash-toolbar">
+                    <div class="dash-field">
+                        <label for="sportUploadSelect">Upload to sport</label>
+                        <select id="sportUploadSelect"></select>
+                    </div>
+                    <button class="dash-btn dash-btn-outline dash-btn-sm" id="addSportBtn">+ Add New Sport</button>
+                </div>
+
+                <div class="dash-dropzone" id="sportDropzone">
+                    <span class="dash-dropzone-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+                    </span>
+                    <h3>Drag photos here or click to choose</h3>
+                    <p>JPG, PNG, or WEBP &middot; up to 10&nbsp;MB each &middot; multiple photos allowed</p>
+                    <input type="file" id="sportFileInput" accept="image/jpeg,image/png,image/webp" multiple>
+                </div>
+
+                <div class="dash-preview-grid" id="sportPreviewGrid"></div>
+                <div class="dash-upload-options" id="sportUploadOptions" hidden>
+                    <div class="dash-field">
+                        <label for="sportSeasonSelect">School year</label>
+                        <select id="sportSeasonSelect">
+                            <option value="2026-2027">2026&ndash;2027</option>
+                            <option value="2025-2026">2025&ndash;2026</option>
+                        </select>
+                    </div>
+                    <div class="dash-field">
+                        <label for="sportCaptionInput">Caption (optional, applied to all)</label>
+                        <input type="text" id="sportCaptionInput" placeholder="e.g. Friday night lights">
+                    </div>
+                </div>
+                <button class="dash-btn dash-btn-primary" id="sportUploadBtn" style="width:auto" hidden>Upload Photos</button>
+
+                <div class="dash-toolbar" style="margin-top:2rem">
+                    <div class="dash-field">
+                        <label for="sportFilterSelect">Filter by sport</label>
+                        <select id="sportFilterSelect"><option value="all">All Sports</option></select>
+                    </div>
+                    <div class="dash-field">
+                        <label>Filter by year</label>
+                        <div class="dash-pill-row" id="sportYearFilterRow">
+                            <button class="dash-pill is-active" data-year="all">All Years</button>
+                            <button class="dash-pill" data-year="2026-2027">2026&ndash;2027</button>
+                            <button class="dash-pill" data-year="2025-2026">2025&ndash;2026</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-grid" id="sportPhotoGrid"></div>
+            </section>
+
+            <!-- HAPPY FRIDAY VIEW -->
+            <section id="fridayView" hidden>
+                <div class="dash-back" data-goto="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Dashboard
+                </div>
+                <h1 class="dash-view-title">Happy Friday Photos</h1>
+                <p class="dash-view-sub">Choose Almost Friday or Finally Friday, then drop in photos.</p>
+
+                <div class="dash-toolbar">
+                    <div class="dash-field">
+                        <label for="fridayUploadSelect">Upload to category</label>
+                        <select id="fridayUploadSelect">
+                            <option value="almost_friday">Almost Friday</option>
+                            <option value="finally_friday">Finally Friday</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="dash-dropzone" id="fridayDropzone">
+                    <span class="dash-dropzone-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+                    </span>
+                    <h3>Drag photos here or click to choose</h3>
+                    <p>JPG, PNG, or WEBP &middot; up to 10&nbsp;MB each &middot; multiple photos allowed</p>
+                    <input type="file" id="fridayFileInput" accept="image/jpeg,image/png,image/webp" multiple>
+                </div>
+
+                <div class="dash-preview-grid" id="fridayPreviewGrid"></div>
+                <div class="dash-upload-options" id="fridayUploadOptions" hidden>
+                    <div class="dash-field">
+                        <label for="fridaySeasonSelect">School year</label>
+                        <select id="fridaySeasonSelect">
+                            <option value="2026-2027">2026&ndash;2027</option>
+                            <option value="2025-2026">2025&ndash;2026</option>
+                        </select>
+                    </div>
+                    <div class="dash-field">
+                        <label for="fridayCaptionInput">Caption (optional, applied to all)</label>
+                        <input type="text" id="fridayCaptionInput" placeholder="e.g. Pep rally">
+                    </div>
+                </div>
+                <button class="dash-btn dash-btn-primary" id="fridayUploadBtn" style="width:auto" hidden>Upload Photos</button>
+
+                <div class="dash-toolbar" style="margin-top:2rem">
+                    <div class="dash-field">
+                        <label>Filter by category</label>
+                        <div class="dash-pill-row" id="fridayCategoryFilterRow">
+                            <button class="dash-pill is-active" data-filter="all">All Photos</button>
+                            <button class="dash-pill" data-filter="almost_friday">Almost Friday</button>
+                            <button class="dash-pill" data-filter="finally_friday">Finally Friday</button>
+                        </div>
+                    </div>
+                    <div class="dash-field">
+                        <label>Filter by year</label>
+                        <div class="dash-pill-row" id="fridayYearFilterRow">
+                            <button class="dash-pill is-active" data-year="all">All Years</button>
+                            <button class="dash-pill" data-year="2026-2027">2026&ndash;2027</button>
+                            <button class="dash-pill" data-year="2025-2026">2025&ndash;2026</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-grid" id="fridayPhotoGrid"></div>
+            </section>
+
+            <!-- SENIORS VIEW -->
+            <section id="seniorsView" hidden>
+                <div class="dash-back" data-goto="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Dashboard
+                </div>
+                <h1 class="dash-view-title">Senior Profiles</h1>
+                <p class="dash-view-sub">Add, edit, or remove senior profiles. New profiles appear on the public Seniors page right away.</p>
+
+                <div class="dash-toolbar">
+                    <div class="dash-field">
+                        <label for="seniorSearchInput">Search</label>
+                        <input type="text" id="seniorSearchInput" placeholder="Search by name or college">
+                    </div>
+                    <button class="dash-btn dash-btn-primary" style="width:auto" id="addSeniorBtn">+ Add Senior</button>
+                </div>
+
+                <div class="dash-senior-list" id="seniorList"></div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- ══ ADD SPORT MODAL ══ -->
+<div class="dash-modal-overlay" id="addSportModal" hidden>
+    <div class="dash-modal">
+        <div class="dash-modal-head">
+            <h2>Add New Sport</h2>
+            <button class="dash-modal-close" data-close-modal="addSportModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="addSportForm">
+            <div class="dash-field">
+                <label for="newSportName">Sport name</label>
+                <input type="text" id="newSportName" placeholder="e.g. Wrestling" required>
+            </div>
+            <div class="dash-field">
+                <label for="newSportOrder">Display order (optional)</label>
+                <input type="number" id="newSportOrder" placeholder="Leave blank to add at the end" min="1">
+            </div>
+            <div class="dash-error" id="addSportError" hidden></div>
+            <div class="dash-modal-actions">
+                <button type="button" class="dash-btn dash-btn-outline" data-close-modal="addSportModal">Cancel</button>
+                <button type="submit" class="dash-btn dash-btn-primary" id="addSportSubmitBtn">Add Sport</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ══ EDIT PHOTO MODAL (shared: sports + happy friday) ══ -->
+<div class="dash-modal-overlay" id="editPhotoModal" hidden>
+    <div class="dash-modal">
+        <div class="dash-modal-head">
+            <h2>Edit Photo</h2>
+            <button class="dash-modal-close" data-close-modal="editPhotoModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="editPhotoForm">
+            <div class="dash-field">
+                <label for="editPhotoCaption">Caption</label>
+                <input type="text" id="editPhotoCaption" placeholder="Optional caption">
+            </div>
+            <div class="dash-field">
+                <label for="editPhotoSeason">School year</label>
+                <select id="editPhotoSeason">
+                    <option value="2026-2027">2026&ndash;2027</option>
+                    <option value="2025-2026">2025&ndash;2026</option>
+                </select>
+            </div>
+            <div class="dash-error" id="editPhotoError" hidden></div>
+            <div class="dash-modal-actions">
+                <button type="button" class="dash-btn dash-btn-outline" data-close-modal="editPhotoModal">Cancel</button>
+                <button type="submit" class="dash-btn dash-btn-primary" id="editPhotoSubmitBtn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ══ ADD/EDIT SENIOR MODAL ══ -->
+<div class="dash-modal-overlay" id="seniorModal" hidden>
+    <div class="dash-modal dash-modal-wide">
+        <div class="dash-modal-head">
+            <h2 id="seniorModalTitle">Add Senior</h2>
+            <button class="dash-modal-close" data-close-modal="seniorModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="seniorForm">
+            <input type="hidden" id="seniorId">
+            <div class="dash-senior-form-grid">
+                <div>
+                    <div class="dash-two-col">
+                        <div class="dash-field dash-full">
+                            <label for="seniorFullName">Full name</label>
+                            <input type="text" id="seniorFullName" required>
+                        </div>
+                        <div class="dash-field">
+                            <label for="seniorCollege">College</label>
+                            <input type="text" id="seniorCollege" required>
+                        </div>
+                        <div class="dash-field">
+                            <label for="seniorGradYear">Graduation year</label>
+                            <input type="number" id="seniorGradYear" value="2027" required>
+                        </div>
+                        <div class="dash-field">
+                            <label for="seniorMajor">Major</label>
+                            <input type="text" id="seniorMajor" placeholder="e.g. Biology">
+                        </div>
+                        <div class="dash-field">
+                            <label for="seniorMinor">Minor (optional)</label>
+                            <input type="text" id="seniorMinor" placeholder="e.g. Spanish">
+                        </div>
+                        <div class="dash-field dash-full">
+                            <label for="seniorNote">Short note (optional)</label>
+                            <textarea id="seniorNote" placeholder="A short detail or memory"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="dash-two-col">
+                        <label class="dash-senior-photo-slot" id="kidPhotoSlot">
+                            <span>Childhood photo</span>
+                            <input type="file" id="kidPhotoInput" accept="image/jpeg,image/png,image/webp">
+                        </label>
+                        <label class="dash-senior-photo-slot" id="seniorPhotoSlot">
+                            <span>Senior photo</span>
+                            <input type="file" id="seniorPhotoInput" accept="image/jpeg,image/png,image/webp">
+                        </label>
+                    </div>
+
+                    <div class="dash-error" id="seniorFormError" hidden></div>
+                </div>
+
+                <div class="dash-senior-preview-wrap">
+                    <p class="dash-senior-preview-label">Public Card Preview</p>
+                    <div class="dash-senior-preview-card">
+                        <div class="dash-senior-preview-images">
+                            <img class="dash-senior-preview-kid" id="previewKidImg" src="" alt="">
+                            <img class="dash-senior-preview-senior" id="previewSeniorImg" src="" alt="">
+                            <div class="dash-senior-preview-divider"></div>
+                        </div>
+                        <div class="dash-senior-preview-overlay">
+                            <p class="label" id="previewGradYear">Class of 2027</p>
+                            <h4 id="previewName">Full Name</h4>
+                            <p id="previewDetails">College &bull; Major</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dash-modal-actions">
+                <button type="button" class="dash-btn dash-btn-outline" data-close-modal="seniorModal">Cancel</button>
+                <button type="submit" class="dash-btn dash-btn-primary" id="seniorSubmitBtn">Save Senior</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ══ CHANGE PASSWORD MODAL ══ -->
+<div class="dash-modal-overlay" id="changePasswordModal" hidden>
+    <div class="dash-modal">
+        <div class="dash-modal-head">
+            <h2>Change Password</h2>
+            <button class="dash-modal-close" data-close-modal="changePasswordModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="changePasswordForm">
+            <div class="dash-field">
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" minlength="8" required placeholder="At least 8 characters">
+            </div>
+            <div class="dash-field">
+                <label for="confirmPassword">Confirm new password</label>
+                <input type="password" id="confirmPassword" minlength="8" required>
+            </div>
+            <div class="dash-error" id="changePasswordError" hidden></div>
+            <div class="dash-modal-actions">
+                <button type="button" class="dash-btn dash-btn-outline" data-close-modal="changePasswordModal">Cancel</button>
+                <button type="submit" class="dash-btn dash-btn-primary" id="changePasswordSubmitBtn">Update Password</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ══ DELETE CONFIRM MODAL ══ -->
+<div class="dash-modal-overlay" id="deleteConfirmModal" hidden>
+    <div class="dash-modal" style="width:min(420px,100%)">
+        <div class="dash-modal-head">
+            <h2>Delete?</h2>
+            <button class="dash-modal-close" data-close-modal="deleteConfirmModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <p id="deleteConfirmText" style="font-family:'Bree Serif',serif;font-size:.92rem;color:var(--cream-dim);line-height:1.6">This cannot be undone.</p>
+        <div class="dash-modal-actions">
+            <button type="button" class="dash-btn dash-btn-outline" data-close-modal="deleteConfirmModal">Cancel</button>
+            <button type="button" class="dash-btn dash-btn-danger" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="dash-toast-wrap" id="toastWrap"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="../assets/js/utils/supabase-client.js"></script>
+<script src="../assets/js/pages/dashboard.js"></script>
+</body>
+</html>
