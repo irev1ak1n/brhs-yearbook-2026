@@ -498,6 +498,24 @@ body{
 .dash-senior-info p{font-family:sans-serif;font-size:.76rem;color:var(--cream-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dash-senior-actions{display:flex;gap:.5rem;flex-shrink:0}
 
+/* ══ INSTAGRAM SHORTCUTS LIST ══ */
+.dash-insta-list{display:flex;flex-direction:column;gap:.8rem}
+.dash-insta-row{
+    display:flex;align-items:center;gap:1rem;
+    padding:.9rem 1.1rem;border-radius:8px;
+    border:1px solid var(--border);
+    background:linear-gradient(180deg,rgba(26,15,6,.6),rgba(14,8,4,.85));
+}
+.dash-insta-info{flex:1;min-width:0}
+.dash-insta-info h3{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:1.15rem;color:var(--cream)}
+.dash-insta-info p{font-family:sans-serif;font-size:.76rem;color:var(--cream-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-insta-badge{
+    flex-shrink:0;padding:.25rem .65rem;border-radius:999px;
+    font-family:sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+    border:1px solid rgba(212,115,42,.28);background:rgba(212,115,42,.08);color:var(--ember-bright);
+}
+.dash-insta-actions{display:flex;gap:.5rem;flex-shrink:0}
+
 /* ══ MODAL ══ */
 .dash-modal-overlay{
     position:fixed;inset:0;z-index:200;

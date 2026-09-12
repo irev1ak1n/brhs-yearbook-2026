@@ -254,7 +254,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
 /* ══════════════════════════════════════
    VIEW ROUTING
 ══════════════════════════════════════ */
-const VIEWS = ['home', 'sports', 'friday', 'seniors'];
+const VIEWS = ['home', 'sports', 'friday', 'seniors', 'instagram'];
 function goto(view){
     VIEWS.forEach(v=>{
         document.getElementById(`${v}View`).hidden = (v !== view);
@@ -262,6 +262,7 @@ function goto(view){
     if(view === 'sports') refreshSportsView();
     if(view === 'friday') refreshFridayView();
     if(view === 'seniors') refreshSeniorsView();
+    if(view === 'instagram') refreshInstagramView();
     if(view === 'home') refreshHomeCounts();
     window.scrollTo(0, 0);
 }
@@ -270,14 +271,16 @@ document.querySelectorAll('[data-goto]').forEach(el=>{
 });
 
 async function refreshHomeCounts(){
-    const [sportPhotos, fridayPhotos, seniors] = await Promise.all([
+    const [sportPhotos, fridayPhotos, seniors, instagramAccounts] = await Promise.all([
         sb().from('sport_photos').select('id', { count: 'exact', head: true }),
         sb().from('happy_friday_photos').select('id', { count: 'exact', head: true }),
         sb().from('seniors').select('id', { count: 'exact', head: true }),
+        sb().from('instagram_shortcuts').select('id', { count: 'exact', head: true }),
     ]);
     document.getElementById('sportsCount').textContent = `${sportPhotos.count ?? 0} uploaded photo${sportPhotos.count === 1 ? '' : 's'}`;
     document.getElementById('fridayCount').textContent = `${fridayPhotos.count ?? 0} uploaded photo${fridayPhotos.count === 1 ? '' : 's'}`;
     document.getElementById('seniorsCount').textContent = `${seniors.count ?? 0} senior profile${seniors.count === 1 ? '' : 's'}`;
+    document.getElementById('instagramCount').textContent = `${instagramAccounts.count ?? 0} account${instagramAccounts.count === 1 ? '' : 's'}`;
 }
 
 /* ══════════════════════════════════════
@@ -1296,11 +1299,152 @@ document.getElementById('seniorForm').addEventListener('submit', async (e)=>{
 });
 
 /* ══════════════════════════════════════
+   INSTAGRAM SHORTCUTS VIEW
+   Public homepage reads this table directly (public SELECT RLS), so
+   any add/edit/delete here shows up on the site immediately — no
+   commit or redeploy needed.
+══════════════════════════════════════ */
+let instagramCache = [];
+let instagramSearchTerm = '';
+let instagramCategoryFilter = 'all';
+
+const INSTAGRAM_CATEGORY_LABELS = { photographers: 'Photographers', sports: 'Sports', clubs: 'School Clubs' };
+
+async function refreshInstagramView(){
+    const { data, error } = await sb().from('instagram_shortcuts').select('*').order('display_name', { ascending: true });
+    if(error){ showToast('Could not load Instagram shortcuts.', 'error'); return; }
+    instagramCache = data || [];
+    renderInstagramList();
+}
+
+function renderInstagramList(){
+    const list = document.getElementById('instagramList');
+    const term = instagramSearchTerm.toLowerCase();
+    const filtered = instagramCache.filter(a=>
+        (instagramCategoryFilter === 'all' || a.category === instagramCategoryFilter) &&
+        (!term || a.display_name.toLowerCase().includes(term))
+    );
+
+    if(!filtered.length){
+        list.innerHTML = '<p class="dash-empty">No Instagram accounts match.</p>';
+        return;
+    }
+
+    list.innerHTML = filtered.map(a=> `
+        <div class="dash-insta-row" data-id="${a.id}">
+            <div class="dash-insta-info">
+                <h3>${escapeHtml(a.display_name)}</h3>
+                <p>${escapeHtml(a.url)}</p>
+            </div>
+            <span class="dash-insta-badge">${escapeHtml(INSTAGRAM_CATEGORY_LABELS[a.category] || a.category)}</span>
+            <div class="dash-insta-actions">
+                <button class="dash-icon-btn" data-action="edit-instagram" data-id="${a.id}">Edit</button>
+                <button class="dash-icon-btn danger" data-action="delete-instagram" data-id="${a.id}">Delete</button>
+            </div>
+        </div>`).join('');
+}
+
+document.getElementById('instagramSearchInput').addEventListener('input', e=>{
+    instagramSearchTerm = e.target.value;
+    renderInstagramList();
+});
+
+document.getElementById('instagramCategoryFilterRow').addEventListener('click', e=>{
+    const btn = e.target.closest('.dash-pill');
+    if(!btn) return;
+    [...btn.parentElement.children].forEach(b=> b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    instagramCategoryFilter = btn.dataset.category;
+    renderInstagramList();
+});
+
+document.getElementById('instagramList').addEventListener('click', e=>{
+    const editBtn = e.target.closest('[data-action="edit-instagram"]');
+    const delBtn = e.target.closest('[data-action="delete-instagram"]');
+    if(editBtn) openInstagramForm(instagramCache.find(a=> a.id === editBtn.dataset.id));
+    if(delBtn){
+        const a = instagramCache.find(x=> x.id === delBtn.dataset.id);
+        confirmDelete(`Delete ${a?.display_name || 'this account'} from Instagram Shortcuts? This cannot be undone.`, ()=> deleteInstagram(delBtn.dataset.id));
+    }
+});
+
+async function deleteInstagram(id){
+    const { error } = await sb().from('instagram_shortcuts').delete().eq('id', id);
+    if(error){ showToast('Could not delete this account.', 'error'); return; }
+    showToast('Instagram account deleted.', 'success');
+    await refreshInstagramView();
+    refreshHomeCounts();
+}
+
+document.getElementById('addInstagramBtn').addEventListener('click', ()=> openInstagramForm(null));
+
+function openInstagramForm(account){
+    document.getElementById('instagramModalTitle').textContent = account ? 'Edit Instagram Account' : 'Add Instagram Account';
+    document.getElementById('instagramId').value = account?.id || '';
+    document.getElementById('instagramDisplayName').value = account?.display_name || '';
+    document.getElementById('instagramUrl').value = account?.url || '';
+    document.getElementById('instagramCategory').value = account?.category || 'sports';
+    syncCustomSelect('instagramCategory');
+    document.getElementById('instagramFormError').hidden = true;
+    openModal('instagramModal');
+}
+
+document.getElementById('instagramForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const errorEl = document.getElementById('instagramFormError');
+    errorEl.hidden = true;
+
+    const id = document.getElementById('instagramId').value || null;
+    const displayName = document.getElementById('instagramDisplayName').value.trim();
+    const url = document.getElementById('instagramUrl').value.trim();
+    const category = document.getElementById('instagramCategory').value;
+
+    if(!displayName || !url){
+        errorEl.textContent = 'Display name and Instagram URL are required.';
+        errorEl.hidden = false;
+        return;
+    }
+    if(!/^https?:\/\/(www\.)?instagram\.com\//i.test(url)){
+        errorEl.textContent = 'Please enter a valid instagram.com URL.';
+        errorEl.hidden = false;
+        return;
+    }
+
+    const btn = document.getElementById('instagramSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="dash-spinner"></span>';
+
+    try {
+        const payload = { display_name: displayName, url, category };
+
+        if(id){
+            const { error } = await sb().from('instagram_shortcuts').update(payload).eq('id', id);
+            if(error) throw error;
+            showToast(`${displayName} was updated.`, 'success');
+        } else {
+            const { error } = await sb().from('instagram_shortcuts').insert(payload);
+            if(error) throw error;
+            showToast(`${displayName} was added to Instagram Shortcuts.`, 'success');
+        }
+
+        closeModal('instagramModal');
+        await refreshInstagramView();
+        refreshHomeCounts();
+    } catch(err){
+        errorEl.textContent = err.message || 'Could not save this account.';
+        errorEl.hidden = false;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save Account';
+    }
+});
+
+/* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
 [
     'sportUploadSelect', 'sportSeasonSelect', 'sportFilterSelect',
-    'fridayUploadSelect', 'fridaySeasonSelect', 'editPhotoSeason',
+    'fridayUploadSelect', 'fridaySeasonSelect', 'editPhotoSeason', 'instagramCategory',
 ].forEach(syncCustomSelect);
 
 wireBulkBar({
