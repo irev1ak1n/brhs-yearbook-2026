@@ -505,6 +505,17 @@ body{
     padding:.9rem 1.1rem;border-radius:8px;
     border:1px solid var(--border);
     background:linear-gradient(180deg,rgba(26,15,6,.6),rgba(14,8,4,.85));
+    cursor:pointer;
+    transition:border-color .25s ease,background .25s ease,box-shadow .25s ease;
+}
+.dash-insta-row:hover{
+    border-color:var(--ember-bright);
+    background:linear-gradient(180deg,rgba(34,20,8,.7),rgba(18,10,4,.92));
+    box-shadow:0 10px 26px rgba(0,0,0,.28),0 0 16px rgba(212,115,42,.08);
+}
+.dash-insta-row:focus-visible{
+    outline:2px solid var(--ember-bright);
+    outline-offset:2px;
 }
 .dash-insta-info{flex:1;min-width:0}
 .dash-insta-info h3{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:1.15rem;color:var(--cream)}

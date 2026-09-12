@@ -1331,7 +1331,7 @@ function renderInstagramList(){
     }
 
     list.innerHTML = filtered.map(a=> `
-        <div class="dash-insta-row" data-id="${a.id}">
+        <div class="dash-insta-row" data-id="${a.id}" data-url="${escapeHtml(a.url)}" tabindex="0" role="link" aria-label="Open ${escapeHtml(a.display_name)} on Instagram">
             <div class="dash-insta-info">
                 <h3>${escapeHtml(a.display_name)}</h3>
                 <p>${escapeHtml(a.url)}</p>
@@ -1342,6 +1342,10 @@ function renderInstagramList(){
                 <button class="dash-icon-btn danger" data-action="delete-instagram" data-id="${a.id}">Delete</button>
             </div>
         </div>`).join('');
+}
+
+function openInstagramAccount(url){
+    if(url) window.open(url, '_blank', 'noopener,noreferrer');
 }
 
 document.getElementById('instagramSearchInput').addEventListener('input', e=>{
@@ -1360,12 +1364,26 @@ document.getElementById('instagramCategoryFilterRow').addEventListener('click', 
 
 document.getElementById('instagramList').addEventListener('click', e=>{
     const editBtn = e.target.closest('[data-action="edit-instagram"]');
+    if(editBtn){ openInstagramForm(instagramCache.find(a=> a.id === editBtn.dataset.id)); return; }
+
     const delBtn = e.target.closest('[data-action="delete-instagram"]');
-    if(editBtn) openInstagramForm(instagramCache.find(a=> a.id === editBtn.dataset.id));
     if(delBtn){
         const a = instagramCache.find(x=> x.id === delBtn.dataset.id);
         confirmDelete(`Delete ${a?.display_name || 'this account'} from Instagram Shortcuts? This cannot be undone.`, ()=> deleteInstagram(delBtn.dataset.id));
+        return;
     }
+
+    const row = e.target.closest('.dash-insta-row');
+    if(row) openInstagramAccount(row.dataset.url);
+});
+
+document.getElementById('instagramList').addEventListener('keydown', e=>{
+    if(e.key !== 'Enter' && e.key !== ' ') return;
+    if(e.target.closest('button')) return; // buttons handle their own activation
+    const row = e.target.closest('.dash-insta-row');
+    if(!row) return;
+    e.preventDefault();
+    openInstagramAccount(row.dataset.url);
 });
 
 async function deleteInstagram(id){
