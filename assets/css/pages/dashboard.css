@@ -297,6 +297,28 @@ body{
     border:1px solid var(--border);background:rgba(20,11,4,.5);
 }
 .dash-toolbar .dash-field{margin-bottom:0;min-width:200px;flex:1}
+
+/* ══ BULK SELECTION BAR ══ */
+.dash-bulk-bar{
+    display:flex;flex-wrap:wrap;align-items:center;gap:1rem;
+    margin-bottom:1.2rem;padding:.9rem 1.1rem;border-radius:8px;
+    border:1px solid var(--border);background:rgba(20,11,4,.4);
+}
+.dash-bulk-selectall{
+    display:flex;align-items:center;gap:.6rem;cursor:pointer;
+    font-family:sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--cream-dim);
+}
+.dash-bulk-selectall:hover{color:var(--cream)}
+.dash-bulk-selectall input[type="checkbox"]{
+    width:17px;height:17px;accent-color:var(--ember-bright);cursor:pointer;
+}
+.dash-bulk-count{
+    font-family:sans-serif;font-weight:700;font-size:.74rem;letter-spacing:.04em;
+    color:var(--ember-glow);
+}
+.dash-bulk-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-left:auto}
+
 .dash-pill-row{display:flex;flex-wrap:wrap;gap:.55rem}
 .dash-pill{
     padding:.5rem 1.1rem;border-radius:999px;
@@ -378,9 +400,24 @@ body{
     position:relative;overflow:hidden;border-radius:8px;
     border:1px solid var(--border);
     background:linear-gradient(180deg,rgba(26,15,6,.8),rgba(14,8,4,.95));
-    transition:border-color .25s ease,transform .25s ease;
+    transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease;
 }
 .dash-card:hover{border-color:rgba(212,115,42,.4);transform:translateY(-2px)}
+.dash-card.is-selected{
+    border-color:var(--ember-bright);
+    box-shadow:0 0 0 2px rgba(212,115,42,.3);
+}
+.dash-card-select{
+    position:absolute;top:.6rem;left:.6rem;z-index:3;
+    display:flex;align-items:center;justify-content:center;
+    width:1.9rem;height:1.9rem;border-radius:6px;
+    background:rgba(6,3,1,.6);backdrop-filter:blur(2px);
+    border:1px solid rgba(240,230,208,.25);
+    cursor:pointer;
+}
+.dash-card-select input[type="checkbox"]{
+    width:18px;height:18px;accent-color:var(--ember-bright);cursor:pointer;
+}
 .dash-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--wood-dark)}
 .dash-card-body{padding:.9rem 1rem}
 .dash-card-tag{
@@ -577,6 +614,9 @@ body{
     .dash-brand{font-size:.92rem}
     .dash-main{padding:1.6rem 0 3rem}
     .dash-toolbar{flex-direction:column;align-items:stretch}
+    .dash-bulk-bar{flex-direction:column;align-items:stretch}
+    .dash-bulk-actions{margin-left:0;width:100%}
+    .dash-bulk-actions .dash-btn{flex:1}
     .dash-modal{padding:1.4rem}
     .dash-toast-wrap{left:1rem;right:1rem;max-width:none}
 }

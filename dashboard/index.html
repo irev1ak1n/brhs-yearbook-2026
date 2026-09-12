@@ -143,6 +143,18 @@
                     </div>
                 </div>
 
+                <div class="dash-bulk-bar" id="sportBulkBar">
+                    <label class="dash-bulk-selectall">
+                        <input type="checkbox" id="sportSelectAll">
+                        <span>Select All</span>
+                    </label>
+                    <span class="dash-bulk-count" id="sportSelectedCount" hidden>0 selected</span>
+                    <div class="dash-bulk-actions" id="sportBulkActions" hidden>
+                        <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="sportBulkHideBtn" data-bulk-action="hide" hidden>Hide Selected</button>
+                        <button type="button" class="dash-btn dash-btn-danger dash-btn-sm" id="sportBulkDeleteBtn" data-bulk-action="delete" hidden>Permanently Delete Selected</button>
+                    </div>
+                </div>
+
                 <div class="dash-grid" id="sportPhotoGrid"></div>
 
                 <div class="dash-hidden-section">
@@ -152,6 +164,18 @@
                         <svg class="dash-hidden-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <p class="dash-hidden-hint">Photos hidden from the public Sports page. Restore any of these to bring them back.</p>
+
+                    <div class="dash-bulk-bar" id="sportHiddenBulkBar" hidden>
+                        <label class="dash-bulk-selectall">
+                            <input type="checkbox" id="sportHiddenSelectAll">
+                            <span>Select All</span>
+                        </label>
+                        <span class="dash-bulk-count" id="sportHiddenSelectedCount" hidden>0 selected</span>
+                        <div class="dash-bulk-actions" id="sportHiddenBulkActions" hidden>
+                            <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="sportHiddenBulkRestoreBtn" data-bulk-action="restore">Restore Selected</button>
+                        </div>
+                    </div>
+
                     <div class="dash-grid" id="sportHiddenGrid" hidden></div>
                 </div>
             </section>
@@ -219,6 +243,18 @@
                     </div>
                 </div>
 
+                <div class="dash-bulk-bar" id="fridayBulkBar">
+                    <label class="dash-bulk-selectall">
+                        <input type="checkbox" id="fridaySelectAll">
+                        <span>Select All</span>
+                    </label>
+                    <span class="dash-bulk-count" id="fridaySelectedCount" hidden>0 selected</span>
+                    <div class="dash-bulk-actions" id="fridayBulkActions" hidden>
+                        <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="fridayBulkHideBtn" data-bulk-action="hide" hidden>Hide Selected</button>
+                        <button type="button" class="dash-btn dash-btn-danger dash-btn-sm" id="fridayBulkDeleteBtn" data-bulk-action="delete" hidden>Permanently Delete Selected</button>
+                    </div>
+                </div>
+
                 <div class="dash-grid" id="fridayPhotoGrid"></div>
 
                 <div class="dash-hidden-section">
@@ -228,6 +264,18 @@
                         <svg class="dash-hidden-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <p class="dash-hidden-hint">Photos hidden from the public Happy Friday page. Restore any of these to bring them back.</p>
+
+                    <div class="dash-bulk-bar" id="fridayHiddenBulkBar" hidden>
+                        <label class="dash-bulk-selectall">
+                            <input type="checkbox" id="fridayHiddenSelectAll">
+                            <span>Select All</span>
+                        </label>
+                        <span class="dash-bulk-count" id="fridayHiddenSelectedCount" hidden>0 selected</span>
+                        <div class="dash-bulk-actions" id="fridayHiddenBulkActions" hidden>
+                            <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="fridayHiddenBulkRestoreBtn" data-bulk-action="restore">Restore Selected</button>
+                        </div>
+                    </div>
+
                     <div class="dash-grid" id="fridayHiddenGrid" hidden></div>
                 </div>
             </section>
