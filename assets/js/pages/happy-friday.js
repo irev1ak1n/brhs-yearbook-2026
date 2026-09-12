@@ -17,23 +17,11 @@ const FRIDAY_SETS = [
 
 const BASE_PATH = '../assets/images/gallery/';
 const MAX_CONSECUTIVE_MISSES = 25;
-const BATCH_SIZE = 10;
-const ABSOLUTE_MAX = 800;
 
 // keeps the randomized order stable across scrolling, filtering, and
 // rerenders within a session; a fresh shuffle is generated once this expires
 const GALLERY_ORDER_KEY = 'brhs_friday_gallery_order_2025-2026';
 const GALLERY_ORDER_TTL_MS = 30 * 60 * 1000;
-
-function probeImage(set, n){
-    return new Promise(resolve=>{
-        const src = `${BASE_PATH}${set.folder}/${set.prefix} (${n}).jpg`;
-        const img = new Image();
-        img.onload = () => resolve({ src, set: set.key, label: set.label, year: '2025-2026' });
-        img.onerror = () => resolve(null);
-        img.src = encodeURI(src);
-    });
-}
 
 async function fetchFridayPhotosFromDB(){
     const byCategory = new Map(FRIDAY_SETS.map(s => [s.key, s]));
@@ -60,40 +48,20 @@ async function fetchFridayPhotosFromDB(){
     }
 }
 
+/* probe a single category's on-disk folder (shared with the dashboard so
+   both always agree on what legacy photos exist) */
 async function gatherSetPhotos(set){
-    const photos = [];
-    let n = 1;
-    let consecutiveMisses = 0;
-
-    while(consecutiveMisses < MAX_CONSECUTIVE_MISSES && n <= ABSOLUTE_MAX){
-        const batchEnd = Math.min(n + BATCH_SIZE - 1, ABSOLUTE_MAX);
-        const batch = [];
-        for(let i = n; i <= batchEnd; i++){
-            batch.push(probeImage(set, i));
-        }
-
-        const results = await Promise.all(batch);
-
-        for(const result of results){
-            if(result){
-                photos.push(result);
-                consecutiveMisses = 0;
-            } else {
-                consecutiveMisses++;
-                if(consecutiveMisses >= MAX_CONSECUTIVE_MISSES) break;
-            }
-        }
-
-        n = batchEnd + 1;
-    }
-
-    return photos;
+    const paths = await gatherLegacyFolderPhotos(BASE_PATH, set.folder, set.prefix, MAX_CONSECUTIVE_MISSES);
+    return paths.map(src => ({ src, set: set.key, label: set.label, year: '2025-2026' }));
 }
 
 async function gatherPhotos(){
     const perSet = await Promise.all(FRIDAY_SETS.map(gatherSetPhotos));
     const dbPhotos = await fetchFridayPhotosFromDB();
-    const photos = perSet.flat().concat(dbPhotos);
+    const hiddenPaths = await fetchHiddenLegacyPaths('friday');
+
+    const photos = perSet.flat().concat(dbPhotos)
+        .filter(photo => !hiddenPaths.has(normalizeLegacyPath(photo.src)));
 
     const photoBySrc = new Map(photos.map(photo => [photo.src, photo]));
     const orderedSrcs = getStableOrderedIds(GALLERY_ORDER_KEY, photos.map(photo => photo.src), GALLERY_ORDER_TTL_MS);

@@ -144,6 +144,16 @@
                 </div>
 
                 <div class="dash-grid" id="sportPhotoGrid"></div>
+
+                <div class="dash-hidden-section">
+                    <button type="button" class="dash-hidden-toggle" id="sportHiddenToggle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.4 5.5A9.4 9.4 0 0 1 12 5c5 0 9 4.5 10 7-.4 1.1-1.2 2.4-2.3 3.6M6.2 6.7C4.2 8 2.8 9.8 2 12c1 2.5 5 7 10 7 1.2 0 2.4-.2 3.5-.7"/></svg>
+                        <span id="sportHiddenToggleText">Hidden Photos (0)</span>
+                        <svg class="dash-hidden-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <p class="dash-hidden-hint">Photos hidden from the public Sports page. Restore any of these to bring them back.</p>
+                    <div class="dash-grid" id="sportHiddenGrid" hidden></div>
+                </div>
             </section>
 
             <!-- HAPPY FRIDAY VIEW -->
@@ -210,6 +220,16 @@
                 </div>
 
                 <div class="dash-grid" id="fridayPhotoGrid"></div>
+
+                <div class="dash-hidden-section">
+                    <button type="button" class="dash-hidden-toggle" id="fridayHiddenToggle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.4 5.5A9.4 9.4 0 0 1 12 5c5 0 9 4.5 10 7-.4 1.1-1.2 2.4-2.3 3.6M6.2 6.7C4.2 8 2.8 9.8 2 12c1 2.5 5 7 10 7 1.2 0 2.4-.2 3.5-.7"/></svg>
+                        <span id="fridayHiddenToggleText">Hidden Photos (0)</span>
+                        <svg class="dash-hidden-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <p class="dash-hidden-hint">Photos hidden from the public Happy Friday page. Restore any of these to bring them back.</p>
+                    <div class="dash-grid" id="fridayHiddenGrid" hidden></div>
+                </div>
             </section>
 
             <!-- SENIORS VIEW -->
@@ -420,6 +440,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="../assets/js/utils/supabase-client.js"></script>
+<script src="../assets/js/utils/legacy-gallery.js"></script>
+<script src="../assets/js/utils/custom-select.js"></script>
 <script src="../assets/js/pages/dashboard.js"></script>
 </body>
 </html>

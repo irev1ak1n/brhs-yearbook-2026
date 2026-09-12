@@ -299,6 +299,8 @@ function populateSportSelects(){
     uploadSelect.innerHTML = sportsCache.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
     filterSelect.innerHTML = '<option value="all">All Sports</option>' +
         sportsCache.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+    syncCustomSelect(uploadSelect);
+    syncCustomSelect(filterSelect);
 }
 
 async function refreshSportsView(){
@@ -479,23 +481,55 @@ document.getElementById('sportUploadBtn').addEventListener('click', async ()=>{
     refreshHomeCounts();
 });
 
-let sportPhotosCache = [];
+let sportPhotosCache = []; // merged legacy (on-disk) + dashboard-uploaded photos
 let sportGridFilters = { sport: 'all', year: 'all' };
+const DASH_LEGACY_BASE_PATH = '../assets/images/gallery/';
+
+/* Probes every sport's on-disk folder (same logic the public page uses)
+   so legacy photos show up here even though they were never uploaded
+   through the dashboard. */
+async function loadLegacySportPhotos(){
+    const lists = await Promise.all(sportsCache.map(async sport=>{
+        const paths = await gatherLegacyFolderPhotos(DASH_LEGACY_BASE_PATH, sport.folder, sport.prefix);
+        return paths.map(path => ({
+            id: normalizeLegacyPath(path),
+            source: 'legacy',
+            sport_id: sport.id,
+            image_url: path,
+            caption: null,
+            season: '2025-2026',
+        }));
+    }));
+    return lists.flat();
+}
 
 async function loadSportPhotoGrid(){
-    const { data, error } = await sb()
-        .from('sport_photos')
-        .select('id, sport_id, image_url, caption, season, created_at')
-        .order('created_at', { ascending: false });
-    if(error){ showToast('Could not load sport photos.', 'error'); return; }
-    sportPhotosCache = data || [];
+    const grid = document.getElementById('sportPhotoGrid');
+    grid.innerHTML = '<div class="dash-grid-loading"><span class="dash-spinner"></span>Gathering photos from the website and dashboard&hellip;</div>';
+
+    const [legacyPhotos, dbResult, hiddenPaths] = await Promise.all([
+        loadLegacySportPhotos(),
+        sb().from('sport_photos').select('id, sport_id, image_url, caption, season, created_at').order('created_at', { ascending: false }),
+        fetchHiddenLegacyPaths('sport'),
+    ]);
+
+    if(dbResult.error){ showToast('Could not load dashboard-uploaded sport photos.', 'error'); }
+    const dbPhotos = (dbResult.data || []).map(row => ({ ...row, source: 'dashboard' }));
+
+    sportPhotosCache = legacyPhotos.concat(dbPhotos).map(p => ({
+        ...p,
+        isHidden: p.source === 'legacy' && hiddenPaths.has(p.id),
+    }));
+
     renderSportPhotoGrid();
+    renderSportHiddenGrid('sport');
 }
 
 function renderSportPhotoGrid(){
     const grid = document.getElementById('sportPhotoGrid');
     const bySportId = new Map(sportsCache.map(s=>[s.id, s]));
     const filtered = sportPhotosCache.filter(p=>{
+        if(p.isHidden) return false;
         const sportMatch = sportGridFilters.sport === 'all' || p.sport_id === sportGridFilters.sport;
         const yearMatch = sportGridFilters.year === 'all' || p.season === sportGridFilters.year;
         return sportMatch && yearMatch;
@@ -506,22 +540,55 @@ function renderSportPhotoGrid(){
         return;
     }
 
-    grid.innerHTML = filtered.map(p=>{
-        const sport = bySportId.get(p.sport_id);
-        return `
-        <div class="dash-card" data-id="${p.id}">
-            <img class="dash-card-img" src="${p.image_url}" alt="" loading="lazy">
-            <div class="dash-card-body">
-                <span class="dash-card-tag">${escapeHtml(sport?.name || 'Unknown sport')}</span>
-                <p class="dash-card-caption">${escapeHtml(p.caption || '')}</p>
-                <p class="dash-card-meta">${escapeHtml(p.season || 'No year set')}</p>
-                <div class="dash-card-actions">
-                    <button class="dash-icon-btn" data-action="edit-sport-photo" data-id="${p.id}">Edit</button>
-                    <button class="dash-icon-btn danger" data-action="delete-sport-photo" data-id="${p.id}">Delete</button>
-                </div>
+    grid.innerHTML = filtered.map(p=> photoCardHtml(p, bySportId.get(p.sport_id)?.name, 'sport')).join('');
+}
+
+function renderSportHiddenGrid(){
+    const grid = document.getElementById('sportHiddenGrid');
+    const bySportId = new Map(sportsCache.map(s=>[s.id, s]));
+    const hidden = sportPhotosCache.filter(p=> p.isHidden);
+    document.getElementById('sportHiddenToggleText').textContent = `Hidden Photos (${hidden.length})`;
+
+    grid.innerHTML = hidden.length
+        ? hidden.map(p=> hiddenCardHtml(p, bySportId.get(p.sport_id)?.name, 'sport')).join('')
+        : '<p class="dash-empty">No hidden photos.</p>';
+}
+
+/* Shared card markup for both sports and Happy Friday galleries. */
+function photoCardHtml(p, tagLabel, kind){
+    const sourceLabel = p.source === 'legacy' ? 'Website Photo' : 'Dashboard Upload';
+    const editBtn = p.source === 'dashboard'
+        ? `<button class="dash-icon-btn" data-action="edit-${kind}-photo" data-id="${p.id}">Edit</button>`
+        : '';
+    return `
+    <div class="dash-card" data-id="${p.id}">
+        <img class="dash-card-img" src="${p.image_url}" alt="" loading="lazy">
+        <div class="dash-card-body">
+            <span class="dash-card-tag">${escapeHtml(tagLabel || 'Unknown')}</span>
+            <span class="dash-card-source dash-card-source-${p.source}">${sourceLabel}</span>
+            <p class="dash-card-caption">${escapeHtml(p.caption || '')}</p>
+            <p class="dash-card-meta">${escapeHtml(p.season || 'No year set')}</p>
+            <div class="dash-card-actions">
+                ${editBtn}
+                <button class="dash-icon-btn danger" data-action="delete-${kind}-photo" data-id="${p.id}">Delete</button>
             </div>
-        </div>`;
-    }).join('');
+        </div>
+    </div>`;
+}
+
+function hiddenCardHtml(p, tagLabel, kind){
+    return `
+    <div class="dash-card is-hidden-card" data-id="${p.id}">
+        <img class="dash-card-img" src="${p.image_url}" alt="" loading="lazy">
+        <div class="dash-card-body">
+            <span class="dash-card-tag">${escapeHtml(tagLabel || 'Unknown')}</span>
+            <span class="dash-card-source dash-card-source-legacy">Website Photo</span>
+            <p class="dash-card-meta">${escapeHtml(p.season || 'No year set')}</p>
+            <div class="dash-card-actions">
+                <button class="dash-icon-btn" data-action="restore-${kind}-photo" data-id="${p.id}">Restore</button>
+            </div>
+        </div>
+    </div>`;
 }
 
 document.getElementById('sportFilterSelect').addEventListener('change', e=>{
@@ -537,13 +604,54 @@ document.getElementById('sportYearFilterRow').addEventListener('click', e=>{
     renderSportPhotoGrid();
 });
 
+document.getElementById('sportHiddenToggle').addEventListener('click', ()=>{
+    const grid = document.getElementById('sportHiddenGrid');
+    const btn = document.getElementById('sportHiddenToggle');
+    grid.hidden = !grid.hidden;
+    btn.classList.toggle('is-open', !grid.hidden);
+});
+
 let editingPhoto = null; // { table, id }
 document.getElementById('sportPhotoGrid').addEventListener('click', e=>{
     const editBtn = e.target.closest('[data-action="edit-sport-photo"]');
     const delBtn = e.target.closest('[data-action="delete-sport-photo"]');
     if(editBtn) openEditPhoto('sport_photos', editBtn.dataset.id, sportPhotosCache);
-    if(delBtn) confirmDelete('Delete this photo? This cannot be undone.', ()=> deletePhoto('sport_photos', 'sport-photos', delBtn.dataset.id, sportPhotosCache, loadSportPhotoGrid));
+    if(delBtn) handlePhotoDelete('sport', delBtn.dataset.id, sportPhotosCache, loadSportPhotoGrid);
 });
+document.getElementById('sportHiddenGrid').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action="restore-sport-photo"]');
+    if(btn) handlePhotoRestore('sport', btn.dataset.id, sportPhotosCache, loadSportPhotoGrid);
+});
+
+/* Legacy photos are hidden (not deleted — the file still lives in the
+   repo); dashboard-uploaded photos are fully deleted from Storage + DB. */
+function handlePhotoDelete(kind, id, cache, refreshFn){
+    const photo = cache.find(p=> p.id === id);
+    if(!photo) return;
+
+    if(photo.source === 'legacy'){
+        confirmDelete('Hide this photo from the public page? You can bring it back later from Hidden Photos.', async ()=>{
+            const { error } = await hideLegacyPhoto(kind, photo.image_url);
+            if(error){ showToast('Could not hide this photo.', 'error'); return; }
+            showToast('Photo hidden. Find it under Hidden Photos to restore it.', 'success');
+            await refreshFn();
+        });
+        return;
+    }
+
+    const bucket = kind === 'sport' ? 'sport-photos' : 'happy-friday-photos';
+    const table = kind === 'sport' ? 'sport_photos' : 'happy_friday_photos';
+    confirmDelete('Delete this photo? This cannot be undone.', ()=> deletePhoto(table, bucket, id, cache, refreshFn));
+}
+
+async function handlePhotoRestore(kind, id, cache, refreshFn){
+    const photo = cache.find(p=> p.id === id);
+    if(!photo) return;
+    const { error } = await restoreLegacyPhoto(kind, photo.image_url);
+    if(error){ showToast('Could not restore this photo.', 'error'); return; }
+    showToast('Photo restored.', 'success');
+    await refreshFn();
+}
 
 function openEditPhoto(table, id, cache){
     const photo = cache.find(p=> p.id === id);
@@ -551,6 +659,7 @@ function openEditPhoto(table, id, cache){
     editingPhoto = { table, id };
     document.getElementById('editPhotoCaption').value = photo.caption || '';
     document.getElementById('editPhotoSeason').value = photo.season || '2026-2027';
+    syncCustomSelect('editPhotoSeason');
     document.getElementById('editPhotoError').hidden = true;
     openModal('editPhotoModal');
 }
@@ -589,10 +698,14 @@ async function deletePhoto(table, bucket, id, cache, refreshFn){
    HAPPY FRIDAY VIEW
 ══════════════════════════════════════ */
 let fridayPendingFiles = [];
-let fridayPhotosCache = [];
+let fridayPhotosCache = []; // merged legacy (on-disk) + dashboard-uploaded photos
 let fridayGridFilters = { category: 'all', year: 'all' };
 
 const FRIDAY_LABELS = { almost_friday: 'Almost Friday', finally_friday: 'Finally Friday' };
+const FRIDAY_SETS = [
+    { key: 'almost_friday', folder: 'almost_friday', prefix: 'afr' },
+    { key: 'finally_friday', folder: 'finally_friday', prefix: 'ff' },
+];
 
 async function refreshFridayView(){
     await loadFridayPhotoGrid();
@@ -667,19 +780,47 @@ document.getElementById('fridayUploadBtn').addEventListener('click', async ()=>{
     refreshHomeCounts();
 });
 
+async function loadLegacyFridayPhotos(){
+    const lists = await Promise.all(FRIDAY_SETS.map(async set=>{
+        const paths = await gatherLegacyFolderPhotos(DASH_LEGACY_BASE_PATH, set.folder, set.prefix);
+        return paths.map(path => ({
+            id: normalizeLegacyPath(path),
+            source: 'legacy',
+            category: set.key,
+            image_url: path,
+            caption: null,
+            season: '2025-2026',
+        }));
+    }));
+    return lists.flat();
+}
+
 async function loadFridayPhotoGrid(){
-    const { data, error } = await sb()
-        .from('happy_friday_photos')
-        .select('id, category, image_url, caption, season, created_at')
-        .order('created_at', { ascending: false });
-    if(error){ showToast('Could not load Happy Friday photos.', 'error'); return; }
-    fridayPhotosCache = data || [];
+    const grid = document.getElementById('fridayPhotoGrid');
+    grid.innerHTML = '<div class="dash-grid-loading"><span class="dash-spinner"></span>Gathering photos from the website and dashboard&hellip;</div>';
+
+    const [legacyPhotos, dbResult, hiddenPaths] = await Promise.all([
+        loadLegacyFridayPhotos(),
+        sb().from('happy_friday_photos').select('id, category, image_url, caption, season, created_at').order('created_at', { ascending: false }),
+        fetchHiddenLegacyPaths('friday'),
+    ]);
+
+    if(dbResult.error){ showToast('Could not load dashboard-uploaded Happy Friday photos.', 'error'); }
+    const dbPhotos = (dbResult.data || []).map(row => ({ ...row, source: 'dashboard' }));
+
+    fridayPhotosCache = legacyPhotos.concat(dbPhotos).map(p => ({
+        ...p,
+        isHidden: p.source === 'legacy' && hiddenPaths.has(p.id),
+    }));
+
     renderFridayPhotoGrid();
+    renderFridayHiddenGrid();
 }
 
 function renderFridayPhotoGrid(){
     const grid = document.getElementById('fridayPhotoGrid');
     const filtered = fridayPhotosCache.filter(p=>{
+        if(p.isHidden) return false;
         const catMatch = fridayGridFilters.category === 'all' || p.category === fridayGridFilters.category;
         const yearMatch = fridayGridFilters.year === 'all' || p.season === fridayGridFilters.year;
         return catMatch && yearMatch;
@@ -690,20 +831,25 @@ function renderFridayPhotoGrid(){
         return;
     }
 
-    grid.innerHTML = filtered.map(p=> `
-        <div class="dash-card" data-id="${p.id}">
-            <img class="dash-card-img" src="${p.image_url}" alt="" loading="lazy">
-            <div class="dash-card-body">
-                <span class="dash-card-tag">${FRIDAY_LABELS[p.category] || p.category}</span>
-                <p class="dash-card-caption">${escapeHtml(p.caption || '')}</p>
-                <p class="dash-card-meta">${escapeHtml(p.season || 'No year set')}</p>
-                <div class="dash-card-actions">
-                    <button class="dash-icon-btn" data-action="edit-friday-photo" data-id="${p.id}">Edit</button>
-                    <button class="dash-icon-btn danger" data-action="delete-friday-photo" data-id="${p.id}">Delete</button>
-                </div>
-            </div>
-        </div>`).join('');
+    grid.innerHTML = filtered.map(p=> photoCardHtml(p, FRIDAY_LABELS[p.category] || p.category, 'friday')).join('');
 }
+
+function renderFridayHiddenGrid(){
+    const grid = document.getElementById('fridayHiddenGrid');
+    const hidden = fridayPhotosCache.filter(p=> p.isHidden);
+    document.getElementById('fridayHiddenToggleText').textContent = `Hidden Photos (${hidden.length})`;
+
+    grid.innerHTML = hidden.length
+        ? hidden.map(p=> hiddenCardHtml(p, FRIDAY_LABELS[p.category] || p.category, 'friday')).join('')
+        : '<p class="dash-empty">No hidden photos.</p>';
+}
+
+document.getElementById('fridayHiddenToggle').addEventListener('click', ()=>{
+    const grid = document.getElementById('fridayHiddenGrid');
+    const btn = document.getElementById('fridayHiddenToggle');
+    grid.hidden = !grid.hidden;
+    btn.classList.toggle('is-open', !grid.hidden);
+});
 
 document.getElementById('fridayCategoryFilterRow').addEventListener('click', e=>{
     const btn = e.target.closest('.dash-pill');
@@ -726,7 +872,11 @@ document.getElementById('fridayPhotoGrid').addEventListener('click', e=>{
     const editBtn = e.target.closest('[data-action="edit-friday-photo"]');
     const delBtn = e.target.closest('[data-action="delete-friday-photo"]');
     if(editBtn) openEditPhoto('happy_friday_photos', editBtn.dataset.id, fridayPhotosCache);
-    if(delBtn) confirmDelete('Delete this photo? This cannot be undone.', ()=> deletePhoto('happy_friday_photos', 'happy-friday-photos', delBtn.dataset.id, fridayPhotosCache, loadFridayPhotoGrid));
+    if(delBtn) handlePhotoDelete('friday', delBtn.dataset.id, fridayPhotosCache, loadFridayPhotoGrid);
+});
+document.getElementById('fridayHiddenGrid').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action="restore-friday-photo"]');
+    if(btn) handlePhotoRestore('friday', btn.dataset.id, fridayPhotosCache, loadFridayPhotoGrid);
 });
 
 /* ══════════════════════════════════════
@@ -949,4 +1099,9 @@ document.getElementById('seniorForm').addEventListener('submit', async (e)=>{
 /* ══════════════════════════════════════
    INIT
 ══════════════════════════════════════ */
+[
+    'sportUploadSelect', 'sportSeasonSelect', 'sportFilterSelect',
+    'fridayUploadSelect', 'fridaySeasonSelect', 'editPhotoSeason',
+].forEach(syncCustomSelect);
+
 checkSession();

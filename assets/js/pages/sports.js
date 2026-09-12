@@ -82,66 +82,28 @@ function buildSportFilterPills(sports){
 // how many consecutive missing numbers before we assume a sport's
 // folder has no more photos (handles small numbering gaps gracefully)
 const MAX_CONSECUTIVE_MISSES = 15;
-const BATCH_SIZE = 10;
-// hard safety ceiling so a misconfigured folder can't loop forever
-const ABSOLUTE_MAX = 800;
 
 // keeps the randomized order stable across scrolling, filtering, and
 // rerenders within a session; a fresh shuffle is generated once this expires
 const GALLERY_ORDER_KEY = 'brhs_sports_gallery_order_2025-2026';
 const GALLERY_ORDER_TTL_MS = 30 * 60 * 1000;
 
-/* probe a single image; resolves with the item if it exists, else null */
-function probeImage(sport, n){
-    return new Promise(resolve=>{
-        const src = `${BASE_PATH}${sport.folder}/${sport.prefix} (${n}).jpg`;
-        const img = new Image();
-        img.onload = () => resolve({ src, sport: sport.key, label: sport.label, year: '2025-2026' });
-        img.onerror = () => resolve(null);
-        img.src = encodeURI(src);
-    });
-}
-
-/* keep probing a single sport's folder in batches until we hit a
-   run of consecutive misses — finds ALL photos regardless of count */
+/* probe a single sport's on-disk folder (shared with the dashboard so both
+   always agree on what legacy photos exist) */
 async function gatherSportPhotos(sport){
-    if(!sport.folder || !sport.prefix) return [];
-
-    const photos = [];
-    let n = 1;
-    let consecutiveMisses = 0;
-
-    while(consecutiveMisses < MAX_CONSECUTIVE_MISSES && n <= ABSOLUTE_MAX){
-        const batchEnd = Math.min(n + BATCH_SIZE - 1, ABSOLUTE_MAX);
-        const batch = [];
-        for(let i = n; i <= batchEnd; i++){
-            batch.push(probeImage(sport, i));
-        }
-
-        const results = await Promise.all(batch);
-
-        for(const result of results){
-            if(result){
-                photos.push(result);
-                consecutiveMisses = 0;
-            } else {
-                consecutiveMisses++;
-                if(consecutiveMisses >= MAX_CONSECUTIVE_MISSES) break;
-            }
-        }
-
-        n = batchEnd + 1;
-    }
-
-    return photos;
+    const paths = await gatherLegacyFolderPhotos(BASE_PATH, sport.folder, sport.prefix, MAX_CONSECUTIVE_MISSES);
+    return paths.map(src => ({ src, sport: sport.key, label: sport.label, year: '2025-2026' }));
 }
 
-/* probe legacy on-disk photos + fetch dashboard-uploaded photos, return
-   combined list in a session-stable order */
+/* probe legacy on-disk photos + fetch dashboard-uploaded photos, drop
+   anything an admin has hidden, and return the rest in a session-stable order */
 async function gatherPhotos(sports){
     const perSport = await Promise.all(sports.map(gatherSportPhotos));
     const dbPhotos = await fetchSportPhotosFromDB(sports);
-    const photos = perSport.flat().concat(dbPhotos);
+    const hiddenPaths = await fetchHiddenLegacyPaths('sport');
+
+    const photos = perSport.flat().concat(dbPhotos)
+        .filter(photo => !hiddenPaths.has(normalizeLegacyPath(photo.src)));
 
     const photoBySrc = new Map(photos.map(photo => [photo.src, photo]));
     const orderedSrcs = getStableOrderedIds(GALLERY_ORDER_KEY, photos.map(photo => photo.src), GALLERY_ORDER_TTL_MS);
