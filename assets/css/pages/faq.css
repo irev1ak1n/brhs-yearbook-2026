@@ -114,6 +114,12 @@
 
 .faq-list{display:grid;gap:1rem}
 
+/* Content is kept in the markup (not deleted) so it can be restored
+   later — just flip data-visible back to "true" (or remove the
+   attribute) to bring an item back. display:none keeps it out of the
+   grid entirely so no empty card or gap is left behind. */
+.faq-item[data-visible="false"]{display:none}
+
 .faq-item{
     position:relative;
     background:rgba(26,15,6,.7);
