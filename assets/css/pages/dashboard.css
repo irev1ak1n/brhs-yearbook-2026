@@ -498,6 +498,18 @@ body{
 .dash-senior-info p{font-family:sans-serif;font-size:.76rem;color:var(--cream-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dash-senior-actions{display:flex;gap:.5rem;flex-shrink:0}
 
+/* ══ INSTAGRAM POST SYNC ══ */
+.dash-ig-sync{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+    padding:1rem 1.2rem;border-radius:8px;margin-bottom:1.6rem;
+    border:1px solid var(--border);
+    background:linear-gradient(180deg,rgba(26,15,6,.6),rgba(14,8,4,.85));
+}
+.dash-ig-sync-info h3{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:1.1rem;color:var(--cream);margin-bottom:.25rem}
+.dash-ig-sync-info p{font-family:sans-serif;font-size:.78rem;color:var(--cream-muted)}
+
+.dash-section-divider{height:1px;background:var(--border);margin:0 0 1.6rem}
+
 /* ══ INSTAGRAM SHORTCUTS LIST ══ */
 .dash-insta-list{display:flex;flex-direction:column;gap:.8rem}
 .dash-insta-row{

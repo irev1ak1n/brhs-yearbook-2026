@@ -262,7 +262,7 @@ function goto(view){
     if(view === 'sports') refreshSportsView();
     if(view === 'friday') refreshFridayView();
     if(view === 'seniors') refreshSeniorsView();
-    if(view === 'instagram') refreshInstagramView();
+    if(view === 'instagram'){ refreshInstagramView(); refreshInstagramSyncStatus(); }
     if(view === 'home') refreshHomeCounts();
     window.scrollTo(0, 0);
 }
@@ -1454,6 +1454,54 @@ document.getElementById('instagramForm').addEventListener('submit', async (e)=>{
     } finally {
         btn.disabled = false;
         btn.textContent = 'Save Account';
+    }
+});
+
+/* ══════════════════════════════════════
+   INSTAGRAM POST SYNC
+   Status + manual trigger for the "Latest from Instagram" homepage
+   feed. The actual Instagram Graph API call and Supabase write happen
+   server-side in /api/instagram-sync — this just shows sync status and
+   calls that endpoint with the staff member's own Supabase session
+   token so the serverless function can verify who's asking.
+══════════════════════════════════════ */
+async function refreshInstagramSyncStatus(){
+    const statusEl = document.getElementById('igSyncStatus');
+    const { data, error } = await sb().from('instagram_posts').select('synced_at').order('synced_at', { ascending: false }).limit(1);
+    if(error){ statusEl.textContent = 'Could not load sync status.'; return; }
+    if(!data || !data.length){
+        statusEl.textContent = 'Not synced yet — click Refresh Instagram to pull the latest posts.';
+        return;
+    }
+    const synced = new Date(data[0].synced_at);
+    statusEl.textContent = `Last synced ${synced.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`;
+}
+
+document.getElementById('refreshInstagramBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('refreshInstagramBtn');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="dash-spinner"></span>';
+
+    try {
+        const { data: sessionData } = await sb().auth.getSession();
+        const token = sessionData?.session?.access_token;
+        if(!token) throw new Error('Your session expired — please log in again.');
+
+        const resp = await fetch('/api/instagram-sync', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const result = await resp.json().catch(()=> ({}));
+        if(!resp.ok) throw new Error(result.error || 'Refresh failed.');
+
+        showToast(`Instagram refreshed — ${result.synced ?? 0} post${result.synced === 1 ? '' : 's'} synced.`, 'success');
+        await refreshInstagramSyncStatus();
+    } catch(err){
+        showToast(err.message || 'Could not refresh Instagram.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
     }
 });
 
