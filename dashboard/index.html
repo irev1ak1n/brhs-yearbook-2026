@@ -91,6 +91,14 @@
                         <p>Manage Instagram links for photographers, sports teams, and school clubs.</p>
                         <span class="dash-home-count" id="instagramCount">Loading&hellip;</span>
                     </button>
+                    <button class="dash-home-card" data-goto="settings">
+                        <span class="dash-home-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+                        </span>
+                        <h2>Website Settings</h2>
+                        <p>Manage the shared yearbook price and the site's browser-tab icon.</p>
+                        <span class="dash-home-count" id="settingsCount">Loading&hellip;</span>
+                    </button>
                 </div>
             </section>
 
@@ -345,6 +353,64 @@
                 <div class="dash-insta-list" id="instagramList"></div>
             </section>
 
+            <!-- WEBSITE SETTINGS VIEW -->
+            <section id="settingsView" hidden>
+                <div class="dash-back" data-goto="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Dashboard
+                </div>
+                <h1 class="dash-view-title">Website Settings</h1>
+                <p class="dash-view-sub">Changes here apply across the public website immediately &mdash; no redeploy needed.</p>
+
+                <div class="dash-settings-block">
+                    <h2 class="dash-settings-block-title">Yearbook Price</h2>
+                    <p class="dash-settings-block-sub">This single price is shown everywhere the yearbook price appears on the public site.</p>
+
+                    <div class="dash-price-panel">
+                        <div class="dash-price-current">
+                            <p class="dash-price-current-label">Current Price</p>
+                            <p class="dash-price-current-value" id="currentPriceDisplay">$&hellip;</p>
+                        </div>
+                        <form class="dash-price-form" id="priceForm">
+                            <div class="dash-field">
+                                <label for="priceInput">New price (whole dollars)</label>
+                                <input type="number" id="priceInput" min="1" step="1" inputmode="numeric" placeholder="e.g. 100" required>
+                            </div>
+                            <div class="dash-error" id="priceFormError" hidden></div>
+                            <button type="submit" class="dash-btn dash-btn-primary" id="priceSubmitBtn">Save Price</button>
+                        </form>
+                    </div>
+
+                    <h3 class="dash-settings-subheading">Price History</h3>
+                    <div class="dash-price-history" id="priceHistoryList"></div>
+                </div>
+
+                <div class="dash-section-divider"></div>
+
+                <div class="dash-settings-block">
+                    <h2 class="dash-settings-block-title">Site Icon</h2>
+                    <p class="dash-settings-block-sub">The small icon shown in the browser tab (not a homepage logo). PNG, SVG, ICO, and WEBP are supported.</p>
+
+                    <div class="dash-icon-panel">
+                        <div class="dash-icon-current">
+                            <img id="currentIconPreview" alt="Current site icon">
+                            <div>
+                                <p class="dash-icon-current-label">Active Icon</p>
+                                <p class="dash-icon-current-name" id="currentIconName">Loading&hellip;</p>
+                            </div>
+                        </div>
+                        <label class="dash-btn dash-btn-outline" id="iconUploadLabel">
+                            <span id="iconUploadLabelText">Upload New Icon</span>
+                            <input type="file" id="iconUploadInput" accept=".png,.svg,.ico,.webp,image/png,image/svg+xml,image/x-icon,image/webp" hidden>
+                        </label>
+                    </div>
+                    <div class="dash-error" id="iconUploadError" hidden></div>
+
+                    <h3 class="dash-settings-subheading">Icon History</h3>
+                    <div class="dash-icon-history" id="iconHistoryList"></div>
+                </div>
+            </section>
+
         </main>
     </div>
 </div>
@@ -569,6 +635,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="../assets/js/utils/supabase-client.js"></script>
+<script src="../assets/js/utils/favicon-loader.js"></script>
 <script src="../assets/js/utils/legacy-gallery.js"></script>
 <script src="../assets/js/utils/custom-select.js"></script>
 <script src="../assets/js/pages/dashboard.js"></script>

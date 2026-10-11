@@ -254,7 +254,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
 /* ══════════════════════════════════════
    VIEW ROUTING
 ══════════════════════════════════════ */
-const VIEWS = ['home', 'sports', 'friday', 'seniors', 'instagram'];
+const VIEWS = ['home', 'sports', 'friday', 'seniors', 'instagram', 'settings'];
 function goto(view){
     VIEWS.forEach(v=>{
         document.getElementById(`${v}View`).hidden = (v !== view);
@@ -263,6 +263,7 @@ function goto(view){
     if(view === 'friday') refreshFridayView();
     if(view === 'seniors') refreshSeniorsView();
     if(view === 'instagram'){ refreshInstagramView(); refreshInstagramSyncStatus(); }
+    if(view === 'settings'){ refreshPriceSettings(); refreshIconSettings(); }
     if(view === 'home') refreshHomeCounts();
     window.scrollTo(0, 0);
 }
@@ -271,16 +272,18 @@ document.querySelectorAll('[data-goto]').forEach(el=>{
 });
 
 async function refreshHomeCounts(){
-    const [sportPhotos, fridayPhotos, seniors, instagramAccounts] = await Promise.all([
+    const [sportPhotos, fridayPhotos, seniors, instagramAccounts, price] = await Promise.all([
         sb().from('sport_photos').select('id', { count: 'exact', head: true }),
         sb().from('happy_friday_photos').select('id', { count: 'exact', head: true }),
         sb().from('seniors').select('id', { count: 'exact', head: true }),
         sb().from('instagram_shortcuts').select('id', { count: 'exact', head: true }),
+        sb().from('yearbook_price').select('amount').eq('id', true).single(),
     ]);
     document.getElementById('sportsCount').textContent = `${sportPhotos.count ?? 0} uploaded photo${sportPhotos.count === 1 ? '' : 's'}`;
     document.getElementById('fridayCount').textContent = `${fridayPhotos.count ?? 0} uploaded photo${fridayPhotos.count === 1 ? '' : 's'}`;
     document.getElementById('seniorsCount').textContent = `${seniors.count ?? 0} senior profile${seniors.count === 1 ? '' : 's'}`;
     document.getElementById('instagramCount').textContent = `${instagramAccounts.count ?? 0} account${instagramAccounts.count === 1 ? '' : 's'}`;
+    document.getElementById('settingsCount').textContent = price.data ? `Price: $${price.data.amount}` : 'Price & icon';
 }
 
 /* ══════════════════════════════════════
@@ -1502,6 +1505,239 @@ document.getElementById('refreshInstagramBtn').addEventListener('click', async (
     } finally {
         btn.disabled = false;
         btn.textContent = originalText;
+    }
+});
+
+/* ══════════════════════════════════════
+   WEBSITE SETTINGS — YEARBOOK PRICE
+   One shared row in `yearbook_price`; every price change is logged to
+   `yearbook_price_history` automatically by a database trigger, so the
+   history is complete no matter how the row gets updated.
+══════════════════════════════════════ */
+async function refreshPriceSettings(){
+    const { data, error } = await sb().from('yearbook_price').select('amount').eq('id', true).single();
+    const currentEl = document.getElementById('currentPriceDisplay');
+    if(error || !data){
+        currentEl.textContent = '—';
+    } else {
+        currentEl.textContent = `$${data.amount}`;
+        document.getElementById('priceInput').value = data.amount;
+    }
+    await refreshPriceHistory();
+}
+
+async function refreshPriceHistory(){
+    const list = document.getElementById('priceHistoryList');
+    const { data, error } = await sb().from('yearbook_price_history').select('*').order('changed_at', { ascending: false }).limit(25);
+    if(error){ list.innerHTML = '<p class="dash-empty">Could not load price history.</p>'; return; }
+    if(!data || !data.length){ list.innerHTML = '<p class="dash-empty">No price changes yet.</p>'; return; }
+
+    list.innerHTML = data.map(row => `
+        <div class="dash-price-history-row">
+            <span class="dash-price-history-change">${row.old_amount == null ? 'Set to' : `$${row.old_amount} &rarr;`} $${row.new_amount}</span>
+            <span class="dash-price-history-date">${new Date(row.changed_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>
+        </div>`).join('');
+}
+
+document.getElementById('priceForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const errorEl = document.getElementById('priceFormError');
+    errorEl.hidden = true;
+
+    const amount = Number(document.getElementById('priceInput').value);
+    if(!Number.isInteger(amount) || amount <= 0){
+        errorEl.textContent = 'Please enter a positive whole-dollar amount (e.g. 100).';
+        errorEl.hidden = false;
+        return;
+    }
+
+    const btn = document.getElementById('priceSubmitBtn');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="dash-spinner"></span>';
+
+    try {
+        const { error } = await sb().from('yearbook_price').update({ amount }).eq('id', true);
+        if(error) throw error;
+        showToast(`Yearbook price updated to $${amount}.`, 'success');
+        await refreshPriceSettings();
+        refreshHomeCounts();
+    } catch(err){
+        errorEl.textContent = err.message || 'Could not update the price.';
+        errorEl.hidden = false;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+});
+
+/* ══════════════════════════════════════
+   WEBSITE SETTINGS — SITE ICON / FAVICON
+   Every uploaded icon is kept forever in `site_icons` (insert-only RLS
+   — nothing can update or delete a row, and the storage bucket has no
+   update/delete policy either). `active_favicon` is a single pointer
+   row that Restore/Upload repoint — never a destructive operation.
+══════════════════════════════════════ */
+const ICON_ALLOWED_TYPES = ['image/png', 'image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/webp'];
+const ICON_MAX_SIZE = 2 * 1024 * 1024; // 2MB, matches the site-icons bucket limit
+
+function validateIconFile(file){
+    if(!ICON_ALLOWED_TYPES.includes(file.type)){
+        return 'Only PNG, SVG, ICO, or WEBP icons are allowed.';
+    }
+    if(file.size > ICON_MAX_SIZE){
+        return 'That icon is larger than 2MB. Please choose a smaller file.';
+    }
+    return null;
+}
+
+function extensionForIconFile(file){
+    const match = /\.([a-z0-9]+)$/i.exec(file.name);
+    if(match) return match[1].toLowerCase();
+    const byType = { 'image/png': 'png', 'image/svg+xml': 'svg', 'image/x-icon': 'ico', 'image/vnd.microsoft.icon': 'ico', 'image/webp': 'webp' };
+    return byType[file.type] || 'bin';
+}
+
+/* Uploads the file byte-for-byte (no re-encoding/compression) so a
+   PNG's transparency, an SVG's markup, or an ICO's multi-size data
+   survives exactly as uploaded. */
+async function uploadRawFile(bucket, path, file){
+    const { data: sessionData } = await sb().auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if(!token) throw new Error('Your session expired. Please log in again.');
+
+    const resp = await fetch(`${BRHS_SUPABASE_URL}/storage/v1/object/${bucket}/${path}`, {
+        method: 'POST',
+        headers: {
+            apikey: BRHS_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${token}`,
+            'Content-Type': file.type,
+            'x-upsert': 'false',
+        },
+        body: file,
+    });
+    if(!resp.ok){
+        const text = await resp.text().catch(()=> '');
+        throw new Error(text || 'Upload failed.');
+    }
+}
+
+let iconHistoryCache = [];
+
+async function refreshIconSettings(){
+    const { data: active, error: activeError } = await sb().from('active_favicon').select('icon_id, public_url, activated_at').eq('id', true).single();
+    const preview = document.getElementById('currentIconPreview');
+    const nameEl = document.getElementById('currentIconName');
+
+    if(activeError || !active){
+        preview.removeAttribute('src');
+        nameEl.textContent = 'No active icon yet.';
+    } else {
+        preview.src = `${active.public_url}?v=${new Date(active.activated_at).getTime()}`;
+        nameEl.textContent = `Active since ${new Date(active.activated_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+    }
+
+    await refreshIconHistory(active?.icon_id);
+}
+
+async function refreshIconHistory(activeId){
+    const list = document.getElementById('iconHistoryList');
+    const { data, error } = await sb().from('site_icons').select('*').order('uploaded_at', { ascending: false });
+    if(error){ list.innerHTML = '<p class="dash-empty">Could not load icon history.</p>'; return; }
+
+    iconHistoryCache = data || [];
+    if(!iconHistoryCache.length){ list.innerHTML = '<p class="dash-empty">No icons uploaded yet.</p>'; return; }
+
+    list.innerHTML = iconHistoryCache.map(icon => `
+        <div class="dash-icon-history-row">
+            <img src="${icon.public_url}" alt="" class="dash-icon-history-thumb">
+            <div class="dash-icon-history-info">
+                <p class="dash-icon-history-name">${escapeHtml(icon.file_name)}</p>
+                <p class="dash-icon-history-date">${new Date(icon.uploaded_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+            </div>
+            <div class="dash-icon-history-actions">
+                <a class="dash-icon-btn" href="${icon.public_url}" download="${escapeHtml(icon.file_name)}" target="_blank" rel="noopener">Download</a>
+                ${icon.id === activeId
+                    ? '<span class="dash-insta-badge">Active</span>'
+                    : `<button class="dash-icon-btn" data-action="restore-icon" data-id="${icon.id}">Restore</button>`}
+            </div>
+        </div>`).join('');
+}
+
+document.getElementById('iconHistoryList').addEventListener('click', async (e)=>{
+    const btn = e.target.closest('[data-action="restore-icon"]');
+    if(!btn) return;
+    const icon = iconHistoryCache.find(i => i.id === btn.dataset.id);
+    if(!icon) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="dash-spinner"></span>';
+    try {
+        const { error } = await sb().from('active_favicon').update({
+            icon_id: icon.id,
+            public_url: icon.public_url,
+            activated_at: new Date().toISOString(),
+        }).eq('id', true);
+        if(error) throw error;
+        showToast(`Restored "${icon.file_name}" as the active site icon.`, 'success');
+        await refreshIconSettings();
+    } catch(err){
+        showToast(err.message || 'Could not restore this icon.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Restore';
+    }
+});
+
+document.getElementById('iconUploadInput').addEventListener('change', async (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const errorEl = document.getElementById('iconUploadError');
+    errorEl.hidden = true;
+
+    const validationError = validateIconFile(file);
+    if(validationError){
+        errorEl.textContent = validationError;
+        errorEl.hidden = false;
+        e.target.value = '';
+        return;
+    }
+
+    const label = document.getElementById('iconUploadLabel');
+    const labelText = document.getElementById('iconUploadLabelText');
+    const originalText = labelText.textContent;
+    label.classList.add('is-uploading');
+    labelText.textContent = 'Uploading…';
+
+    try {
+        const path = `icons/${Date.now()}-${randomId()}-${sanitizeFilename(file.name)}.${extensionForIconFile(file)}`;
+        await uploadRawFile('site-icons', path, file);
+        const url = publicUrlFor('site-icons', path);
+
+        const { data: iconRow, error: insertError } = await sb().from('site_icons').insert({
+            storage_path: path,
+            public_url: url,
+            file_name: file.name,
+            mime_type: file.type,
+        }).select().single();
+        if(insertError) throw insertError;
+
+        const { error: activeError } = await sb().from('active_favicon').update({
+            icon_id: iconRow.id,
+            public_url: iconRow.public_url,
+            activated_at: new Date().toISOString(),
+        }).eq('id', true);
+        if(activeError) throw activeError;
+
+        showToast('New site icon uploaded and activated.', 'success');
+        await refreshIconSettings();
+    } catch(err){
+        errorEl.textContent = err.message || 'Could not upload this icon.';
+        errorEl.hidden = false;
+    } finally {
+        label.classList.remove('is-uploading');
+        labelText.textContent = originalText;
+        e.target.value = '';
     }
 });
 

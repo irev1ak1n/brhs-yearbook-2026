@@ -122,7 +122,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
                         </span>
                         <p class="purchase-detail-label">Price</p>
-                        <h3 class="purchase-detail-value">Starting at $100</h3>
+                        <h3 class="purchase-detail-value">Starting at $<span data-yearbook-price>100</span></h3>
                         <p class="purchase-detail-text">Your yearbook is something you will keep long after this school year is over. Order early to make sure you have your own copy.</p>
                     </div>
                     <div class="purchase-detail">
@@ -392,6 +392,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="assets/js/utils/supabase-client.js"></script>
+<script src="assets/js/utils/favicon-loader.js"></script>
+<script src="assets/js/utils/price-loader.js"></script>
 <script src="assets/js/components/navbar.js"></script>
 <script src="assets/js/components/footer.js"></script>
 <script src="assets/js/pages/index.js"></script>
