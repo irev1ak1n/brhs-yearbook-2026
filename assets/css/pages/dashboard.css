@@ -371,6 +371,19 @@ body{
     margin-bottom:1.2rem;
 }
 
+/* ══ PHOTO SELECTION BAR (above a gallery grid) ══ */
+.dash-selection-bar{
+    display:flex;flex-wrap:wrap;align-items:center;gap:1rem;
+    margin-bottom:1.2rem;padding:.8rem 1.1rem;border-radius:8px;
+    border:1px solid var(--border);background:rgba(20,11,4,.4);
+}
+#sportHiddenSelectionBar,#fridayHiddenSelectionBar{margin-bottom:1rem}
+.dash-selection-count{
+    font-family:sans-serif;font-weight:700;font-size:.74rem;letter-spacing:.04em;
+    color:var(--ember-glow);
+}
+.dash-selection-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-left:auto}
+
 /* ══ CONTENT GRID (photo cards) ══ */
 .dash-grid{
     display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;
@@ -382,6 +395,23 @@ body{
     transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease;
 }
 .dash-card:hover{border-color:rgba(212,115,42,.4);transform:translateY(-2px)}
+.dash-card.is-selected{
+    border-color:var(--ember-bright);
+    box-shadow:0 0 0 2px rgba(212,115,42,.3);
+}
+.dash-card-select{
+    position:absolute;top:.6rem;left:.6rem;z-index:3;
+    display:flex;align-items:center;justify-content:center;
+    width:1.9rem;height:1.9rem;border-radius:6px;padding:0;
+    background:rgba(6,3,1,.65);backdrop-filter:blur(2px);
+    border:1px solid rgba(240,230,208,.35);color:transparent;
+    cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease;
+}
+.dash-card-select:hover{border-color:var(--ember-bright)}
+.dash-card-select svg{width:14px;height:14px}
+.dash-card-select.is-checked{
+    background:var(--ember-bright);border-color:var(--ember-bright);color:#1c0e02;
+}
 .dash-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--wood-dark);cursor:pointer;transition:opacity .2s ease}
 .dash-card-img:hover{opacity:.88}
 .dash-card-body{padding:.9rem 1rem}
@@ -677,4 +707,7 @@ body{
     .dash-photo-lightbox-close svg{width:15px;height:15px}
     .dash-price-panel{flex-direction:column;align-items:stretch}
     .dash-price-form{max-width:none}
+    .dash-selection-bar{flex-direction:column;align-items:stretch}
+    .dash-selection-actions{margin-left:0;width:100%}
+    .dash-selection-actions .dash-btn{flex:1}
 }

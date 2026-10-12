@@ -159,6 +159,15 @@
                     </div>
                 </div>
 
+                <div class="dash-selection-bar" id="sportSelectionBar">
+                    <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="sportSelectAllBtn">Select All</button>
+                    <span class="dash-selection-count" data-role="selected-count" hidden></span>
+                    <div class="dash-selection-actions" id="sportBulkActions" hidden>
+                        <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" data-bulk-action="hide" hidden>Hide Selected</button>
+                        <button type="button" class="dash-btn dash-btn-danger dash-btn-sm" data-bulk-action="delete" hidden>Delete Selected</button>
+                    </div>
+                </div>
+
                 <div class="dash-grid" id="sportPhotoGrid"></div>
 
                 <div class="dash-hidden-section">
@@ -168,6 +177,14 @@
                         <svg class="dash-hidden-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <p class="dash-hidden-hint">Photos hidden from the public Sports page. Restore any of these to bring them back.</p>
+
+                    <div class="dash-selection-bar" id="sportHiddenSelectionBar" hidden>
+                        <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="sportHiddenSelectAllBtn">Select All</button>
+                        <span class="dash-selection-count" data-role="selected-count" hidden></span>
+                        <div class="dash-selection-actions" id="sportHiddenBulkActions" hidden>
+                            <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" data-bulk-action="restore">Restore Selected</button>
+                        </div>
+                    </div>
 
                     <div class="dash-grid" id="sportHiddenGrid" hidden></div>
                 </div>
@@ -236,6 +253,15 @@
                     </div>
                 </div>
 
+                <div class="dash-selection-bar" id="fridaySelectionBar">
+                    <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="fridaySelectAllBtn">Select All</button>
+                    <span class="dash-selection-count" data-role="selected-count" hidden></span>
+                    <div class="dash-selection-actions" id="fridayBulkActions" hidden>
+                        <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" data-bulk-action="hide" hidden>Hide Selected</button>
+                        <button type="button" class="dash-btn dash-btn-danger dash-btn-sm" data-bulk-action="delete" hidden>Delete Selected</button>
+                    </div>
+                </div>
+
                 <div class="dash-grid" id="fridayPhotoGrid"></div>
 
                 <div class="dash-hidden-section">
@@ -245,6 +271,14 @@
                         <svg class="dash-hidden-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <p class="dash-hidden-hint">Photos hidden from the public Happy Friday page. Restore any of these to bring them back.</p>
+
+                    <div class="dash-selection-bar" id="fridayHiddenSelectionBar" hidden>
+                        <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" id="fridayHiddenSelectAllBtn">Select All</button>
+                        <span class="dash-selection-count" data-role="selected-count" hidden></span>
+                        <div class="dash-selection-actions" id="fridayHiddenBulkActions" hidden>
+                            <button type="button" class="dash-btn dash-btn-outline dash-btn-sm" data-bulk-action="restore">Restore Selected</button>
+                        </div>
+                    </div>
 
                     <div class="dash-grid" id="fridayHiddenGrid" hidden></div>
                 </div>
