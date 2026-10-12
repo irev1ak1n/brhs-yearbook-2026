@@ -288,104 +288,38 @@ async function refreshHomeCounts(){
 }
 
 /* ══════════════════════════════════════
-   BULK PHOTO SELECTION
-   Shared by the Sports and Happy Friday galleries (main grid + hidden
-   grid = 4 independent selections). Selection is tracked as a plain Set
-   of photo ids, kept separate from the rendered DOM so a full re-render
-   never loses track of what's checked — it's cleared explicitly instead,
-   any time the underlying photo list changes (new data load or a filter
-   change), since ids that scroll out of a filter shouldn't stay silently
-   selected in the background.
+   PHOTO PREVIEW LIGHTBOX
+   Shared by the Sports and Happy Friday galleries (main + hidden grids).
+   Pure preview — clicking a card's thumbnail opens the full-size image;
+   it never selects anything or triggers an edit/delete action.
 ══════════════════════════════════════ */
-function createPhotoSelection(){
-    return { ids: new Set() };
+function openPhotoLightbox(src, alt){
+    const img = document.getElementById('dashPhotoLightboxImg');
+    img.src = src;
+    img.alt = alt || '';
+    document.getElementById('dashPhotoLightbox').hidden = false;
+    document.body.style.overflow = 'hidden';
 }
 
-function toggleSelection(selection, id, checked){
-    checked ? selection.ids.add(id) : selection.ids.delete(id);
+function closePhotoLightbox(){
+    document.getElementById('dashPhotoLightbox').hidden = true;
+    document.getElementById('dashPhotoLightboxImg').src = '';
+    document.body.style.overflow = '';
 }
 
-/* Wires a "select all" checkbox + per-card checkboxes (delegated) + bulk
-   action buttons for one grid. `getVisible()` must return the array of
-   currently-rendered photo objects (post-filter) so "select all" only
-   ever affects what's actually on screen. */
-function wireBulkBar({ gridId, selectAllId, countId, actionsId, selection, getVisible, onAction }){
-    const grid = document.getElementById(gridId);
-    const selectAll = document.getElementById(selectAllId);
-
-    grid.addEventListener('change', e=>{
-        const checkbox = e.target.closest('.dash-card-checkbox');
-        if(!checkbox) return;
-        toggleSelection(selection, checkbox.dataset.id, checkbox.checked);
-        checkbox.closest('.dash-card')?.classList.toggle('is-selected', checkbox.checked);
-        updateBulkBarUI({ selectAllId, countId, actionsId, selection, getVisible });
-    });
-
-    selectAll.addEventListener('change', ()=>{
-        const visible = getVisible();
-        if(selectAll.checked){
-            visible.forEach(p=> selection.ids.add(p.id));
-        } else {
-            visible.forEach(p=> selection.ids.delete(p.id));
-        }
-        grid.querySelectorAll('.dash-card-checkbox').forEach(cb=>{
-            cb.checked = selection.ids.has(cb.dataset.id);
-            cb.closest('.dash-card')?.classList.toggle('is-selected', cb.checked);
-        });
-        updateBulkBarUI({ selectAllId, countId, actionsId, selection, getVisible });
-    });
-
-    document.getElementById(actionsId).addEventListener('click', e=>{
-        const btn = e.target.closest('[data-bulk-action]');
-        if(btn) onAction(btn.dataset.bulkAction);
-    });
-}
-
-/* Recomputes "select all" checked/indeterminate state, the selected
-   count, and which bulk-action buttons are relevant for what's selected. */
-function updateBulkBarUI({ selectAllId, countId, actionsId, selection, getVisible }){
-    const selectAll = document.getElementById(selectAllId);
-    const countEl = document.getElementById(countId);
-    const actionsEl = document.getElementById(actionsId);
-
-    const visible = getVisible();
-    const visibleSelected = visible.filter(p=> selection.ids.has(p.id));
-
-    selectAll.checked = visible.length > 0 && visibleSelected.length === visible.length;
-    selectAll.indeterminate = visibleSelected.length > 0 && visibleSelected.length < visible.length;
-
-    const count = selection.ids.size;
-    countEl.textContent = `${count} selected`;
-    countEl.hidden = count === 0;
-    actionsEl.hidden = count === 0;
-
-    const hideBtn = actionsEl.querySelector('[data-bulk-action="hide"]');
-    if(hideBtn){
-        const hasLegacy = visible.some(p=> selection.ids.has(p.id) && p.source === 'legacy');
-        hideBtn.hidden = !hasLegacy;
-    }
-    const deleteBtn = actionsEl.querySelector('[data-bulk-action="delete"]');
-    if(deleteBtn){
-        const hasDashboard = visible.some(p=> selection.ids.has(p.id) && p.source === 'dashboard');
-        deleteBtn.hidden = !hasDashboard;
-    }
-}
-
-function clearSelectionUI(selectAllId, countId, actionsId){
-    const selectAll = document.getElementById(selectAllId);
-    selectAll.checked = false;
-    selectAll.indeterminate = false;
-    document.getElementById(countId).hidden = true;
-    document.getElementById(actionsId).hidden = true;
-}
+document.getElementById('dashPhotoLightboxClose').addEventListener('click', closePhotoLightbox);
+document.getElementById('dashPhotoLightbox').addEventListener('click', e=>{
+    if(e.target.id === 'dashPhotoLightbox') closePhotoLightbox();
+});
+document.addEventListener('keydown', e=>{
+    if(e.key === 'Escape' && !document.getElementById('dashPhotoLightbox').hidden) closePhotoLightbox();
+});
 
 /* ══════════════════════════════════════
    SPORTS VIEW
 ══════════════════════════════════════ */
 let sportsCache = [];
 let sportPendingFiles = []; // {file, blobPromise, previewUrl}
-let sportSelection = createPhotoSelection();
-let sportHiddenSelection = createPhotoSelection();
 
 async function loadSportsList(){
     const { data, error } = await sb().from('sports').select('*').order('display_order', { ascending: true });
@@ -605,8 +539,6 @@ async function loadLegacySportPhotos(){
 }
 
 async function loadSportPhotoGrid(){
-    sportSelection.ids.clear();
-    sportHiddenSelection.ids.clear();
     const grid = document.getElementById('sportPhotoGrid');
     grid.innerHTML = '<div class="dash-grid-loading"><span class="dash-spinner"></span>Gathering photos from the website and dashboard&hellip;</div>';
 
@@ -643,10 +575,8 @@ function renderSportPhotoGrid(){
     sportVisibleItems = filtered;
 
     grid.innerHTML = filtered.length
-        ? filtered.map(p=> photoCardHtml(p, bySportId.get(p.sport_id)?.name, 'sport', sportSelection)).join('')
+        ? filtered.map(p=> photoCardHtml(p, bySportId.get(p.sport_id)?.name, 'sport')).join('')
         : '<p class="dash-empty">No photos match this filter yet.</p>';
-
-    updateBulkBarUI({ selectAllId: 'sportSelectAll', countId: 'sportSelectedCount', actionsId: 'sportBulkActions', selection: sportSelection, getVisible: ()=> sportVisibleItems });
 }
 
 function renderSportHiddenGrid(){
@@ -657,34 +587,20 @@ function renderSportHiddenGrid(){
     document.getElementById('sportHiddenToggleText').textContent = `Hidden Photos (${hidden.length})`;
 
     grid.innerHTML = hidden.length
-        ? hidden.map(p=> hiddenCardHtml(p, bySportId.get(p.sport_id)?.name, 'sport', sportHiddenSelection)).join('')
+        ? hidden.map(p=> hiddenCardHtml(p, bySportId.get(p.sport_id)?.name, 'sport')).join('')
         : '<p class="dash-empty">No hidden photos.</p>';
-
-    updateBulkBarUI({ selectAllId: 'sportHiddenSelectAll', countId: 'sportHiddenSelectedCount', actionsId: 'sportHiddenBulkActions', selection: sportHiddenSelection, getVisible: ()=> sportHiddenVisibleItems });
 }
 
 /* Shared card markup for both sports and Happy Friday galleries. */
-function checkboxHtml(p, selection){
-    const checked = selection.ids.has(p.id) ? 'checked' : '';
-    return `
-        <label class="dash-card-select">
-            <input type="checkbox" class="dash-card-checkbox" data-id="${p.id}" ${checked}>
-        </label>`;
-}
-
-function photoCardHtml(p, tagLabel, kind, selection){
-    const sourceLabel = p.source === 'legacy' ? 'Website Photo' : 'Dashboard Upload';
+function photoCardHtml(p, tagLabel, kind){
     const editBtn = p.source === 'dashboard'
         ? `<button class="dash-icon-btn" data-action="edit-${kind}-photo" data-id="${p.id}">Edit</button>`
         : '';
-    const isSelected = selection.ids.has(p.id) ? ' is-selected' : '';
     return `
-    <div class="dash-card${isSelected}" data-id="${p.id}">
-        ${checkboxHtml(p, selection)}
-        <img class="dash-card-img" src="${p.image_url}" alt="" loading="lazy">
+    <div class="dash-card" data-id="${p.id}">
+        <img class="dash-card-img" src="${p.image_url}" alt="${escapeHtml(tagLabel || '')}" loading="lazy">
         <div class="dash-card-body">
             <span class="dash-card-tag">${escapeHtml(tagLabel || 'Unknown')}</span>
-            <span class="dash-card-source dash-card-source-${p.source}">${sourceLabel}</span>
             <p class="dash-card-caption">${escapeHtml(p.caption || '')}</p>
             <p class="dash-card-meta">${escapeHtml(p.season || 'No year set')}</p>
             <div class="dash-card-actions">
@@ -695,15 +611,12 @@ function photoCardHtml(p, tagLabel, kind, selection){
     </div>`;
 }
 
-function hiddenCardHtml(p, tagLabel, kind, selection){
-    const isSelected = selection.ids.has(p.id) ? ' is-selected' : '';
+function hiddenCardHtml(p, tagLabel, kind){
     return `
-    <div class="dash-card is-hidden-card${isSelected}" data-id="${p.id}">
-        ${checkboxHtml(p, selection)}
-        <img class="dash-card-img" src="${p.image_url}" alt="" loading="lazy">
+    <div class="dash-card is-hidden-card" data-id="${p.id}">
+        <img class="dash-card-img" src="${p.image_url}" alt="${escapeHtml(tagLabel || '')}" loading="lazy">
         <div class="dash-card-body">
             <span class="dash-card-tag">${escapeHtml(tagLabel || 'Unknown')}</span>
-            <span class="dash-card-source dash-card-source-legacy">Website Photo</span>
             <p class="dash-card-meta">${escapeHtml(p.season || 'No year set')}</p>
             <div class="dash-card-actions">
                 <button class="dash-icon-btn" data-action="restore-${kind}-photo" data-id="${p.id}">Restore</button>
@@ -714,7 +627,6 @@ function hiddenCardHtml(p, tagLabel, kind, selection){
 
 document.getElementById('sportFilterSelect').addEventListener('change', e=>{
     sportGridFilters.sport = e.target.value;
-    sportSelection.ids.clear();
     renderSportPhotoGrid();
 });
 document.getElementById('sportYearFilterRow').addEventListener('click', e=>{
@@ -723,7 +635,6 @@ document.getElementById('sportYearFilterRow').addEventListener('click', e=>{
     [...btn.parentElement.children].forEach(b=> b.classList.remove('is-active'));
     btn.classList.add('is-active');
     sportGridFilters.year = btn.dataset.year;
-    sportSelection.ids.clear();
     renderSportPhotoGrid();
 });
 
@@ -731,20 +642,23 @@ document.getElementById('sportHiddenToggle').addEventListener('click', ()=>{
     const grid = document.getElementById('sportHiddenGrid');
     const btn = document.getElementById('sportHiddenToggle');
     grid.hidden = !grid.hidden;
-    document.getElementById('sportHiddenBulkBar').hidden = grid.hidden;
     btn.classList.toggle('is-open', !grid.hidden);
 });
 
 let editingPhoto = null; // { table, id }
 document.getElementById('sportPhotoGrid').addEventListener('click', e=>{
     const editBtn = e.target.closest('[data-action="edit-sport-photo"]');
+    if(editBtn){ openEditPhoto('sport_photos', editBtn.dataset.id, sportPhotosCache); return; }
     const delBtn = e.target.closest('[data-action="delete-sport-photo"]');
-    if(editBtn) openEditPhoto('sport_photos', editBtn.dataset.id, sportPhotosCache);
-    if(delBtn) handlePhotoDelete('sport', delBtn.dataset.id, sportPhotosCache, loadSportPhotoGrid);
+    if(delBtn){ handlePhotoDelete('sport', delBtn.dataset.id, sportPhotosCache, loadSportPhotoGrid); return; }
+    const img = e.target.closest('.dash-card-img');
+    if(img) openPhotoLightbox(img.src, img.alt);
 });
 document.getElementById('sportHiddenGrid').addEventListener('click', e=>{
     const btn = e.target.closest('[data-action="restore-sport-photo"]');
-    if(btn) handlePhotoRestore('sport', btn.dataset.id, sportPhotosCache, loadSportPhotoGrid);
+    if(btn){ handlePhotoRestore('sport', btn.dataset.id, sportPhotosCache, loadSportPhotoGrid); return; }
+    const img = e.target.closest('.dash-card-img');
+    if(img) openPhotoLightbox(img.src, img.alt);
 });
 
 /* Legacy photos are hidden (not deleted — the file still lives in the
@@ -827,74 +741,11 @@ async function deletePhoto(table, bucket, id, cache, refreshFn){
 }
 
 /* ══════════════════════════════════════
-   BULK PHOTO ACTIONS
-   Reused by both the Sports and Happy Friday galleries — `kind` selects
-   the table/bucket/legacy-list to act on.
-══════════════════════════════════════ */
-function bulkConfig(kind){
-    return kind === 'sport'
-        ? { table: 'sport_photos', bucket: 'sport-photos' }
-        : { table: 'happy_friday_photos', bucket: 'happy-friday-photos' };
-}
-
-function bulkHideSelected(kind, selection, cache, refreshFn){
-    const ids = [...selection.ids].filter(id => cache.find(p=> p.id === id)?.source === 'legacy');
-    if(!ids.length) return;
-    const n = ids.length;
-    confirmDelete(`Hide ${n} photo${n === 1 ? '' : 's'} from the public page? You can restore ${n === 1 ? 'it' : 'them'} later from Hidden Photos.`, async ()=>{
-        const results = await Promise.all(ids.map(id=>{
-            const photo = cache.find(p=> p.id === id);
-            return hideLegacyPhoto(kind, photo.image_url);
-        }));
-        const successCount = results.filter(r=> !r.error).length;
-        if(successCount) showToast(`${successCount} photo${successCount === 1 ? '' : 's'} hidden. Find ${successCount === 1 ? 'it' : 'them'} under Hidden Photos to restore.`, 'success');
-        if(successCount < ids.length) showToast('Some photos could not be hidden.', 'error');
-        selection.ids.clear();
-        await refreshFn();
-    });
-}
-
-function bulkDeleteSelected(kind, selection, cache, refreshFn){
-    const ids = [...selection.ids].filter(id => cache.find(p=> p.id === id)?.source === 'dashboard');
-    if(!ids.length) return;
-    const n = ids.length;
-    const { table, bucket } = bulkConfig(kind);
-    confirmDelete(`Permanently delete ${n} photo${n === 1 ? '' : 's'}? This cannot be undone.`, async ()=>{
-        const results = await Promise.all(ids.map(id=> deletePhotoRow(table, bucket, id, cache)));
-        const successCount = results.filter(Boolean).length;
-        if(successCount) showToast(`${successCount} photo${successCount === 1 ? '' : 's'} deleted.`, 'success');
-        if(successCount < ids.length) showToast('Some photos could not be deleted.', 'error');
-        selection.ids.clear();
-        await refreshFn();
-        refreshHomeCounts();
-    });
-}
-
-function bulkRestoreSelected(kind, selection, cache, refreshFn){
-    const ids = [...selection.ids];
-    if(!ids.length) return;
-    const n = ids.length;
-    confirmDelete(`Restore ${n} photo${n === 1 ? '' : 's'} to the public page?`, async ()=>{
-        const results = await Promise.all(ids.map(id=>{
-            const photo = cache.find(p=> p.id === id);
-            return restoreLegacyPhoto(kind, photo.image_url);
-        }));
-        const successCount = results.filter(r=> !r.error).length;
-        if(successCount) showToast(`${successCount} photo${successCount === 1 ? '' : 's'} restored.`, 'success');
-        if(successCount < ids.length) showToast('Some photos could not be restored.', 'error');
-        selection.ids.clear();
-        await refreshFn();
-    });
-}
-
-/* ══════════════════════════════════════
    HAPPY FRIDAY VIEW
 ══════════════════════════════════════ */
 let fridayPendingFiles = [];
 let fridayPhotosCache = []; // merged legacy (on-disk) + dashboard-uploaded photos
 let fridayGridFilters = { category: 'all', year: 'all' };
-let fridaySelection = createPhotoSelection();
-let fridayHiddenSelection = createPhotoSelection();
 
 const FRIDAY_LABELS = { almost_friday: 'Almost Friday', finally_friday: 'Finally Friday' };
 const FRIDAY_SETS = [
@@ -991,8 +842,6 @@ async function loadLegacyFridayPhotos(){
 }
 
 async function loadFridayPhotoGrid(){
-    fridaySelection.ids.clear();
-    fridayHiddenSelection.ids.clear();
     const grid = document.getElementById('fridayPhotoGrid');
     grid.innerHTML = '<div class="dash-grid-loading"><span class="dash-spinner"></span>Gathering photos from the website and dashboard&hellip;</div>';
 
@@ -1028,10 +877,8 @@ function renderFridayPhotoGrid(){
     fridayVisibleItems = filtered;
 
     grid.innerHTML = filtered.length
-        ? filtered.map(p=> photoCardHtml(p, FRIDAY_LABELS[p.category] || p.category, 'friday', fridaySelection)).join('')
+        ? filtered.map(p=> photoCardHtml(p, FRIDAY_LABELS[p.category] || p.category, 'friday')).join('')
         : '<p class="dash-empty">No photos match this filter yet.</p>';
-
-    updateBulkBarUI({ selectAllId: 'fridaySelectAll', countId: 'fridaySelectedCount', actionsId: 'fridayBulkActions', selection: fridaySelection, getVisible: ()=> fridayVisibleItems });
 }
 
 function renderFridayHiddenGrid(){
@@ -1041,17 +888,14 @@ function renderFridayHiddenGrid(){
     document.getElementById('fridayHiddenToggleText').textContent = `Hidden Photos (${hidden.length})`;
 
     grid.innerHTML = hidden.length
-        ? hidden.map(p=> hiddenCardHtml(p, FRIDAY_LABELS[p.category] || p.category, 'friday', fridayHiddenSelection)).join('')
+        ? hidden.map(p=> hiddenCardHtml(p, FRIDAY_LABELS[p.category] || p.category, 'friday')).join('')
         : '<p class="dash-empty">No hidden photos.</p>';
-
-    updateBulkBarUI({ selectAllId: 'fridayHiddenSelectAll', countId: 'fridayHiddenSelectedCount', actionsId: 'fridayHiddenBulkActions', selection: fridayHiddenSelection, getVisible: ()=> fridayHiddenVisibleItems });
 }
 
 document.getElementById('fridayHiddenToggle').addEventListener('click', ()=>{
     const grid = document.getElementById('fridayHiddenGrid');
     const btn = document.getElementById('fridayHiddenToggle');
     grid.hidden = !grid.hidden;
-    document.getElementById('fridayHiddenBulkBar').hidden = grid.hidden;
     btn.classList.toggle('is-open', !grid.hidden);
 });
 
@@ -1061,7 +905,6 @@ document.getElementById('fridayCategoryFilterRow').addEventListener('click', e=>
     [...btn.parentElement.children].forEach(b=> b.classList.remove('is-active'));
     btn.classList.add('is-active');
     fridayGridFilters.category = btn.dataset.filter;
-    fridaySelection.ids.clear();
     renderFridayPhotoGrid();
 });
 document.getElementById('fridayYearFilterRow').addEventListener('click', e=>{
@@ -1070,19 +913,22 @@ document.getElementById('fridayYearFilterRow').addEventListener('click', e=>{
     [...btn.parentElement.children].forEach(b=> b.classList.remove('is-active'));
     btn.classList.add('is-active');
     fridayGridFilters.year = btn.dataset.year;
-    fridaySelection.ids.clear();
     renderFridayPhotoGrid();
 });
 
 document.getElementById('fridayPhotoGrid').addEventListener('click', e=>{
     const editBtn = e.target.closest('[data-action="edit-friday-photo"]');
+    if(editBtn){ openEditPhoto('happy_friday_photos', editBtn.dataset.id, fridayPhotosCache); return; }
     const delBtn = e.target.closest('[data-action="delete-friday-photo"]');
-    if(editBtn) openEditPhoto('happy_friday_photos', editBtn.dataset.id, fridayPhotosCache);
-    if(delBtn) handlePhotoDelete('friday', delBtn.dataset.id, fridayPhotosCache, loadFridayPhotoGrid);
+    if(delBtn){ handlePhotoDelete('friday', delBtn.dataset.id, fridayPhotosCache, loadFridayPhotoGrid); return; }
+    const img = e.target.closest('.dash-card-img');
+    if(img) openPhotoLightbox(img.src, img.alt);
 });
 document.getElementById('fridayHiddenGrid').addEventListener('click', e=>{
     const btn = e.target.closest('[data-action="restore-friday-photo"]');
-    if(btn) handlePhotoRestore('friday', btn.dataset.id, fridayPhotosCache, loadFridayPhotoGrid);
+    if(btn){ handlePhotoRestore('friday', btn.dataset.id, fridayPhotosCache, loadFridayPhotoGrid); return; }
+    const img = e.target.closest('.dash-card-img');
+    if(img) openPhotoLightbox(img.src, img.alt);
 });
 
 /* ══════════════════════════════════════
@@ -1681,36 +1527,5 @@ document.getElementById('analyticsRefreshBtn').addEventListener('click', loadAna
     'sportUploadSelect', 'sportSeasonSelect', 'sportFilterSelect',
     'fridayUploadSelect', 'fridaySeasonSelect', 'editPhotoSeason', 'instagramCategory',
 ].forEach(syncCustomSelect);
-
-wireBulkBar({
-    gridId: 'sportPhotoGrid', selectAllId: 'sportSelectAll', countId: 'sportSelectedCount', actionsId: 'sportBulkActions',
-    selection: sportSelection, getVisible: ()=> sportVisibleItems,
-    onAction: action=>{
-        if(action === 'hide') bulkHideSelected('sport', sportSelection, sportPhotosCache, loadSportPhotoGrid);
-        if(action === 'delete') bulkDeleteSelected('sport', sportSelection, sportPhotosCache, loadSportPhotoGrid);
-    },
-});
-wireBulkBar({
-    gridId: 'sportHiddenGrid', selectAllId: 'sportHiddenSelectAll', countId: 'sportHiddenSelectedCount', actionsId: 'sportHiddenBulkActions',
-    selection: sportHiddenSelection, getVisible: ()=> sportHiddenVisibleItems,
-    onAction: action=>{
-        if(action === 'restore') bulkRestoreSelected('sport', sportHiddenSelection, sportPhotosCache, loadSportPhotoGrid);
-    },
-});
-wireBulkBar({
-    gridId: 'fridayPhotoGrid', selectAllId: 'fridaySelectAll', countId: 'fridaySelectedCount', actionsId: 'fridayBulkActions',
-    selection: fridaySelection, getVisible: ()=> fridayVisibleItems,
-    onAction: action=>{
-        if(action === 'hide') bulkHideSelected('friday', fridaySelection, fridayPhotosCache, loadFridayPhotoGrid);
-        if(action === 'delete') bulkDeleteSelected('friday', fridaySelection, fridayPhotosCache, loadFridayPhotoGrid);
-    },
-});
-wireBulkBar({
-    gridId: 'fridayHiddenGrid', selectAllId: 'fridayHiddenSelectAll', countId: 'fridayHiddenSelectedCount', actionsId: 'fridayHiddenBulkActions',
-    selection: fridayHiddenSelection, getVisible: ()=> fridayHiddenVisibleItems,
-    onAction: action=>{
-        if(action === 'restore') bulkRestoreSelected('friday', fridayHiddenSelection, fridayPhotosCache, loadFridayPhotoGrid);
-    },
-});
 
 checkSession();

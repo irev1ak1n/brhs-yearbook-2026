@@ -258,4 +258,17 @@ function initLightbox(items){
         if(e.key === 'ArrowLeft') step(-1);
         if(e.key === 'ArrowRight') step(1);
     });
+
+    // swipe left/right to navigate on touch devices
+    let touchStartX = null;
+    lightbox.addEventListener('touchstart', e=>{
+        touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    lightbox.addEventListener('touchend', e=>{
+        if(touchStartX === null) return;
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        touchStartX = null;
+        if(Math.abs(deltaX) < 50) return;
+        step(deltaX < 0 ? 1 : -1);
+    }, { passive: true });
 }
