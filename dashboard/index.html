@@ -96,8 +96,16 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
                         </span>
                         <h2>Website Settings</h2>
-                        <p>Manage the shared yearbook price and the site's browser-tab icon.</p>
+                        <p>Manage the shared yearbook price shown across the public site.</p>
                         <span class="dash-home-count" id="settingsCount">Loading&hellip;</span>
+                    </button>
+                    <button class="dash-home-card" data-goto="analytics">
+                        <span class="dash-home-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V7M17 16v-9"/></svg>
+                        </span>
+                        <h2>Analytics</h2>
+                        <p>Live traffic, top pages, and visitor trends from Google Analytics.</p>
+                        <span class="dash-home-count" id="analyticsCount">Live traffic &amp; trends</span>
                     </button>
                 </div>
             </section>
@@ -384,30 +392,82 @@
                     <h3 class="dash-settings-subheading">Price History</h3>
                     <div class="dash-price-history" id="priceHistoryList"></div>
                 </div>
+            </section>
 
-                <div class="dash-section-divider"></div>
+            <!-- ANALYTICS VIEW -->
+            <section id="analyticsView" hidden>
+                <div class="dash-back" data-goto="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Dashboard
+                </div>
+                <h1 class="dash-view-title">Analytics</h1>
+                <p class="dash-view-sub">Live traffic data from Google Analytics 4.</p>
 
-                <div class="dash-settings-block">
-                    <h2 class="dash-settings-block-title">Site Icon</h2>
-                    <p class="dash-settings-block-sub">The small icon shown in the browser tab (not a homepage logo). PNG, SVG, ICO, and WEBP are supported.</p>
-
-                    <div class="dash-icon-panel">
-                        <div class="dash-icon-current">
-                            <img id="currentIconPreview" alt="Current site icon">
-                            <div>
-                                <p class="dash-icon-current-label">Active Icon</p>
-                                <p class="dash-icon-current-name" id="currentIconName">Loading&hellip;</p>
-                            </div>
-                        </div>
-                        <label class="dash-btn dash-btn-outline" id="iconUploadLabel">
-                            <span id="iconUploadLabelText">Upload New Icon</span>
-                            <input type="file" id="iconUploadInput" accept=".png,.svg,.ico,.webp,image/png,image/svg+xml,image/x-icon,image/webp" hidden>
-                        </label>
+                <div class="dash-analytics-toolbar">
+                    <div class="dash-pill-row" id="analyticsRangeRow">
+                        <button class="dash-pill" data-range="last7">Last 7 Days</button>
+                        <button class="dash-pill is-active" data-range="last30">Last 30 Days</button>
+                        <button class="dash-pill" data-range="last90">Last 90 Days</button>
+                        <button class="dash-pill" data-range="schoolyear">This School Year</button>
                     </div>
-                    <div class="dash-error" id="iconUploadError" hidden></div>
+                    <div class="dash-analytics-actions">
+                        <span class="dash-analytics-updated" id="analyticsUpdated"></span>
+                        <button class="dash-btn dash-btn-outline dash-btn-sm" id="analyticsRefreshBtn">Refresh</button>
+                    </div>
+                </div>
 
-                    <h3 class="dash-settings-subheading">Icon History</h3>
-                    <div class="dash-icon-history" id="iconHistoryList"></div>
+                <div class="dash-analytics-setup" id="analyticsNotConfigured" hidden>
+                    <h3>Analytics isn&rsquo;t connected yet</h3>
+                    <p>Add <code>GA4_PROPERTY_ID</code>, <code>GOOGLE_SERVICE_ACCOUNT_EMAIL</code>, and <code>GOOGLE_PRIVATE_KEY</code> as environment variables in Vercel to turn this on. See <code>GOOGLE_ANALYTICS_SETUP.md</code> in the project for exact steps.</p>
+                </div>
+
+                <div class="dash-error" id="analyticsError" hidden></div>
+
+                <div class="dash-grid-loading" id="analyticsLoading" hidden>
+                    <span class="dash-spinner"></span>
+                    Loading analytics&hellip;
+                </div>
+
+                <div id="analyticsContent" hidden>
+                    <div class="dash-analytics-summary">
+                        <div class="dash-stat-card">
+                            <p class="dash-stat-label">Active Users</p>
+                            <p class="dash-stat-value" id="statActiveUsers">&mdash;</p>
+                        </div>
+                        <div class="dash-stat-card">
+                            <p class="dash-stat-label">New Users</p>
+                            <p class="dash-stat-value" id="statNewUsers">&mdash;</p>
+                        </div>
+                        <div class="dash-stat-card">
+                            <p class="dash-stat-label">Events</p>
+                            <p class="dash-stat-value" id="statEvents">&mdash;</p>
+                        </div>
+                        <div class="dash-stat-card">
+                            <p class="dash-stat-label">Page Views</p>
+                            <p class="dash-stat-value" id="statPageViews">&mdash;</p>
+                        </div>
+                    </div>
+
+                    <div class="dash-analytics-realtime">
+                        <span class="dash-realtime-dot"></span>
+                        <span><strong id="statRealtimeUsers">&mdash;</strong> active right now (last 30 minutes)</span>
+                    </div>
+
+                    <div class="dash-analytics-chart-wrap">
+                        <h3 class="dash-settings-subheading">Daily Users</h3>
+                        <div class="dash-analytics-chart" id="analyticsChart"></div>
+                    </div>
+
+                    <div class="dash-analytics-grid">
+                        <div>
+                            <h3 class="dash-settings-subheading">Top Cities</h3>
+                            <div class="dash-analytics-list" id="analyticsCities"></div>
+                        </div>
+                        <div>
+                            <h3 class="dash-settings-subheading">Most-Viewed Pages</h3>
+                            <div class="dash-analytics-list" id="analyticsPages"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

@@ -254,7 +254,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
 /* ══════════════════════════════════════
    VIEW ROUTING
 ══════════════════════════════════════ */
-const VIEWS = ['home', 'sports', 'friday', 'seniors', 'instagram', 'settings'];
+const VIEWS = ['home', 'sports', 'friday', 'seniors', 'instagram', 'settings', 'analytics'];
 function goto(view){
     VIEWS.forEach(v=>{
         document.getElementById(`${v}View`).hidden = (v !== view);
@@ -263,7 +263,8 @@ function goto(view){
     if(view === 'friday') refreshFridayView();
     if(view === 'seniors') refreshSeniorsView();
     if(view === 'instagram'){ refreshInstagramView(); refreshInstagramSyncStatus(); }
-    if(view === 'settings'){ refreshPriceSettings(); refreshIconSettings(); }
+    if(view === 'settings') refreshPriceSettings();
+    if(view === 'analytics') loadAnalytics();
     if(view === 'home') refreshHomeCounts();
     window.scrollTo(0, 0);
 }
@@ -283,7 +284,7 @@ async function refreshHomeCounts(){
     document.getElementById('fridayCount').textContent = `${fridayPhotos.count ?? 0} uploaded photo${fridayPhotos.count === 1 ? '' : 's'}`;
     document.getElementById('seniorsCount').textContent = `${seniors.count ?? 0} senior profile${seniors.count === 1 ? '' : 's'}`;
     document.getElementById('instagramCount').textContent = `${instagramAccounts.count ?? 0} account${instagramAccounts.count === 1 ? '' : 's'}`;
-    document.getElementById('settingsCount').textContent = price.data ? `Price: $${price.data.amount}` : 'Price & icon';
+    document.getElementById('settingsCount').textContent = price.data ? `Price: $${price.data.amount}` : 'Price settings';
 }
 
 /* ══════════════════════════════════════
@@ -1572,174 +1573,106 @@ document.getElementById('priceForm').addEventListener('submit', async (e)=>{
 });
 
 /* ══════════════════════════════════════
-   WEBSITE SETTINGS — SITE ICON / FAVICON
-   Every uploaded icon is kept forever in `site_icons` (insert-only RLS
-   — nothing can update or delete a row, and the storage bucket has no
-   update/delete policy either). `active_favicon` is a single pointer
-   row that Restore/Upload repoint — never a destructive operation.
+   ANALYTICS
+   The dashboard never talks to Google directly — it calls
+   /api/analytics with the staff member's own Supabase session token,
+   and that serverless function (the only place holding Google service
+   account credentials) does the real work.
 ══════════════════════════════════════ */
-const ICON_ALLOWED_TYPES = ['image/png', 'image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/webp'];
-const ICON_MAX_SIZE = 2 * 1024 * 1024; // 2MB, matches the site-icons bucket limit
+let analyticsRange = 'last30';
 
-function validateIconFile(file){
-    if(!ICON_ALLOWED_TYPES.includes(file.type)){
-        return 'Only PNG, SVG, ICO, or WEBP icons are allowed.';
-    }
-    if(file.size > ICON_MAX_SIZE){
-        return 'That icon is larger than 2MB. Please choose a smaller file.';
-    }
-    return null;
-}
+async function loadAnalytics(){
+    const content = document.getElementById('analyticsContent');
+    const loading = document.getElementById('analyticsLoading');
+    const notConfigured = document.getElementById('analyticsNotConfigured');
+    const errorEl = document.getElementById('analyticsError');
 
-function extensionForIconFile(file){
-    const match = /\.([a-z0-9]+)$/i.exec(file.name);
-    if(match) return match[1].toLowerCase();
-    const byType = { 'image/png': 'png', 'image/svg+xml': 'svg', 'image/x-icon': 'ico', 'image/vnd.microsoft.icon': 'ico', 'image/webp': 'webp' };
-    return byType[file.type] || 'bin';
-}
-
-/* Uploads the file byte-for-byte (no re-encoding/compression) so a
-   PNG's transparency, an SVG's markup, or an ICO's multi-size data
-   survives exactly as uploaded. */
-async function uploadRawFile(bucket, path, file){
-    const { data: sessionData } = await sb().auth.getSession();
-    const token = sessionData?.session?.access_token;
-    if(!token) throw new Error('Your session expired. Please log in again.');
-
-    const resp = await fetch(`${BRHS_SUPABASE_URL}/storage/v1/object/${bucket}/${path}`, {
-        method: 'POST',
-        headers: {
-            apikey: BRHS_SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${token}`,
-            'Content-Type': file.type,
-            'x-upsert': 'false',
-        },
-        body: file,
-    });
-    if(!resp.ok){
-        const text = await resp.text().catch(()=> '');
-        throw new Error(text || 'Upload failed.');
-    }
-}
-
-let iconHistoryCache = [];
-
-async function refreshIconSettings(){
-    const { data: active, error: activeError } = await sb().from('active_favicon').select('icon_id, public_url, activated_at').eq('id', true).single();
-    const preview = document.getElementById('currentIconPreview');
-    const nameEl = document.getElementById('currentIconName');
-
-    if(activeError || !active){
-        preview.removeAttribute('src');
-        nameEl.textContent = 'No active icon yet.';
-    } else {
-        preview.src = `${active.public_url}?v=${new Date(active.activated_at).getTime()}`;
-        nameEl.textContent = `Active since ${new Date(active.activated_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
-    }
-
-    await refreshIconHistory(active?.icon_id);
-}
-
-async function refreshIconHistory(activeId){
-    const list = document.getElementById('iconHistoryList');
-    const { data, error } = await sb().from('site_icons').select('*').order('uploaded_at', { ascending: false });
-    if(error){ list.innerHTML = '<p class="dash-empty">Could not load icon history.</p>'; return; }
-
-    iconHistoryCache = data || [];
-    if(!iconHistoryCache.length){ list.innerHTML = '<p class="dash-empty">No icons uploaded yet.</p>'; return; }
-
-    list.innerHTML = iconHistoryCache.map(icon => `
-        <div class="dash-icon-history-row">
-            <img src="${icon.public_url}" alt="" class="dash-icon-history-thumb">
-            <div class="dash-icon-history-info">
-                <p class="dash-icon-history-name">${escapeHtml(icon.file_name)}</p>
-                <p class="dash-icon-history-date">${new Date(icon.uploaded_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-            </div>
-            <div class="dash-icon-history-actions">
-                <a class="dash-icon-btn" href="${icon.public_url}" download="${escapeHtml(icon.file_name)}" target="_blank" rel="noopener">Download</a>
-                ${icon.id === activeId
-                    ? '<span class="dash-insta-badge">Active</span>'
-                    : `<button class="dash-icon-btn" data-action="restore-icon" data-id="${icon.id}">Restore</button>`}
-            </div>
-        </div>`).join('');
-}
-
-document.getElementById('iconHistoryList').addEventListener('click', async (e)=>{
-    const btn = e.target.closest('[data-action="restore-icon"]');
-    if(!btn) return;
-    const icon = iconHistoryCache.find(i => i.id === btn.dataset.id);
-    if(!icon) return;
-
-    btn.disabled = true;
-    btn.innerHTML = '<span class="dash-spinner"></span>';
-    try {
-        const { error } = await sb().from('active_favicon').update({
-            icon_id: icon.id,
-            public_url: icon.public_url,
-            activated_at: new Date().toISOString(),
-        }).eq('id', true);
-        if(error) throw error;
-        showToast(`Restored "${icon.file_name}" as the active site icon.`, 'success');
-        await refreshIconSettings();
-    } catch(err){
-        showToast(err.message || 'Could not restore this icon.', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Restore';
-    }
-});
-
-document.getElementById('iconUploadInput').addEventListener('change', async (e)=>{
-    const file = e.target.files[0];
-    if(!file) return;
-
-    const errorEl = document.getElementById('iconUploadError');
+    content.hidden = true;
+    notConfigured.hidden = true;
     errorEl.hidden = true;
+    loading.hidden = false;
 
-    const validationError = validateIconFile(file);
-    if(validationError){
-        errorEl.textContent = validationError;
+    try {
+        const { data: sessionData } = await sb().auth.getSession();
+        const token = sessionData?.session?.access_token;
+        if(!token) throw new Error('Your session expired — please log in again.');
+
+        const resp = await fetch(`/api/analytics?range=${analyticsRange}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const result = await resp.json().catch(()=> ({}));
+        if(!resp.ok) throw new Error(result.error || 'Could not load analytics.');
+
+        loading.hidden = true;
+
+        if(result.configured === false){
+            notConfigured.hidden = false;
+            return;
+        }
+
+        renderAnalytics(result);
+        content.hidden = false;
+    } catch(err){
+        loading.hidden = true;
+        errorEl.textContent = err.message || 'Could not load analytics.';
         errorEl.hidden = false;
-        e.target.value = '';
+    }
+}
+
+function renderAnalytics(result){
+    document.getElementById('statActiveUsers').textContent = result.summary.activeUsers.toLocaleString();
+    document.getElementById('statNewUsers').textContent = result.summary.newUsers.toLocaleString();
+    document.getElementById('statEvents').textContent = result.summary.eventCount.toLocaleString();
+    document.getElementById('statPageViews').textContent = result.summary.pageViews.toLocaleString();
+    document.getElementById('statRealtimeUsers').textContent = result.realtimeActiveUsers.toLocaleString();
+
+    document.getElementById('analyticsUpdated').textContent =
+        `Last updated ${new Date(result.fetchedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+
+    renderAnalyticsChart(result.daily);
+
+    const citiesList = document.getElementById('analyticsCities');
+    citiesList.innerHTML = result.cities.length
+        ? result.cities.map(c => `<div class="dash-analytics-row"><span>${escapeHtml(c.city)}</span><span>${c.activeUsers.toLocaleString()}</span></div>`).join('')
+        : '<p class="dash-empty">No city data for this range.</p>';
+
+    const pagesList = document.getElementById('analyticsPages');
+    pagesList.innerHTML = result.pages.length
+        ? result.pages.map(p => `<div class="dash-analytics-row"><span>${escapeHtml(p.path)}</span><span>${p.views.toLocaleString()}</span></div>`).join('')
+        : '<p class="dash-empty">No page data for this range.</p>';
+}
+
+function renderAnalyticsChart(daily){
+    const el = document.getElementById('analyticsChart');
+    if(!daily || !daily.length){
+        el.innerHTML = '<p class="dash-empty">No data for this range.</p>';
         return;
     }
 
-    const label = document.getElementById('iconUploadLabel');
-    const labelText = document.getElementById('iconUploadLabelText');
-    const originalText = labelText.textContent;
-    label.classList.add('is-uploading');
-    labelText.textContent = 'Uploading…';
+    const width = 100, height = 40;
+    const max = Math.max(...daily.map(d => d.activeUsers), 1);
+    const points = daily.map((d, i) => {
+        const x = daily.length > 1 ? (i / (daily.length - 1)) * width : 0;
+        const y = height - (d.activeUsers / max) * height;
+        return `${x.toFixed(2)},${y.toFixed(2)}`;
+    }).join(' ');
 
-    try {
-        const path = `icons/${Date.now()}-${randomId()}-${sanitizeFilename(file.name)}.${extensionForIconFile(file)}`;
-        await uploadRawFile('site-icons', path, file);
-        const url = publicUrlFor('site-icons', path);
+    el.innerHTML = `
+        <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+            <polyline points="${points}" fill="none" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+        </svg>`;
+}
 
-        const { data: iconRow, error: insertError } = await sb().from('site_icons').insert({
-            storage_path: path,
-            public_url: url,
-            file_name: file.name,
-            mime_type: file.type,
-        }).select().single();
-        if(insertError) throw insertError;
-
-        const { error: activeError } = await sb().from('active_favicon').update({
-            icon_id: iconRow.id,
-            public_url: iconRow.public_url,
-            activated_at: new Date().toISOString(),
-        }).eq('id', true);
-        if(activeError) throw activeError;
-
-        showToast('New site icon uploaded and activated.', 'success');
-        await refreshIconSettings();
-    } catch(err){
-        errorEl.textContent = err.message || 'Could not upload this icon.';
-        errorEl.hidden = false;
-    } finally {
-        label.classList.remove('is-uploading');
-        labelText.textContent = originalText;
-        e.target.value = '';
-    }
+document.getElementById('analyticsRangeRow').addEventListener('click', e=>{
+    const btn = e.target.closest('.dash-pill');
+    if(!btn) return;
+    [...btn.parentElement.children].forEach(b=> b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    analyticsRange = btn.dataset.range;
+    loadAnalytics();
 });
+
+document.getElementById('analyticsRefreshBtn').addEventListener('click', loadAnalytics);
 
 /* ══════════════════════════════════════
    INIT
