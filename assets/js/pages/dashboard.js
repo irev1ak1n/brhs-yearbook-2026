@@ -254,7 +254,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
 /* ══════════════════════════════════════
    VIEW ROUTING
 ══════════════════════════════════════ */
-const VIEWS = ['home', 'sports', 'friday', 'seniors', 'instagram', 'settings', 'analytics'];
+const VIEWS = ['home', 'sports', 'friday', 'seniors', 'instagram', 'settings'];
 function goto(view){
     VIEWS.forEach(v=>{
         document.getElementById(`${v}View`).hidden = (v !== view);
@@ -264,7 +264,6 @@ function goto(view){
     if(view === 'seniors') refreshSeniorsView();
     if(view === 'instagram'){ refreshInstagramView(); refreshInstagramSyncStatus(); }
     if(view === 'settings') refreshPriceSettings();
-    if(view === 'analytics') loadAnalytics();
     if(view === 'home') refreshHomeCounts();
     window.scrollTo(0, 0);
 }
@@ -1417,108 +1416,6 @@ document.getElementById('priceForm').addEventListener('submit', async (e)=>{
         btn.textContent = originalText;
     }
 });
-
-/* ══════════════════════════════════════
-   ANALYTICS
-   The dashboard never talks to Google directly — it calls
-   /api/analytics with the staff member's own Supabase session token,
-   and that serverless function (the only place holding Google service
-   account credentials) does the real work.
-══════════════════════════════════════ */
-let analyticsRange = 'last30';
-
-async function loadAnalytics(){
-    const content = document.getElementById('analyticsContent');
-    const loading = document.getElementById('analyticsLoading');
-    const notConfigured = document.getElementById('analyticsNotConfigured');
-    const errorEl = document.getElementById('analyticsError');
-
-    content.hidden = true;
-    notConfigured.hidden = true;
-    errorEl.hidden = true;
-    loading.hidden = false;
-
-    try {
-        const { data: sessionData } = await sb().auth.getSession();
-        const token = sessionData?.session?.access_token;
-        if(!token) throw new Error('Your session expired — please log in again.');
-
-        const resp = await fetch(`/api/analytics?range=${analyticsRange}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const result = await resp.json().catch(()=> ({}));
-        if(!resp.ok) throw new Error(result.error || 'Could not load analytics.');
-
-        loading.hidden = true;
-
-        if(result.configured === false){
-            notConfigured.hidden = false;
-            return;
-        }
-
-        renderAnalytics(result);
-        content.hidden = false;
-    } catch(err){
-        loading.hidden = true;
-        errorEl.textContent = err.message || 'Could not load analytics.';
-        errorEl.hidden = false;
-    }
-}
-
-function renderAnalytics(result){
-    document.getElementById('statActiveUsers').textContent = result.summary.activeUsers.toLocaleString();
-    document.getElementById('statNewUsers').textContent = result.summary.newUsers.toLocaleString();
-    document.getElementById('statEvents').textContent = result.summary.eventCount.toLocaleString();
-    document.getElementById('statPageViews').textContent = result.summary.pageViews.toLocaleString();
-    document.getElementById('statRealtimeUsers').textContent = result.realtimeActiveUsers.toLocaleString();
-
-    document.getElementById('analyticsUpdated').textContent =
-        `Last updated ${new Date(result.fetchedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
-
-    renderAnalyticsChart(result.daily);
-
-    const citiesList = document.getElementById('analyticsCities');
-    citiesList.innerHTML = result.cities.length
-        ? result.cities.map(c => `<div class="dash-analytics-row"><span>${escapeHtml(c.city)}</span><span>${c.activeUsers.toLocaleString()}</span></div>`).join('')
-        : '<p class="dash-empty">No city data for this range.</p>';
-
-    const pagesList = document.getElementById('analyticsPages');
-    pagesList.innerHTML = result.pages.length
-        ? result.pages.map(p => `<div class="dash-analytics-row"><span>${escapeHtml(p.path)}</span><span>${p.views.toLocaleString()}</span></div>`).join('')
-        : '<p class="dash-empty">No page data for this range.</p>';
-}
-
-function renderAnalyticsChart(daily){
-    const el = document.getElementById('analyticsChart');
-    if(!daily || !daily.length){
-        el.innerHTML = '<p class="dash-empty">No data for this range.</p>';
-        return;
-    }
-
-    const width = 100, height = 40;
-    const max = Math.max(...daily.map(d => d.activeUsers), 1);
-    const points = daily.map((d, i) => {
-        const x = daily.length > 1 ? (i / (daily.length - 1)) * width : 0;
-        const y = height - (d.activeUsers / max) * height;
-        return `${x.toFixed(2)},${y.toFixed(2)}`;
-    }).join(' ');
-
-    el.innerHTML = `
-        <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
-            <polyline points="${points}" fill="none" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
-        </svg>`;
-}
-
-document.getElementById('analyticsRangeRow').addEventListener('click', e=>{
-    const btn = e.target.closest('.dash-pill');
-    if(!btn) return;
-    [...btn.parentElement.children].forEach(b=> b.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    analyticsRange = btn.dataset.range;
-    loadAnalytics();
-});
-
-document.getElementById('analyticsRefreshBtn').addEventListener('click', loadAnalytics);
 
 /* ══════════════════════════════════════
    INIT
