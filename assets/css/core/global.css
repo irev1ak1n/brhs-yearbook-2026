@@ -4,6 +4,14 @@
     padding: 0;
 }
 
+/* Guarantees the hidden attribute always wins, even when a more
+   specific author rule (e.g. .pg-divider{display:flex}) sets its own
+   display on the same element — without this, equal-specificity rules
+   fall to source order and the author rule can "un-hide" the element. */
+[hidden] {
+    display: none !important;
+}
+
 html {
     scroll-behavior: smooth;
 }
